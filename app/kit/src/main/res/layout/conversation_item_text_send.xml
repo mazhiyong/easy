@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contentTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:autoLink="phone|email|map|web"
+    android:background="@drawable/img_bubble_send"
+    android:gravity="left|center_vertical"
+    android:linksClickable="true"
+    android:maxWidth="@dimen/dp_240"
+    android:minHeight="@dimen/dp_40"
+    android:paddingLeft="@dimen/dp_15"
+    android:paddingTop="@dimen/dp_12"
+    android:paddingRight="@dimen/dp_15"
+    android:paddingBottom="@dimen/dp_12"
+    android:text="嗯嗯嗯嗯嗯嗯"
+    android:textColorLink="#3655bf"
+    android:textSize="@dimen/sp_16" />

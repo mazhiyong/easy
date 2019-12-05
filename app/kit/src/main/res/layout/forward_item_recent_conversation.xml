@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:background="@drawable/selector_common_item"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_15"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingRight="@dimen/dp_15"
+        android:paddingBottom="@dimen/dp_5">
+
+        <ImageView
+            android:id="@+id/portraitImageView"
+            android:layout_width="@dimen/dp_35"
+            android:layout_height="@dimen/dp_35"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/default_header" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/nameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textColor="@color/gray0"
+                android:textSize="@dimen/sp_16"
+                tools:text="imndx" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/dividerLine"
+        style="@style/Line"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginRight="@dimen/dp_15"
+        android:visibility="visible" />
+
+</LinearLayout>

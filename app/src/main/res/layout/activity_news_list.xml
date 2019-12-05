@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:background="@color/white">
+
+    <include
+        android:id="@+id/top_layout"
+        layout="@layout/title_leftbut_bar"/>
+
+    <com.stx.xhb.xbanner.XBanner
+        android:id="@+id/xBanner"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="@dimen/dp_120"
+        app:AutoPlayTime="3000"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        app:isClipChildrenMode="true"
+        app:isShowIndicatorOnlyOne="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:pageChangeDuration="1000"
+        app:placeholderDrawable="@drawable/icon1_banner"
+        app:pointContainerPosition="BOTTOM"
+        app:pointLeftRightPadding="0dp"
+        app:pointNormal="@drawable/shape_point_normal"
+        app:pointSelect="@drawable/shape_point_select"
+        app:pointsContainerBackground="@color/colorTransparent"
+        app:pointsPosition="CENTER"
+        app:tipTextSize="12sp" />
+
+    <com.lairui.easy.mywidget.view.PageView
+        android:id="@+id/page_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+            <com.github.jdsjlzx.recyclerview.LRecyclerView
+                android:id="@+id/refresh_list_view"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                android:background="@color/body_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </com.github.jdsjlzx.recyclerview.LRecyclerView>
+        </LinearLayout>
+    </com.lairui.easy.mywidget.view.PageView>
+
+
+</LinearLayout>

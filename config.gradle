@@ -1,0 +1,14 @@
+def supportVersion = '1.0.0-beta01'
+ext {
+//这里的ext是必须的
+    versions  = [
+            compileSdkVersion   : 28,
+            buildToolsVersion   : "28.0.3",
+            minSdkVersion       : 19,
+            targetSdkVersion    : 28,
+            versionCode         : 1,
+            versionName         : "V1.0.1 Beta",
+    ]
+
+
+}

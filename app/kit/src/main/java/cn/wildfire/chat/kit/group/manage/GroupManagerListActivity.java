@@ -1,0 +1,35 @@
+package cn.wildfire.chat.kit.group.manage;
+
+import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+
+import com.lairui.easy.R;
+import com.lairui.easy.basic.MbsConstans;
+import com.jaeger.library.StatusBarUtil;
+
+
+
+import butterknife.BindView;
+import cn.wildfire.chat.kit.WfcBaseActivity;
+import cn.wildfirechat.model.GroupInfo;
+
+public class GroupManagerListActivity extends WfcBaseActivity {
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+
+    @Override
+    protected void afterViews() {
+        StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA);
+        tvTitle.setText("群管理员");
+        GroupInfo groupInfo = getIntent().getParcelableExtra("groupInfo");
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.containerFrameLayout, GroupManagerListFragment.newInstance(groupInfo))
+                .commit();
+    }
+
+    @Override
+    protected int contentLayout() {
+        return R.layout.fragment_container_activity;
+    }
+}

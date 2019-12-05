@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/body_bg" >
+    <com.lairui.easy.mywidget.pulltozoomview.PullToZoomScrollViewEx
+        android:id="@+id/person_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:id="@+id/index_top_layout_person"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_item_height"
+        android:orientation="horizontal" >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/back_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_20"
+                />
+
+            <TextView
+                android:id="@+id/titleText"
+                style="@style/title_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:singleLine="true"
+                android:text="@string/bottom_person"
+                android:textColor="@color/white"
+                />
+
+            <ImageView
+                android:id="@+id/personal_more_button"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_27"
+                android:layout_alignParentRight="true"
+                android:paddingRight="@dimen/dp_10"
+                android:layout_centerVertical="true"
+                android:src="@drawable/more_icon"
+                android:paddingLeft="@dimen/dp_10"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

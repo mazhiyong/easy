@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divide_hight"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/divide_line"/>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/trade_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        android:background="@color/transparent"
+        app:cardElevation="0dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="@dimen/item_padding">
+               <TextView
+                   android:id="@+id/trade_type_tv"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textSize="@dimen/sp_16"
+                   android:textColor="@color/black_dark"
+                   android:text="cz"/>
+
+               <TextView
+                   android:layout_below="@+id/trade_type_tv"
+                   android:id="@+id/time_tv"
+                   android:layout_marginTop="@dimen/dp_3"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textSize="@dimen/sp_13"
+                   android:textColor="@color/black_light"
+                   android:text="adsfadsf"/>
+
+               <TextView
+                   android:id="@+id/money_tv"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentRight="true"
+                   android:layout_centerVertical="true"
+                   android:textSize="@dimen/sp_17"
+                   android:textColor="@color/black_dark"
+                   android:text="adsfadsf"/>
+
+           </RelativeLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divide_hight"
+        android:background="@color/divide_line"/>
+</LinearLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.wildfire.chat.kit.conversation.message.MessageItemView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contentFrameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <!-- 显示时间 -->
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/dp_10"
+        android:background="@drawable/shape_notification_bg"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp_5"
+        android:paddingTop="@dimen/dp_2"
+        android:paddingRight="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_2"
+        android:text="下午 5点"
+        android:textColor="#fff"
+        android:textSize="@dimen/sp_12" />
+
+    <ViewStub
+        android:id="@+id/contentViewStub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</cn.wildfire.chat.kit.conversation.message.MessageItemView>

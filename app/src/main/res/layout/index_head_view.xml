@@ -1,0 +1,16 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/layout_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/person_lay"
+        android:layout_width="match_parent"
+        android:background="@drawable/index_head_bac"
+        android:layout_height="@dimen/dp_160">
+
+    </ImageView>
+
+
+</RelativeLayout>
