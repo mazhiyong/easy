@@ -1,4 +1,4 @@
-package com.lairui.easy.ui.module3.fragment
+package com.lairui.easy.ui.temporary.fragment
 
 import android.content.Intent
 

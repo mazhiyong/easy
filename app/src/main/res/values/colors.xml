@@ -474,7 +474,7 @@
     <!-- ****************************************************************************** -->
     <color name="btn_login_press">#FF4720</color>
     <color name="btn_login_normal">#FF4720</color>
-    <color name="btn_login_disabled">#F2F2F2</color>
+    <color name="btn_login_disabled">#DBDADA</color>
 
 
     <color name="start_color">#FFD500</color>

@@ -12,6 +12,7 @@
     <LinearLayout
         android:id="@+id/index_top_layout_person"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="@dimen/title_item_height"
         android:orientation="horizontal" >
         <RelativeLayout

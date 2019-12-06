@@ -13,10 +13,10 @@
 
 
     <string name="biaoge_title">营收表格</string>
-    <string name="chat">聊天</string>
+    <string name="chat">交易</string>
     <string name="bottom_index">首页</string>
-    <string name="get_history">借款记录</string>
-    <string name="return_history">还款记录</string>
+    <string name="get_history">行情</string>
+    <string name="return_history">策略</string>
     <string name="bottom_person">我的</string>
 
     <string name="phone_number">手机号码</string>

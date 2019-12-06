@@ -24,7 +24,7 @@ import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.mywidget.dialog.UpdateDialog
 import com.lairui.easy.service.DownloadService
 import com.lairui.easy.ui.module1.fragment.IndexFragment
-import com.lairui.easy.ui.module3.fragment.RepaymentFragment
+
 import com.lairui.easy.ui.module5.fragment.PersonFragment
 import com.lairui.easy.ui.temporary.fragment.ChatViewFragment
 import com.lairui.easy.utils.permission.PermissionsUtils
@@ -36,6 +36,8 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.jaeger.library.StatusBarUtil
 import com.lairui.easy.ui.module2.fragment.HangQingFragment
+import com.lairui.easy.ui.module3.fragment.CeLueFragment
+import com.lairui.easy.ui.module4.fragment.TradeFragment
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -48,9 +50,9 @@ class MainActivity : BasicActivity(), RequestView {
     private var mTabs: Array<ImageView?>? = null
     private var mTextViews: Array<TextView?>? = null
     private var mIndexFragment: IndexFragment? = null
-    private var mChatFragment: ChatViewFragment? = null
+    private var mTradeFragment: TradeFragment? = null
     private var mHangQingFragment: HangQingFragment? = null
-    private var mRepaymentFragment: RepaymentFragment? = null
+    private var mCeLueFragment: CeLueFragment? = null
     private var mPersonFragment: PersonFragment? = null
     private var fragments: Array<Fragment>? = null
 
@@ -211,17 +213,18 @@ class MainActivity : BasicActivity(), RequestView {
         mTextViews!![1] = findViewById<View>(R.id.two_tv) as TextView
         mTextViews!![2] = findViewById<View>(R.id.three_tv) as TextView
         mTextViews!![3] = findViewById<View>(R.id.four_tv) as TextView
-        mTextViews!![4] = findViewById<View>(R.id.four_tv) as TextView
+        mTextViews!![4] = findViewById<View>(R.id.five_tv) as TextView
         // select first tab
         mTabs!![0]?.isSelected = true
         mTextViews!![0]?.isSelected = true
 
+
         mIndexFragment = IndexFragment()
-        mChatFragment = ChatViewFragment()
+        mTradeFragment = TradeFragment()
         mHangQingFragment = HangQingFragment()
-        mRepaymentFragment = RepaymentFragment()
+        mCeLueFragment = CeLueFragment()
         mPersonFragment = PersonFragment()
-        fragments = arrayOf<Fragment>(mIndexFragment!!,mChatFragment!!, mHangQingFragment!!, mRepaymentFragment!!, mPersonFragment!!)
+        fragments = arrayOf<Fragment>(mIndexFragment!!, mHangQingFragment!!, mCeLueFragment!!, mTradeFragment!!,mPersonFragment!!)
         supportFragmentManager.beginTransaction().add(R.id.fragment_container, mIndexFragment!!)
                 .show(mIndexFragment!!)
                 .commitAllowingStateLoss()
@@ -288,9 +291,9 @@ class MainActivity : BasicActivity(), RequestView {
                 when (index) {
                     // mIndexFragment, mHangQingFragment, mRepaymentFragment,mPersonFragment
                     0 -> (fragments!![index] as IndexFragment).setBarTextColor()
-                    1 -> (fragments!![index] as ChatViewFragment).setBarTextColor()
-                    2 -> (fragments!![index] as HangQingFragment).setBarTextColor()
-                    3 -> (fragments!![index] as RepaymentFragment).setBarTextColor()
+                    1 -> (fragments!![index] as HangQingFragment).setBarTextColor()
+                    2 -> (fragments!![index] as CeLueFragment).setBarTextColor()
+                    3 -> (fragments!![index] as TradeFragment).setBarTextColor()
                     4 -> (fragments!![index] as PersonFragment).setBarTextColor()
                 }
             }
@@ -367,11 +370,7 @@ class MainActivity : BasicActivity(), RequestView {
                 MbsConstans.UpdateAppConstans.VERSION_NET_UPDATE_MSG = tData["verUpdateMsg"]!!.toString() + ""
 
                 val mustUpdate = tData["isMust"]!!.toString() + ""
-                if (mustUpdate == "0") {
-                    MbsConstans.UpdateAppConstans.VERSION_UPDATE_FORCE = false
-                } else {
-                    MbsConstans.UpdateAppConstans.VERSION_UPDATE_FORCE = true
-                }
+                MbsConstans.UpdateAppConstans.VERSION_UPDATE_FORCE = mustUpdate != "0"
                 showUpdateDialog()
             }
             MethodUrl.nameCode -> {
