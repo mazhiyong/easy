@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp_5">
+
+    <TextView
+        android:id="@+id/itemInfoTv"
+        android:layout_width="0dp"
+        android:gravity="right"
+        android:paddingRight="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5"
+        android:layout_weight="1"
+        android:text="5倍\n5000元"
+        android:background="@drawable/select_bg"
+        android:textColor="@color/font_c"
+        android:layout_height="@dimen/dp_40"/>
+
+
+</LinearLayout>
+

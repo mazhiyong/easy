@@ -74,9 +74,6 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
         get() = R.layout.fragment_circle_view2
 
 
-
-
-
     override fun init() {
         initView()
     }

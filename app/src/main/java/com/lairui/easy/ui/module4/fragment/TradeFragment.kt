@@ -95,7 +95,7 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
 
         mAnimUtil = AnimUtil()
         mLoadingWindow = LoadingWindow(activity!!, R.style.Dialog)
-        mContent?.let { mPageView!!.setContentView(it) }
+        mContent?.let { mPageView.setContentView(it) }
         mPageView.showLoading()
         mPageView.reLoadingData = this
         val linearLayoutManager = LinearLayoutManager(activity)
@@ -110,13 +110,18 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
         //borrowListAction()
 
 
-        for (inde in 1..10){
+        for (index in 1..10){
             val map = HashMap<String,Any>()
-            map["name"] = "莱瑞科技"
-            map["price"] = "18210.00"
-            map["ratio"] = "+11.09%"
-            map["type"] = "SZ"
-            map["number"] = "10086"
+            if(index % 2 == 0 ) {
+                map["status"] = "1"
+            }else{
+                map["status"] = "2"
+            }
+
+            map["title"] = "HT2001"
+            map["time"] = "2019.10.15-2019.11.15"
+            map["a"] = "100.00元"
+            map["b"] = "100.00元"
             mDataList.add(map)
         }
 

@@ -1,4 +1,4 @@
-package com.lairui.easy.ui.module1.activity
+package com.lairui.easy.ui.module2.activity
 
 import android.view.View
 import androidx.core.content.ContextCompat

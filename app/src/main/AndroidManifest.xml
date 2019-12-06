@@ -231,17 +231,44 @@
             android:name="com.lairui.easy.ui.temporary.activity.ResetLoginPassButActivity"
             android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
             android:theme="@style/AppTheme.Transparent">
-        </activity> <!-- 新闻列表详情界面 -->
+        </activity>
+        <!-- 新闻列表详情界面 -->
         <activity
             android:name="com.lairui.easy.ui.module1.activity.NewsItemActivity"
             android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
             android:theme="@style/AppTheme.Transparent">
-        </activity> <!-- 新闻列表界面 -->
+        </activity>
+        <!-- 新闻列表界面 -->
         <activity
             android:name="com.lairui.easy.ui.module1.activity.NewsListActivity"
             android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
             android:theme="@style/AppTheme.Transparent">
-        </activity> <!-- 用户信息页面 -->
+        </activity>
+        <!-- 公告列表详情界面 -->
+        <activity
+            android:name="com.lairui.easy.ui.module1.activity.NoticeDetialActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 公告列表界面 -->
+        <activity
+            android:name="com.lairui.easy.ui.module1.activity.NoticeListActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 支付界面 -->
+        <activity
+            android:name="com.lairui.easy.ui.module3.activity.PayActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 策略详情 -->
+        <activity
+            android:name="com.lairui.easy.ui.module4.activity.CeLueItemActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 用户信息页面 -->
         <activity
             android:name="com.lairui.easy.ui.temporary.activity.UserInfoActivity"
             android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
@@ -850,7 +877,7 @@
         </activity>
 
         <activity
-            android:name="com.lairui.easy.ui.module1.activity.CoinInfoActivity"
+            android:name="com.lairui.easy.ui.module2.activity.CoinInfoActivity"
             android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
             android:theme="@style/AppTheme.Transparent"
             android:windowSoftInputMode="stateHidden|adjustPan"> <!-- 行情 -->

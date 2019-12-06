@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 
 import com.lairui.easy.R
 import com.lairui.easy.ui.temporary.activity.BorrowDetailActivity
@@ -44,93 +45,51 @@ class TradeListAdapter(context: Context) : ListBaseAdapter() {
 
         val viewHolder = holder as ViewHolder
 
-        //借款状态（1：放款中 2：还款中 3：已结清 4：已驳回）
-        var ss = item["loanstate"]!!.toString() + ""
+        //状态（1：操盘中 2：已结清 ）
+        var ss = item["status"]!!.toString() + ""
         if (UtilTools.empty(ss)) {
-            ss = "0"
+            ss = "1"
         }
-
-
         val status = Integer.valueOf(ss)
-        var statusStr = ""
         when (status) {
             1 -> {
-                statusStr = "放款中"
-                viewHolder.mUploadLay!!.visibility = View.GONE
+                viewHolder.mStatusTv.text = "操盘中"
+                viewHolder.mStatusTv.setTextColor(ContextCompat.getColor(mContext!!, R.color.font_c))
+                viewHolder.mTradeIv!!.visibility = View.VISIBLE
             }
             2 -> {
-                statusStr = "已放款"
-                viewHolder.mUploadLay!!.visibility = View.VISIBLE
-                viewHolder.mUploadTv!!.setOnClickListener {
-                    val intent = Intent(mContext, UploadDkYongTActivity::class.java)
-                    intent.putExtra("DATA", item as Serializable)
-                    mContext!!.startActivity(intent)
-                }
-            }
-            3 -> {
-                viewHolder.mUploadLay!!.visibility = View.GONE
-                statusStr = "已结清"
-            }
-            4 -> {
-                viewHolder.mUploadLay!!.visibility = View.GONE
-                statusStr = "已驳回"
-            }
-            else -> {
-                viewHolder.mUploadLay!!.visibility = View.GONE
-                statusStr = ""
+                viewHolder.mStatusTv.text = "已结清"
+                viewHolder.mStatusTv.setTextColor(ContextCompat.getColor(mContext!!, R.color.black99))
+                viewHolder.mTradeIv!!.visibility = View.GONE
             }
         }
+        viewHolder.mTitleTv.text = item["title"]!!.toString() + ""
+        viewHolder.mTimeTv.text = item["time"]!!.toString() + ""
 
-        val list = SelectDataUtil.getNameCodeByType("loanState")
-        val mm = SelectDataUtil.getMapByKey(ss + "", list)
-        statusStr = mm[ss + ""]!!.toString() + ""
+        //val dateTime = UtilTools.getStringFromSting2(item["flowdate"]!!.toString() + "", "yyyyMMdd", "yyyy-MM-dd")
+        //viewHolder.mTimeTv!!.text = dateTime + ""
 
+        viewHolder.mJingJieMoneyTv.text = item["a"]!!.toString() + ""
+        viewHolder.mPingCangMoneyTv.text = item["b"]!!.toString() + ""
 
-        viewHolder.mStatusTv!!.text = statusStr
-        viewHolder.mBankNameTv!!.text = item["zifangnme"]!!.toString() + ""
-        viewHolder.mTimeTv!!.text = item["flowdate"]!!.toString() + ""
-
-        val dateTime = UtilTools.getStringFromSting2(item["flowdate"]!!.toString() + "", "yyyyMMdd", "yyyy-MM-dd")
-        viewHolder.mTimeTv!!.text = dateTime + ""
-
-
-        val money = UtilTools.getRMBMoney(item["reqmoney"]!!.toString() + "")
-        viewHolder.mMoneyTv!!.text = money
-
-        viewHolder.mItemLay!!.setOnClickListener {
-            val intent = Intent(mContext, BorrowDetailActivity::class.java)
-            intent.putExtra("DATA", item as Serializable)
-            mContext!!.startActivity(intent)
-        }
     }
 
-    //{
-    //		"jixishum": "2",
-    //		"reqmoney": "100000",
-    //		"flowdate": "20171019",
-    //		"loansqid": "1729200000092879",
-    //		"loancode": "L07",
-    //		"zifangnme": "廊坊银行股份有限公司营业部",
-    //		"loanstate": "3",
-    //		"stopdate": "20181014",
-    //		"zifangbho": "BOLF8888"
-    //	}                                             借款状态（1：放款中 2：还款中 3：已结清 4：已驳回）
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        @BindView(R.id.time_tv)
+        @BindView(R.id.timeTv)
         lateinit var mTimeTv: TextView
-        @BindView(R.id.money_tv)
-        lateinit var mMoneyTv: TextView
-        @BindView(R.id.status_tv)
+        @BindView(R.id.titleTv)
+        lateinit var mTitleTv: TextView
+        @BindView(R.id.typeTv)
         lateinit var mStatusTv: TextView
-        @BindView(R.id.bank_name_tv)
-        lateinit var mBankNameTv: TextView
-        @BindView(R.id.upload_tv)
-        lateinit var mUploadTv: TextView
-        @BindView(R.id.upload_lay)
-        lateinit var mUploadLay: LinearLayout
-        @BindView(R.id.item_lay)
-        lateinit var mItemLay: CardView
+        @BindView(R.id.jingjieMoneyTv)
+        lateinit var mJingJieMoneyTv: TextView
+        @BindView(R.id.pingcangMoneyTv)
+        lateinit var mPingCangMoneyTv: TextView
+        @BindView(R.id.itemTv)
+        lateinit var mItemIv: TextView
+        @BindView(R.id.tradeTv)
+        lateinit var mTradeIv:TextView
 
         init {
             ButterKnife.bind(this, itemView)

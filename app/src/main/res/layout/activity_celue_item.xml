@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/body_bg"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/top_layout"
+        layout="@layout/title_leftbut_bar" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/item_lay"
+        android:layout_margin="@dimen/dp_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/dp_10"
+        app:cardElevation="0dp"
+        android:clickable="true"
+        app:cardPreventCornerOverlap="false"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/white"
+        android:background="@color/white"
+        android:focusable="false">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/titleTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingLeft="@dimen/dp_5"
+                    android:textColor="@color/black33"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:text="AAAA"
+                    android:textSize="@dimen/sp_16"
+                    />
+                <TextView
+                    android:id="@+id/typeTv"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingLeft="@dimen/dp_5"
+                    android:textColor="@color/font_c"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:text="操盘中"
+                    android:textSize="@dimen/sp_17"
+                    />
+            </RelativeLayout>
+            <TextView
+                android:id="@+id/timeTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp_5"
+                android:text="@string/tv_loading_value"
+                android:textSize="@dimen/sp_12"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dp_2"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_2">
+                <TextView
+                    android:id="@+id/money_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dp_5"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/black99"
+                    android:text="策略保证金"
+                    android:textSize="@dimen/sp_15"
+                    />
+                <TextView
+
+                    android:id="@+id/jingjieMoneyTv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/dp_5"
+                    android:text="@string/tv_loading_value"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="@dimen/sp_15"
+                    android:textColor="@color/font_c"
+                    />
+                <TextView
+                    android:id="@+id/tradeTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingTop="@dimen/dp_6"
+                    android:paddingBottom="@dimen/dp_6"
+                    android:paddingLeft="@dimen/dp_15"
+                    android:paddingRight="@dimen/dp_15"
+                    android:background="@drawable/corners_red"
+                    android:textColor="@color/font_c"
+                    android:text="股票交易"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dp_2"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_2">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dp_5"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/black99"
+                    android:text="操盘总资金"
+                    android:textSize="@dimen/sp_15"
+                    />
+                <TextView
+
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/dp_5"
+                    android:text="@string/tv_loading_value"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="@dimen/sp_15"
+                    android:textColor="@color/font_c"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingTop="@dimen/dp_6"
+                    android:paddingBottom="@dimen/dp_6"
+                    android:paddingLeft="@dimen/dp_15"
+                    android:paddingRight="@dimen/dp_15"
+                    android:background="@drawable/corners_red"
+                    android:textColor="@color/font_c"
+                    android:text="股票交易"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/upload_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/itemTv"
+                    android:layout_width="wrap_content"
+                    android:paddingTop="@dimen/dp_6"
+                    android:paddingBottom="@dimen/dp_6"
+                    android:paddingLeft="@dimen/dp_15"
+                    android:paddingRight="@dimen/dp_15"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp_10"
+                    android:background="@drawable/corners_gray"
+                    android:textColor="@color/black99"
+                    android:text="策略详情"/>
+
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/dp_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/payBt"
+            android:layout_weight="1"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/but_height"
+            android:layout_marginRight="@dimen/dp_5"
+            android:background="@drawable/btn_next"
+            android:text="提取收益"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_17" />
+
+        <Button
+            android:id="@+id/stopBt"
+            android:layout_weight="1"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/but_height"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:background="@drawable/btn_next"
+            android:text="终止操盘"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_17" />
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:focusable="false"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/dp_8"
+        app:cardElevation="@dimen/dp_0"
+        app:cardPreventCornerOverlap="false">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/dp_10"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="扩大配资记录"
+                    android:textColor="@color/black33"
+                    android:textSize="@dimen/sp_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:text="1000.00"
+                    android:textColor="@color/black33"
+                    android:textSize="@dimen/sp_16"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/android_list_idex"
+                    />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/dp_10"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="追加保证金记录"
+                    android:textColor="@color/black33"
+                    android:textSize="@dimen/sp_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:text="1000.00"
+                    android:textColor="@color/black33"
+                    android:textSize="@dimen/sp_16"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/android_list_idex"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/dp_10"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="支付利息记录"
+                    android:textColor="@color/black33"
+                    android:textSize="@dimen/sp_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:text="1000.00"
+                    android:textColor="@color/black33"
+                    android:textSize="@dimen/sp_16"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/android_list_idex"
+                    />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/dp_10"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="提取收益记录"
+                    android:textColor="@color/black33"
+                    android:textSize="@dimen/sp_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:text="1000.00"
+                    android:textColor="@color/black33"
+                    android:textSize="@dimen/sp_16"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/android_list_idex"
+                    />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
+
+</LinearLayout>

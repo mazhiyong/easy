@@ -5,7 +5,7 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <corners android:radius="@dimen/dp_2"/>
+                    <corners android:radius="@dimen/dp_25"/>
                     <solid android:color="@color/btn_login_press" />
                 </shape>
             </item>
@@ -15,7 +15,7 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <corners android:radius="@dimen/dp_2"/>
+                    <corners android:radius="@dimen/dp_25"/>
                     <solid android:color="@color/btn_login_disabled" />
                 </shape>
             </item>
@@ -25,7 +25,7 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <corners android:radius="@dimen/dp_2"/>
+                    <corners android:radius="@dimen/dp_25"/>
                     <solid android:color="@color/btn_login_normal" />
                 </shape>
             </item>

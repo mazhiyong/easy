@@ -439,7 +439,7 @@
 
     <color name="colorPrimaryDark">#00ae7d</color>
 
-    <color name="colorPrimary">#00ce7d</color>
+    <color name="colorPrimary">#00AA8A</color>
 
     <color name="navigationBarColor">@android:color/black</color>
 
