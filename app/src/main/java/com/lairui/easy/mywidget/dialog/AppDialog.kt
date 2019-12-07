@@ -14,6 +14,7 @@ class AppDialog : BaseDialog {
     lateinit var tv_cancel: TextView
     lateinit var tv_exit: TextView
 
+
     private var mTitleTv: TextView? = null
     private var mContentTv: TextView? = null
 

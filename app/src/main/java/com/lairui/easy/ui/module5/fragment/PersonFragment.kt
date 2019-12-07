@@ -21,10 +21,8 @@ import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.mywidget.view.LoadingWindow
 import com.lairui.easy.mywidget.pulltozoomview.PullToZoomScrollViewEx
 import com.lairui.easy.utils.imageload.GlideUtils
-import com.lairui.easy.utils.share.ShareUtil
 import com.lairui.easy.utils.tool.JSONUtil
 import com.lairui.easy.basic.MbsConstans
-import com.lairui.easy.utils.tool.LogUtil
 import com.lairui.easy.utils.tool.SPUtils
 import com.lairui.easy.utils.tool.UtilTools
 import com.jaeger.library.StatusBarUtil
@@ -33,7 +31,8 @@ import java.util.HashMap
 
 import butterknife.BindView
 import butterknife.Unbinder
-import com.lairui.easy.ui.temporary.activity.*
+import com.lairui.easy.ui.module4.activity.RecordListActivity
+import com.lairui.easy.ui.module5.activity.*
 import de.hdodenhof.circleimageview.CircleImageView
 
 class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
@@ -74,6 +73,7 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
     private lateinit var mToggleButton: ToggleButton
     private lateinit var mShowMoneyTv: TextView
     private lateinit var mChongZhiTv: TextView
+    private lateinit var mTixianTv: TextView
 
 
     private var mRequestTag = ""
@@ -116,6 +116,15 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
         mZoomImage = zoomView.findViewById<View>(R.id.iv_zoom) as ImageView
         //  Glide.with(this).load(R.drawable.per_bg).into(mZoomImage);
         //Glide.with(this).load(R.drawable.per_bg).into(mZoomImage);
+        mToggleButton = headView.findViewById(R.id.togglePwd)
+        mChongZhiTv = headView.findViewById(R.id.chongzhiTv)
+        mChongZhiTv.setOnClickListener(this)
+        mTixianTv = headView.findViewById(R.id.tixianTv)
+        mTixianTv.setOnClickListener(this)
+        mShowYueLay = headView.findViewById(R.id.show_yue_lay)
+        mShowYueLay.setOnClickListener(this)
+
+
 
         mPersonScrollView.headerView = headView
         mPersonScrollView.zoomView = zoomView
@@ -131,7 +140,7 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
         mTradeLay.setOnClickListener(this)
         mAccountLay = contentView.findViewById(R.id.account_Lay)
         mAccountLay.setOnClickListener(this)
-        mHelpLay = contentView.findViewById(R.id.help_Lay) //应收账款
+        mHelpLay = contentView.findViewById(R.id.help_Lay)
         mHelpLay.setOnClickListener(this)
         mMessageLay = contentView.findViewById(R.id.message_Lay)
         mMessageLay.setOnClickListener(this)
@@ -146,30 +155,14 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
         mUserName = mPersonScrollView.findViewById<View>(R.id.userAccount_Tv) as TextView
         mRoundImageView.setOnClickListener(this)
 
-        //        GlideUtils.loadImage(getActivity(),
-        //                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1539229311228&di=ab45fd88a26e56a503cc8749dca98310&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F11%2F20141211091345_QNN8s.jpeg",mRoundImageView);
 
-       // mShowYueLay = mPersonScrollView.findViewById(R.id.show_yue_lay)
-        // mToggleButton = mPersonScrollView.findViewById(R.id.togglePwd)
-       // mShowMoneyTv = mPersonScrollView.findViewById(R.id.show_money_tv)
-      //  mBankMoneyTv = mPersonScrollView.findViewById(R.id.bank_money_tv)
-        //mShowYueLay.setOnClickListener(this)
-
-       /* mToggleButton.setOnCheckedChangeListener { buttonView, isChecked ->
+        mToggleButton.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                if (mMoneyInfo == null || mMoneyInfo.isEmpty()) {
-                    getCardMoney()
-                } else {
-                    val ss = UtilTools.getMoney(mMoneyInfo["bal_amt"]!!.toString() + "")
-                    mBankMoneyTv!!.text = ss
-                    mShowMoneyTv!!.text = "隐藏余额"
-                }
+
             } else {
-                mBankMoneyTv!!.text = "*****"
-                mShowMoneyTv!!.text = "显示余额"
+
             }
         }
-*/
         // getCardInfoAction();
         setBarTextColor()
 
@@ -234,56 +227,35 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
     }
 
     override fun onClick(view: View) {
-        val intent: Intent
+        var intent: Intent
         when (view.id) {
-            /*R.id.shared_lay -> {}
-            R.id.show_yue_lay -> mToggleButton!!.performClick()
-            R.id.my_image -> {
-                intent = Intent(activity, UserInfoActivity::class.java)
-                //                intent = new Intent(getActivity(), HtmlActivity.class);
-                //                intent.putExtra("id","http://h5.nashi8.com/");
-                //                intent = new Intent(getActivity(), IdCardMyPicActivity.class);
-                //                intent = new Intent(getActivity(), IdCardPicActivity.class);
-                //                intent = new Intent(getActivity(), QiyeInfoActivity.class);
-                //                intent = new Intent(getActivity(), BankOpenXieyiActivity.class);
+            R.id.show_yue_lay -> mToggleButton.performClick()
+            R.id.chongzhiTv ->{
+                intent = Intent(activity,PayWayActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.tixianTv ->{
+                intent = Intent(activity,TixianActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.renZhengLay ->{
+                intent = Intent(activity,RenZhengActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.bankCardLay ->{
+                intent = Intent(activity,BankCardListActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.yaoQingLay ->{
+                intent = Intent(activity,JiangliListActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.trade_Lay ->{
+                intent = Intent(activity,RecordListActivity::class.java)
+                startActivity(intent)
+            }
 
-                startActivity(intent)
-            }
-            R.id.personal_more_button -> {
-                intent = Intent(activity, MoreSetActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.all_zichan_lay -> {
-                intent = Intent(activity, AllZiChanActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.my_bank_card_lay -> {
-                intent = Intent(activity, BankCardActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.order_detail_lay -> {
-                intent = Intent(activity, TradeListActivity::class.java)
-                //intent = new Intent(getActivity(), QiyeInfoActivity.class);
-                startActivity(intent)
-            }
-            R.id.my_larger_lay -> {
-                intent = Intent(activity, MyAmountActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.same_people_lay -> {
-                intent = Intent(activity, SamePeopleListActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.borrow_money //应收账款
-            -> {
-                intent = Intent(activity, MyShouMoneyActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.mymoney_borrow //我的借款
-            -> {
-                intent = Intent(activity, MyBorrowMoneyActivity::class.java)
-                startActivity(intent)
-            }*/
+
         }
 
     }
@@ -314,7 +286,7 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
                     val list = JSONUtil.instance.jsonToList(result)
                     if (list != null && list.size > 0) {
                         mBankInfo = list[0]
-                        mBankCardTv!!.text = "银行账户(" + mBankInfo!!["accid"] + ")余额"
+                        mBankCardTv.text = "银行账户(" + mBankInfo!!["accid"] + ")余额"
                     } else {
 
                     }
@@ -323,8 +295,8 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
 
             MethodUrl.allZichan -> {
                 val yue = UtilTools.getMoney(tData["use_amt"]!!.toString() + "")
-                mBankMoneyTv!!.text = yue
-                mShowMoneyTv!!.text = "隐藏余额"
+                mBankMoneyTv.text = yue
+                mShowMoneyTv.text = "隐藏余额"
             }
             MethodUrl.refreshToken//获取refreshToken返回结果
             -> {

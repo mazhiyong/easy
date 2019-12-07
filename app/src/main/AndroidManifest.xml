@@ -298,6 +298,51 @@
             android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
             android:theme="@style/AppTheme.Transparent">
         </activity>
+        <!-- 微信支付宝充值 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.WeiAndAliPayActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 银行卡充值 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.BankPayActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+
+        <!-- 提现 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.TixianActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+
+        <!-- 认证 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.RenZhengActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+
+        <!-- 添加银行卡 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.BankCardAddActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 银行卡列表 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.BankCardListActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 邀请奖励记录 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.JiangliListActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
 
         <!-- 用户信息页面 -->
         <activity

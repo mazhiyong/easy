@@ -14,6 +14,8 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.lairui.easy.R
 import com.lairui.easy.ui.module1.activity.NoticeDetialActivity
+import com.lairui.easy.ui.module5.activity.BankPayActivity
+import com.lairui.easy.ui.module5.activity.WeiAndAliPayActivity
 import com.lairui.easy.ui.temporary.adapter.ListBaseAdapter
 import java.io.Serializable
 
@@ -47,9 +49,16 @@ class PayWayListAdapter(context: Context) : ListBaseAdapter() {
         }
 
         viewHolder.tradeLay.setOnClickListener {
-          /*  val intent = Intent(mContext, NoticeDetialActivity::class.java)
-            intent.putExtra("DATA", mDataList[position] as Serializable)
-            mContext!!.startActivity(intent)*/
+            if (item["type"] == 3){ //银行卡支付
+                 val intent = Intent(mContext, BankPayActivity::class.java)
+                 //intent.putExtra("DATA", mDataList[position] as Serializable)
+                 mContext!!.startActivity(intent)
+            }else{
+                val intent = Intent(mContext, WeiAndAliPayActivity::class.java)
+                //intent.putExtra("DATA", mDataList[position] as Serializable)
+                mContext!!.startActivity(intent)
+            }
+
         }
     }
 

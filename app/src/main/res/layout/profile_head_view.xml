@@ -58,8 +58,8 @@
                 <ImageView
                     android:id="@+id/headKefuIv"
                     android:background="@drawable/person_kefu"
-                    android:layout_width="@dimen/dp_25"
-                    android:layout_height="@dimen/dp_25"
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/dp_5"
                     android:gravity="center" />
@@ -71,6 +71,7 @@
                 android:background="@drawable/zijin_bac"
                 android:layout_height="wrap_content">
                 <RelativeLayout
+                    android:id="@+id/show_yue_lay"
                     android:layout_marginTop="@dimen/dp_15"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:layout_marginRight="@dimen/dp_10"
@@ -82,11 +83,16 @@
                         android:textColor="@color/white5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
-                    <ImageView
+                    <ToggleButton
+                        android:id="@+id/togglePwd"
+                        android:layout_width="@dimen/dp_20"
+                        android:layout_height="@dimen/dp_20"
                         android:layout_alignParentRight="true"
-                        android:background="@drawable/person_eye"
-                        android:layout_width="@dimen/dp_15"
-                        android:layout_height="@dimen/dp_15"/>
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:background="@drawable/switch_eye"
+                        android:textOff=""
+                        android:textOn="" />
                 </RelativeLayout>
                 <TextView
                     android:layout_marginTop="@dimen/dp_5"

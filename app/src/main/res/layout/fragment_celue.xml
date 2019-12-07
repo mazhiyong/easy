@@ -641,7 +641,7 @@
                 android:padding="@dimen/dp_5"
                 android:layout_marginTop="@dimen/dp_10"
                 android:textColor="@color/font_c"
-                android:textSize="@dimen/sp_13"
+                android:textSize="@dimen/sp_14"
                 android:lineSpacingExtra="@dimen/sp_6"
                 android:text="盈利不能提现  只能当管理费使用\n只需支付100元就可以获得5000元体验操盘账号"
                 android:layout_height="wrap_content"/>

@@ -20,11 +20,11 @@ class JSONUtil {
         return gson!!.toJson(o)
     }
 
-    fun jsonToList(json: String): List<MutableMap<String, Any>>? {
-        var retList: List<MutableMap<String, Any>>? = null
+    fun jsonToList(json: String): MutableList<MutableMap<String, Any>>? {
+        var retList: MutableList<MutableMap<String, Any>>? = null
         try {
             // json转为带泛型的list
-            retList = gson!!.fromJson<List<MutableMap<String, Any>>>(json, object : TypeToken<List<MutableMap<String, Any>>>() {
+            retList = gson!!.fromJson<MutableList<MutableMap<String, Any>>>(json, object : TypeToken<MutableList<MutableMap<String, Any>>>() {
 
             }.type)
         } catch (e: Exception) {

@@ -38,7 +38,7 @@
             android:layout_below="@+id/tv_title"
             android:text="aaa"
             android:textColor="@color/black99"
-            android:textSize="@dimen/sp_13" />
+            android:textSize="@dimen/sp_14" />
 
 
         <LinearLayout

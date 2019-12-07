@@ -81,7 +81,7 @@
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/black99"
                     android:text="策略保证金"
-                    android:textSize="@dimen/sp_13"
+                    android:textSize="@dimen/sp_14"
                     />
                 <TextView
                     android:id="@+id/celueMoneyTv"
@@ -125,7 +125,7 @@
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/black99"
                     android:text="操盘总资金"
-                    android:textSize="@dimen/sp_13"
+                    android:textSize="@dimen/sp_14"
                     />
                 <TextView
                     android:id="@+id/caopanMoneyTv"

@@ -38,7 +38,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="利息:0.00元(2天)"
                     android:textColor="@color/black33"
-                    android:textSize="@dimen/sp_13"
+                    android:textSize="@dimen/sp_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -104,7 +104,7 @@
                 android:text=""
                 android:textColor="@color/black33"
                 android:lineSpacingExtra="@dimen/dp_5"
-                android:textSize="@dimen/sp_13"
+                android:textSize="@dimen/sp_14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>

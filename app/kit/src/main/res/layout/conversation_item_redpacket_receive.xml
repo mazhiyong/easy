@@ -27,7 +27,7 @@
             android:lineSpacingExtra="@dimen/dp_6"
             android:text="大吉大利,恭喜发财"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_13" />
+            android:textSize="@dimen/sp_14" />
     </LinearLayout>
 
     <TextView
