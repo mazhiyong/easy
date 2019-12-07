@@ -3,9 +3,7 @@ package com.lairui.easy.mywidget.dialog
 import android.content.Context
 import android.graphics.Color
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
-
 import com.flyco.animation.BaseAnimatorSet
 import com.flyco.animation.BounceEnter.BounceEnter
 import com.flyco.animation.ZoomExit.ZoomOutExit
@@ -13,8 +11,8 @@ import com.flyco.dialog.utils.CornerUtils
 import com.lairui.easy.R
 
 class AppDialog : BaseDialog {
-    lateinit var tv_cancel: Button
-    lateinit var tv_exit: Button
+    lateinit var tv_cancel: TextView
+    lateinit var tv_exit: TextView
 
     private var mTitleTv: TextView? = null
     private var mContentTv: TextView? = null
@@ -26,8 +24,12 @@ class AppDialog : BaseDialog {
 
     var onClickListener: View.OnClickListener? = null
 
-    constructor(context: Context) : super(context) {}
-    constructor(context: Context, isb: Boolean) : super(context, isb) {}
+    fun setClickListener(clickListener: View.OnClickListener) {
+        onClickListener = clickListener
+    }
+
+    constructor(context: Context) : super(context)
+    constructor(context: Context, isb: Boolean) : super(context, isb)
 
     override fun onCreateView(): View {
         val bas_in: BaseAnimatorSet
@@ -36,7 +38,7 @@ class AppDialog : BaseDialog {
         bas_out = ZoomOutExit()
         showAnim(bas_in)
         dismissAnim(bas_out)//
-        widthScale(0.85f)
+        widthScale(0.7f)
         val inflate = View.inflate(mContext, R.layout.app_dialog, null)
         inflate.setBackgroundDrawable(
                 CornerUtils.cornerDrawable(Color.parseColor("#ffffff"), dp2px(10f).toFloat()))

@@ -71,9 +71,9 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
     private lateinit var mBankMoneyTv: TextView
     private lateinit var mBankCardTv: TextView
     private lateinit var mShowYueLay: RelativeLayout
-
     private lateinit var mToggleButton: ToggleButton
     private lateinit var mShowMoneyTv: TextView
+    private lateinit var mChongZhiTv: TextView
 
 
     private var mRequestTag = ""

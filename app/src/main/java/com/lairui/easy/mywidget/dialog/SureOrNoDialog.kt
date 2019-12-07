@@ -24,8 +24,8 @@ class SureOrNoDialog : BaseDialog {
 
     var onClickListener: View.OnClickListener? = null
 
-    constructor(context: Context) : super(context) {}
-    constructor(context: Context, isb: Boolean) : super(context, isb) {}
+    constructor(context: Context) : super(context)
+    constructor(context: Context, isb: Boolean) : super(context, isb)
 
     override fun onCreateView(): View {
         val bas_in: BaseAnimatorSet

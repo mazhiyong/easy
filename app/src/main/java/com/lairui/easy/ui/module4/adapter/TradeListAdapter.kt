@@ -21,6 +21,7 @@ import java.io.Serializable
 
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.lairui.easy.ui.module4.activity.CeLueItemActivity
 import com.lairui.easy.ui.temporary.adapter.ListBaseAdapter
 
 /**
@@ -72,6 +73,11 @@ class TradeListAdapter(context: Context) : ListBaseAdapter() {
         viewHolder.mJingJieMoneyTv.text = item["a"]!!.toString() + ""
         viewHolder.mPingCangMoneyTv.text = item["b"]!!.toString() + ""
 
+
+        viewHolder.mItemIv.setOnClickListener {
+            val intent = Intent(mContext,CeLueItemActivity::class.java)
+            mContext!!.startActivity(intent)
+        }
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

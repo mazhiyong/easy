@@ -268,6 +268,37 @@
             android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
             android:theme="@style/AppTheme.Transparent">
         </activity>
+        <!-- 追加保证金 -->
+        <activity
+            android:name="com.lairui.easy.ui.module4.activity.AddMoneyActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 扩大配资 -->
+        <activity
+            android:name="com.lairui.easy.ui.module4.activity.ExtendMoneyActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 提取收益 -->
+        <activity
+            android:name="com.lairui.easy.ui.module4.activity.TixuMoneyActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 记录界面 -->
+        <activity
+            android:name="com.lairui.easy.ui.module4.activity.RecordListActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 充值方式 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.PayWayActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+
         <!-- 用户信息页面 -->
         <activity
             android:name="com.lairui.easy.ui.temporary.activity.UserInfoActivity"
