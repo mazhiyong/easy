@@ -337,12 +337,57 @@
             android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
             android:theme="@style/AppTheme.Transparent">
         </activity>
-        <!-- 邀请奖励记录 -->
+        <!-- 邀请 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.YaoqingActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 奖励记录 -->
         <activity
             android:name="com.lairui.easy.ui.module5.activity.JiangliListActivity"
             android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
             android:theme="@style/AppTheme.Transparent">
         </activity>
+        <!-- 邀请记录 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.YaoqingListActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!--账户设置 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.AccountActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 修改手机号 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.EditPhobeActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 修改提现密码 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.EditPayCodeActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 修改账户密码 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.EditPassWordActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 在线客服 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.KefuChatActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+
 
         <!-- 用户信息页面 -->
         <activity

@@ -74,6 +74,7 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
     private lateinit var mShowMoneyTv: TextView
     private lateinit var mChongZhiTv: TextView
     private lateinit var mTixianTv: TextView
+    private lateinit var mKefuIv: ImageView
 
 
     private var mRequestTag = ""
@@ -123,6 +124,8 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
         mTixianTv.setOnClickListener(this)
         mShowYueLay = headView.findViewById(R.id.show_yue_lay)
         mShowYueLay.setOnClickListener(this)
+        mKefuIv = headView.findViewById(R.id.headKefuIv)
+        mKefuIv.setOnClickListener(this)
 
 
 
@@ -227,9 +230,14 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
     }
 
     override fun onClick(view: View) {
+
         var intent: Intent
         when (view.id) {
             R.id.show_yue_lay -> mToggleButton.performClick()
+            R.id.headKefuIv->{
+                intent = Intent(activity,KefuChatActivity::class.java)
+                startActivity(intent)
+            }
             R.id.chongzhiTv ->{
                 intent = Intent(activity,PayWayActivity::class.java)
                 startActivity(intent)
@@ -247,13 +255,18 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
                 startActivity(intent)
             }
             R.id.yaoQingLay ->{
-                intent = Intent(activity,JiangliListActivity::class.java)
+                intent = Intent(activity,YaoqingActivity::class.java)
                 startActivity(intent)
             }
             R.id.trade_Lay ->{
                 intent = Intent(activity,RecordListActivity::class.java)
                 startActivity(intent)
             }
+            R.id.account_Lay ->{
+                intent = Intent(activity,AccountActivity::class.java)
+                startActivity(intent)
+            }
+
 
 
         }

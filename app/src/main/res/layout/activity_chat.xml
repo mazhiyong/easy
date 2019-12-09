@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.lairui.easy.mywidget.view.WindowInsetsFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/body_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_chat"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <include
+            android:id="@+id/top_layout"
+            layout="@layout/title_leftbut_bar"/>
+        <FrameLayout
+            android:layout_weight="1.0"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/sw_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rc_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        </FrameLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divide_hight"
+            android:background="@color/divide_line" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_5">
+
+            <EditText
+                android:layout_margin="@dimen/dp_5"
+                android:id="@+id/edit_msg"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:background="@drawable/background_search"
+                android:gravity="left|center"
+                android:hint="  请输入..."
+                android:imeOptions="flagNoExtractUi"
+                android:lineSpacingExtra="@dimen/dp_5"
+                android:minHeight="@dimen/dp_35"
+                android:padding="@dimen/dp_5"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/sp_13" />
+
+            <Button
+                android:textColor="@color/white"
+                android:text="发送"
+                android:enabled="false"
+                android:id="@+id/btn_chat_send"
+                android:layout_width="@dimen/dp_45"
+                android:layout_height="@dimen/dp_25"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_5"
+                android:background="@drawable/btn_next"
+                android:gravity="center"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</com.lairui.easy.mywidget.view.WindowInsetsFrameLayout>
