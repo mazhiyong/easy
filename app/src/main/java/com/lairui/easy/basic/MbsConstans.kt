@@ -38,7 +38,7 @@ object MbsConstans {
     val SERVER_IP_PORT = "172.16.1.65:12170"
     val WEBSOCKET_URL = "ws://$SERVER_IP_PORT/appsvr/"
 
-    val SERVER_URL = "http://bestapi.jinjifuweng.com/index/"
+    val SERVER_URL = "http://by.qilinpz.com/index/"
 
     val XIEYI_URL = "http://ys.51zhir.cn/"
 

@@ -21,6 +21,7 @@ import java.io.Serializable
 
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.lairui.easy.ui.module2.activity.BuyAndSellActivity
 import com.lairui.easy.ui.module4.activity.CeLueItemActivity
 import com.lairui.easy.ui.temporary.adapter.ListBaseAdapter
 
@@ -56,12 +57,12 @@ class TradeListAdapter(context: Context) : ListBaseAdapter() {
             1 -> {
                 viewHolder.mStatusTv.text = "操盘中"
                 viewHolder.mStatusTv.setTextColor(ContextCompat.getColor(mContext!!, R.color.font_c))
-                viewHolder.mTradeIv!!.visibility = View.VISIBLE
+                viewHolder.mTradeIv.visibility = View.VISIBLE
             }
             2 -> {
                 viewHolder.mStatusTv.text = "已结清"
                 viewHolder.mStatusTv.setTextColor(ContextCompat.getColor(mContext!!, R.color.black99))
-                viewHolder.mTradeIv!!.visibility = View.GONE
+                viewHolder.mTradeIv.visibility = View.GONE
             }
         }
         viewHolder.mTitleTv.text = item["title"]!!.toString() + ""
@@ -78,6 +79,11 @@ class TradeListAdapter(context: Context) : ListBaseAdapter() {
             val intent = Intent(mContext,CeLueItemActivity::class.java)
             mContext!!.startActivity(intent)
         }
+        viewHolder.mTradeIv.setOnClickListener {
+            val intent = Intent(mContext,BuyAndSellActivity::class.java)
+            mContext!!.startActivity(intent)
+        }
+
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

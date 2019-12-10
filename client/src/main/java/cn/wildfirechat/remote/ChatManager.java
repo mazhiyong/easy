@@ -677,7 +677,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.modifyChannelInfo(channelId, modifyType.ordinal(), newValue, new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.modifyChannelInfo(channelId, modifyType.ordinal(), newValue, new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -818,7 +818,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.listenChannel(channelId, listen, new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.listenChannel(channelId, listen, new IGeneralCallback.Stub() {
 
                 @Override
                 public void onSuccess() throws RemoteException {
@@ -865,7 +865,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.destoryChannel(channelId, new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.destoryChannel(channelId, new IGeneralCallback.Stub() {
 
                 @Override
                 public void onSuccess() throws RemoteException {
@@ -1407,7 +1407,7 @@ public class ChatManager {
      */
     public void recallMessage(final Message msg, final GeneralCallback callback) {
         try {
-            mClient.recall(msg.messageUid, new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.recall(msg.messageUid, new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     msg.content = new RecallMessageContent(userId, msg.messageUid);
@@ -1520,7 +1520,7 @@ public class ChatManager {
      * @param fromIndex    消息起始id(messageId)
      * @param before       true, 获取fromInde之前的消息，即更旧的消息；false，获取fromIndex之后的消息，即更新的消息。都不包含fromIndex对应的消息
      * @param count        获取消息条数
-     * @param withUser     只有会话类型为{@link cn.wildfirechat.model.Conversation.ConversationType#Channel}时生效, channel主用来查询和某个用户的所有消息
+     * @param withUser     只有会话类型为{@link Conversation.ConversationType#Channel}时生效, channel主用来查询和某个用户的所有消息
      * @return
      */
     public List<Message> getMessages(Conversation conversation, long fromIndex, boolean before, int count, String withUser) {
@@ -2112,7 +2112,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.removeFriend(userId, new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.removeFriend(userId, new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -2152,7 +2152,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.sendFriendRequest(userId, reason, new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.sendFriendRequest(userId, reason, new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -2192,7 +2192,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.handleFriendRequest(userId, accept, new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.handleFriendRequest(userId, accept, new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -2232,7 +2232,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.setBlackList(userId, isBlacked, new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.setBlackList(userId, isBlacked, new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -2272,7 +2272,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.deleteFriend(userId, new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.deleteFriend(userId, new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -2329,7 +2329,7 @@ public class ChatManager {
             return;
         }
         try {
-            mClient.joinChatRoom(chatRoomId, new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.joinChatRoom(chatRoomId, new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     mainHandler.post(() -> callback.onSuccess());
@@ -2351,7 +2351,7 @@ public class ChatManager {
             return;
         }
         try {
-            mClient.quitChatRoom(chatRoomId, new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.quitChatRoom(chatRoomId, new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     mainHandler.post(() -> callback.onSuccess());
@@ -2653,7 +2653,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.modifyMyInfo(values, new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.modifyMyInfo(values, new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -2840,7 +2840,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.addGroupMembers(groupId, memberIds, inlines, content2Payload(notifyMsg), new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.addGroupMembers(groupId, memberIds, inlines, content2Payload(notifyMsg), new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -2894,7 +2894,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.removeGroupMembers(groupId, memberIds, inlines, content2Payload(notifyMsg), new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.removeGroupMembers(groupId, memberIds, inlines, content2Payload(notifyMsg), new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -2939,7 +2939,7 @@ public class ChatManager {
             inlines[j] = lines.get(j);
         }
         try {
-            mClient.quitGroup(groupId, inlines, content2Payload(notifyMsg), new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.quitGroup(groupId, inlines, content2Payload(notifyMsg), new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -2984,7 +2984,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.dismissGroup(groupId, inlines, content2Payload(notifyMsg), new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.dismissGroup(groupId, inlines, content2Payload(notifyMsg), new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -3031,7 +3031,7 @@ public class ChatManager {
             inlines[j] = lines.get(j);
         }
         try {
-            mClient.modifyGroupInfo(groupId, modifyType.ordinal(), newValue, inlines, content2Payload(notifyMsg), new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.modifyGroupInfo(groupId, modifyType.ordinal(), newValue, inlines, content2Payload(notifyMsg), new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -3077,7 +3077,7 @@ public class ChatManager {
             inlines[j] = lines.get(j);
         }
         try {
-            mClient.modifyGroupAlias(groupId, alias, inlines, content2Payload(notifyMsg), new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.modifyGroupAlias(groupId, alias, inlines, content2Payload(notifyMsg), new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -3164,7 +3164,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.transferGroup(groupId, newOwner, inlines, content2Payload(notifyMsg), new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.transferGroup(groupId, newOwner, inlines, content2Payload(notifyMsg), new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -3209,7 +3209,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.setGroupManager(groupId, isSet, memberIds, inlines, content2Payload(notifyMsg), new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.setGroupManager(groupId, isSet, memberIds, inlines, content2Payload(notifyMsg), new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {
@@ -3317,7 +3317,7 @@ public class ChatManager {
         }
 
         try {
-            mClient.setUserSetting(scope, key, value, new cn.wildfirechat.client.IGeneralCallback.Stub() {
+            mClient.setUserSetting(scope, key, value, new IGeneralCallback.Stub() {
                 @Override
                 public void onSuccess() throws RemoteException {
                     if (callback != null) {

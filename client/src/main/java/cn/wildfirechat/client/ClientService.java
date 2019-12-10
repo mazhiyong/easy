@@ -274,7 +274,7 @@ public class ClientService extends Service implements SdtLogic.ICallBack,
             }
         }
 
-        private ProtoMessage convertMessage(cn.wildfirechat.message.Message msg) {
+        private ProtoMessage convertMessage(Message msg) {
             ProtoMessage protoMessage = new ProtoMessage();
 
             if (msg.conversation != null) {
@@ -298,7 +298,7 @@ public class ClientService extends Service implements SdtLogic.ICallBack,
         }
 
         @Override
-        public void send(cn.wildfirechat.message.Message msg, final ISendMessageCallback callback, int expireDuration) throws RemoteException {
+        public void send(Message msg, final ISendMessageCallback callback, int expireDuration) throws RemoteException {
 
             msg.sender = userId;
             ProtoMessage protoMessage = convertMessage(msg);
@@ -413,11 +413,11 @@ public class ClientService extends Service implements SdtLogic.ICallBack,
         }
 
         @Override
-        public List<cn.wildfirechat.message.Message> getMessages(Conversation conversation, long fromIndex, boolean before, int count, String withUser) throws RemoteException {
+        public List<Message> getMessages(Conversation conversation, long fromIndex, boolean before, int count, String withUser) throws RemoteException {
             ProtoMessage[] protoMessages = ProtoLogic.getMessages(conversation.type.ordinal(), conversation.target, conversation.line, fromIndex, before, count, withUser);
-            List<cn.wildfirechat.message.Message> out = new ArrayList<>();
+            List<Message> out = new ArrayList<>();
             for (ProtoMessage protoMessage : protoMessages) {
-                cn.wildfirechat.message.Message msg = convertProtoMessage(protoMessage);
+                Message msg = convertProtoMessage(protoMessage);
                 if (msg != null) {
                     out.add(msg);
                 }
@@ -428,9 +428,9 @@ public class ClientService extends Service implements SdtLogic.ICallBack,
         @Override
         public List<Message> getMessagesEx(int[] conversationTypes, int[] lines, int[] contentTypes, long fromIndex, boolean before, int count, String withUser) throws RemoteException {
             ProtoMessage[] protoMessages = ProtoLogic.getMessagesEx(conversationTypes, lines, contentTypes, fromIndex, before, count, withUser);
-            List<cn.wildfirechat.message.Message> out = new ArrayList<>();
+            List<Message> out = new ArrayList<>();
             for (ProtoMessage protoMessage : protoMessages) {
-                cn.wildfirechat.message.Message msg = convertProtoMessage(protoMessage);
+                Message msg = convertProtoMessage(protoMessage);
                 if (msg != null) {
                     out.add(msg);
                 }
@@ -441,9 +441,9 @@ public class ClientService extends Service implements SdtLogic.ICallBack,
         @Override
         public List<Message> getMessagesEx2(int[] conversationTypes, int[] lines, int messageStatus, long fromIndex, boolean before, int count, String withUser) throws RemoteException {
             ProtoMessage[] protoMessages = ProtoLogic.getMessagesEx2(conversationTypes, lines, messageStatus, fromIndex, before, count, withUser);
-            List<cn.wildfirechat.message.Message> out = new ArrayList<>();
+            List<Message> out = new ArrayList<>();
             for (ProtoMessage protoMessage : protoMessages) {
-                cn.wildfirechat.message.Message msg = convertProtoMessage(protoMessage);
+                Message msg = convertProtoMessage(protoMessage);
                 if (msg != null) {
                     out.add(msg);
                 }
@@ -456,9 +456,9 @@ public class ClientService extends Service implements SdtLogic.ICallBack,
             ProtoLogic.getRemoteMessages(conversation.type.ordinal(), conversation.target, conversation.line, beforeMessageUid, count, new ProtoLogic.ILoadRemoteMessagesCallback() {
                 @Override
                 public void onSuccess(ProtoMessage[] list) {
-                    List<cn.wildfirechat.message.Message> out = new ArrayList<>();
+                    List<Message> out = new ArrayList<>();
                     for (ProtoMessage protoMessage : list) {
-                        cn.wildfirechat.message.Message msg = convertProtoMessage(protoMessage);
+                        Message msg = convertProtoMessage(protoMessage);
                         if (msg != null) {
                             out.add(msg);
                         }
@@ -482,24 +482,24 @@ public class ClientService extends Service implements SdtLogic.ICallBack,
         }
 
         @Override
-        public cn.wildfirechat.message.Message getMessage(long messageId) throws RemoteException {
+        public Message getMessage(long messageId) throws RemoteException {
             return convertProtoMessage(ProtoLogic.getMessage(messageId));
         }
 
         @Override
-        public cn.wildfirechat.message.Message getMessageByUid(long messageUid) throws RemoteException {
+        public Message getMessageByUid(long messageUid) throws RemoteException {
             return convertProtoMessage(ProtoLogic.getMessageByUid(messageUid));
         }
 
         @Override
-        public cn.wildfirechat.message.Message insertMessage(cn.wildfirechat.message.Message message, boolean notify) throws RemoteException {
+        public Message insertMessage(Message message, boolean notify) throws RemoteException {
             ProtoMessage protoMessage = convertMessage(message);
             message.messageId = ProtoLogic.insertMessage(protoMessage);
             return message;
         }
 
         @Override
-        public boolean updateMessage(cn.wildfirechat.message.Message message) throws RemoteException {
+        public boolean updateMessage(Message message) throws RemoteException {
             ProtoMessage protoMessage = convertMessage(message);
             ProtoLogic.updateMessageContent(protoMessage);
             return false;
@@ -1120,9 +1120,9 @@ public class ClientService extends Service implements SdtLogic.ICallBack,
         }
 
         @Override
-        public List<cn.wildfirechat.message.Message> searchMessage(Conversation conversation, String keyword) throws RemoteException {
+        public List<Message> searchMessage(Conversation conversation, String keyword) throws RemoteException {
             ProtoMessage[] protoMessages = ProtoLogic.searchMessage(conversation.type.getValue(), conversation.target, conversation.line, keyword);
-            List<cn.wildfirechat.message.Message> out = new ArrayList<>();
+            List<Message> out = new ArrayList<>();
 
             if (protoMessages != null) {
                 for (ProtoMessage protoMsg : protoMessages) {
@@ -1719,10 +1719,10 @@ public class ClientService extends Service implements SdtLogic.ICallBack,
 
     private final ClientServiceStub mBinder = new ClientServiceStub();
 
-    private List<cn.wildfirechat.message.Message> convertProtoMessages(List<ProtoMessage> protoMessages) {
-        List<cn.wildfirechat.message.Message> out = new ArrayList<>();
+    private List<Message> convertProtoMessages(List<ProtoMessage> protoMessages) {
+        List<Message> out = new ArrayList<>();
         for (ProtoMessage protoMessage : protoMessages) {
-            cn.wildfirechat.message.Message msg = convertProtoMessage(protoMessage);
+            Message msg = convertProtoMessage(protoMessage);
             if (msg != null && msg.content != null) {
                 out.add(msg);
             }
@@ -1730,11 +1730,11 @@ public class ClientService extends Service implements SdtLogic.ICallBack,
         return out;
     }
 
-    private cn.wildfirechat.message.Message convertProtoMessage(ProtoMessage protoMessage) {
+    private Message convertProtoMessage(ProtoMessage protoMessage) {
         if (protoMessage == null || TextUtils.isEmpty(protoMessage.getTarget())) {
             return null;
         }
-        cn.wildfirechat.message.Message msg = new cn.wildfirechat.message.Message();
+        Message msg = new Message();
         msg.messageId = protoMessage.getMessageId();
         msg.conversation = new Conversation(Conversation.ConversationType.values()[protoMessage.getConversationType()], protoMessage.getTarget(), protoMessage.getLine());
         msg.sender = protoMessage.getFrom();

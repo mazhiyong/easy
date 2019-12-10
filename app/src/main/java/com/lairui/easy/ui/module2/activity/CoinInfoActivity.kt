@@ -17,6 +17,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.jaeger.library.StatusBarUtil
+import com.lairui.easy.utils.tool.SelectDataUtil
 import com.zhangke.websocket.SocketListener
 import com.zhangke.websocket.WebSocketHandler.getDefault
 import com.zhangke.websocket.response.ErrorResponse
@@ -41,21 +42,25 @@ class CoinInfoActivity : BasicActivity(), RequestView {
         return false
     }
 
+
+
     override val contentView: Int
         get() = R.layout.activity_coin_info
 
     override fun init() {
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
         title_text.setText("行情")
+        divide_line.visibility = View.GONE
 
         val timeChoose = resources.getStringArray(R.array.timeChoose)
         val klineTimeParams = resources.getStringArray(R.array.klineTimeParams)
-        for (item in timeChoose){
-            tabLayout.addTab(tabLayout.newTab().setText(item))
+
+        val mKLineData = SelectDataUtil.kLineParams
+        for (item in mKLineData){
+            tabLayout.addTab(tabLayout.newTab().setText(item.get("name") as String))
         }
 
-
-        tabLayout.addOnTabSelectedListener(object:TabLayout.OnTabSelectedListener{
+        /*tabLayout.addOnTabSelectedListener(object:TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when(tabLayout.selectedTabPosition){
                     0 -> period = klineTimeParams[0]
@@ -79,7 +84,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
 
         })
-
+*/
 
 
         //匿名内部类格式
@@ -214,7 +219,6 @@ class CoinInfoActivity : BasicActivity(), RequestView {
         try {
             t = Gson().fromJson(jsonString, typeOfT)
         } catch (e: Exception) {
-            // TODO: handle exception
             e.printStackTrace()
         }
 
@@ -248,7 +252,6 @@ class CoinInfoActivity : BasicActivity(), RequestView {
         map["period"] = period
         val headerMap = HashMap<String, String>()
         mRequestPresenterImp.requestGetToMap(headerMap, MethodUrl.K_LINE, map)
-
 
     }
 

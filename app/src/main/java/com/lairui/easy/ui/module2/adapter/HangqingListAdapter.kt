@@ -1,14 +1,17 @@
 package com.lairui.easy.ui.module2.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.lairui.easy.R
+import com.lairui.easy.ui.module2.activity.CoinInfoActivity
 import com.lairui.easy.ui.temporary.adapter.ListBaseAdapter
 
 class HangqingListAdapter(context: Context) : ListBaseAdapter() {
@@ -55,11 +58,15 @@ class HangqingListAdapter(context: Context) : ListBaseAdapter() {
         } else {
             val item: Map<String, Any> = mDataList[position - 1]
             val viewHolder = holder as ViewHolder
-            viewHolder.nameTv!!.text = item["name"].toString() + ""
-            viewHolder.priceTv!!.text = item["price"].toString() + ""
-            viewHolder.ratioTv!!.text = item["ratio"].toString() + ""
-            viewHolder.typeTv!!.text = item["type"].toString() + ""
-            viewHolder.numberTv!!.text = item["number"].toString() + ""
+            viewHolder.nameTv.text = item["name"].toString() + ""
+            viewHolder.priceTv.text = item["price"].toString() + ""
+            viewHolder.ratioTv.text = item["ratio"].toString() + ""
+            viewHolder.typeTv.text = item["type"].toString() + ""
+            viewHolder.numberTv.text = item["number"].toString() + ""
+            viewHolder.lay!!.setOnClickListener {
+                val intent = Intent(mContext,CoinInfoActivity::class.java)
+                mContext!!.startActivity(intent)
+            }
         }
     }
 
@@ -75,11 +82,15 @@ class HangqingListAdapter(context: Context) : ListBaseAdapter() {
         @BindView(R.id.numberTv)
         lateinit var numberTv: TextView
 
+        var lay: CardView? = null
+
         init {
             when (type) {
                 ITEM_TYPE_HEADER -> {
+
                 }
                 ITEM_TYPE_NORMAL -> {
+                    lay = itemView!!.findViewById(R.id.trade_Lay)
                 }
             }
             ButterKnife.bind(this, itemView!!)

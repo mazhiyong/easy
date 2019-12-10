@@ -108,7 +108,7 @@ public class OKHttpHelper {
         });
     }
 
-    private static <T> void handleResponse(String url, Call call, okhttp3.Response response, Callback<T> callback) {
+    private static <T> void handleResponse(String url, Call call, Response response, Callback<T> callback) {
         if (callback != null) {
             if (!response.isSuccessful()) {
                 callback.onFailure(response.code(), response.message());

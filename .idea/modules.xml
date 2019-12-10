@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/android-project-easy.iml" filepath="$PROJECT_DIR$/android-project-easy.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/avenginekit/avenginekit.iml" filepath="$PROJECT_DIR$/avenginekit/avenginekit.iml" />
       <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
       <module fileurl="file://$PROJECT_DIR$/easy.iml" filepath="$PROJECT_DIR$/easy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/avenginekit/easy-avenginekit.iml" filepath="$PROJECT_DIR$/avenginekit/easy-avenginekit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mars-core-release/easy-mars-core-release.iml" filepath="$PROJECT_DIR$/mars-core-release/easy-mars-core-release.iml" />
       <module fileurl="file://$PROJECT_DIR$/emojilibrary/emojilibrary.iml" filepath="$PROJECT_DIR$/emojilibrary/emojilibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/imagepicker/imagepicker.iml" filepath="$PROJECT_DIR$/imagepicker/imagepicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/mars-core-release/mars-core-release.iml" filepath="$PROJECT_DIR$/mars-core-release/mars-core-release.iml" />

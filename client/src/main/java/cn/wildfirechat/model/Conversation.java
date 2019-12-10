@@ -105,7 +105,7 @@ public class Conversation implements Parcelable {
         this.line = in.readInt();
     }
 
-    public static final Parcelable.Creator<Conversation> CREATOR = new Parcelable.Creator<Conversation>() {
+    public static final Creator<Conversation> CREATOR = new Creator<Conversation>() {
         @Override
         public Conversation createFromParcel(Parcel source) {
             return new Conversation(source);

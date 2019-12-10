@@ -388,6 +388,16 @@
             android:theme="@style/AppTheme.Transparent">
         </activity>
 
+        <!-- 买入卖出 -->
+        <activity
+            android:name="com.lairui.easy.ui.module2.activity.BuyAndSellActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+
+
 
         <!-- 用户信息页面 -->
         <activity

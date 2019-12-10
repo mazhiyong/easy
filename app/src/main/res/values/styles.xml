@@ -189,4 +189,14 @@
         <item name="colorControlNormal">@color/divide_line</item>
         <item name="colorControlActivated">@color/font_c</item>
     </style>
+
+
+    <style name="ToolBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="actionOverflowButtonStyle">@style/OverFlowButton</item>
+    </style>
+
+    <style name="OverFlowButton" parent="Widget.AppCompat.ActionButton.Overflow">
+    </style>
+
+
 </resources>

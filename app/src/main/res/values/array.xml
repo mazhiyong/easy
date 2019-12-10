@@ -32,13 +32,12 @@
     </array>
 
     <string-array name="timeChoose">
-        <item>1分</item>
-        <item>5分</item>
-        <item>15分</item>
-        <item>30分</item>
-        <item>1小时</item>
-        <item>1天</item>
-        <item>1周</item>
+        <item>1分钟</item>
+        <item>5分钟</item>
+        <item>10分钟</item>
+        <item>15分钟</item>
+        <item>30分钟</item>
+        <item>60分钟</item>
     </string-array>
 
     <string-array name="klineTimeParams">

@@ -1,4 +1,4 @@
-//package com.lqr.imagepicker.ui;
+package com.lqr.imagepicker.ui;//package com.lqr.imagepicker.ui;
 //
 //import android.content.Intent;
 //import android.graphics.Bitmap;
