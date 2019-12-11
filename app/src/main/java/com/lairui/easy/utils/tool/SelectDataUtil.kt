@@ -101,6 +101,38 @@ object SelectDataUtil {
 
             return list
         }
+    //K线
+    val kLineParams: List<MutableMap<String, Any>>
+        get() {
+            val list = ArrayList<MutableMap<String, Any>>()
+            var map: MutableMap<String, Any> = HashMap()
+            map["name"] = "分时"
+            map["code"] = "1"
+            list.add(map)
+
+            map = HashMap()
+            map["name"] = "5日"
+            map["code"] = "2"
+            list.add(map)
+
+            map = HashMap()
+            map["name"] = "日K"
+            map["code"] = "3"
+            list.add(map)
+
+            map = HashMap()
+            map["name"] = "周K"
+            map["code"] = "4"
+            list.add(map)
+
+            map = HashMap()
+            map["name"] = "月K"
+            map["code"] = "5"
+            list.add(map)
+
+            return list
+        }
+
     //学历(1:小学程度或以下,2:中学程度,3:预科/大专程度,4:学士,5:硕士或以上)
     val education: List<MutableMap<String, Any>>
         get() {

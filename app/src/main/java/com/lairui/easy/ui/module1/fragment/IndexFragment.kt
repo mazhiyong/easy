@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Rect
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
@@ -22,7 +23,10 @@ import com.lairui.easy.mywidget.view.LoadingWindow
 import com.lairui.easy.mywidget.view.MyRefreshHeader
 import com.lairui.easy.mywidget.view.PageView
 import com.lairui.easy.mywidget.view.PullScrollView
+import com.lairui.easy.mywidget.view.TipsToast.Companion.showToastMsg
+import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module1.activity.NewsListActivity
+import com.lairui.easy.ui.module1.activity.NoticeDetialActivity
 import com.lairui.easy.ui.module1.adapter.CoinInfoAdapter
 import com.lairui.easy.ui.module1.adapter.MainCoinAdapter
 import com.lairui.easy.ui.module1.adapter.NewsListAdapter
@@ -32,6 +36,7 @@ import com.lairui.easy.ui.temporary.activity.BorrowMoneyActivity
 import com.lairui.easy.ui.temporary.activity.ChongZhiCardAddActivity
 import com.lairui.easy.utils.tool.LogUtil
 import com.lairui.easy.utils.tool.UtilTools
+import com.sunfusheng.marqueeview.MarqueeView
 import kotlinx.android.synthetic.main.fragment_circle_view2.*
 import java.io.Serializable
 import java.util.*
@@ -52,8 +57,11 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
     lateinit var contentLay: LinearLayout
     @BindView(R.id.rvList)
     lateinit var rvList: RecyclerView
+    @BindView(R.id.marqueeView)
+    lateinit var marqueeView: MarqueeView<Any>
 
 
+    private var noticeList: MutableList<MutableMap<String, Any>?>? = null
 
     private var coinInfoAdapter: CoinInfoAdapter? = null
     private var mainCoinAdapter: MainCoinAdapter? = null
@@ -109,6 +117,14 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
 
 
 
+
+        marqueeView.setOnItemClickListener { position, textView ->
+            val intent = Intent(activity, NoticeDetialActivity::class.java)
+            intent.putExtra("DATA", noticeList!![position] as Serializable)
+            startActivity(intent)
+        }
+
+
         for (index in 1..5){
             val map = HashMap<String,Any>()
             map["name"] = "上证指数"+index
@@ -121,7 +137,7 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
         vpQuotesInfo.adapter = mainCoinAdapter
         mainCoinAdapter!!.setData(listUp,vpQuotesInfo.currentItem)
 
-        coinInfoAdapter = CoinInfoAdapter(activity)
+        coinInfoAdapter = CoinInfoAdapter(activity!!)
         rvHoriList.adapter = coinInfoAdapter
         //rvHoriList.addItemDecoration(SpaceItemDecoration(UtilTools.dip2px(activity!!,10),3))
         coinInfoAdapter!!.setList(listUp)
@@ -152,13 +168,22 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
         newsAdapter!!.addAll(listNews)
         rvList.adapter = newsAdapter
 
+
+
+
+        getNoticeListAction()
+
     }
     fun setBarTextColor() {
         StatusBarUtil.setLightMode(activity!!)
     }
 
-
-
+    fun getNoticeListAction() {
+        val map = java.util.HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.NOTICE_LIST
+        val mHeaderMap = java.util.HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.NOTICE_LIST, map)
+    }
 
 
 
@@ -178,25 +203,30 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
     }
 
     override fun showProgress() {
-        //mLoadingWindow.showView();
+        //mLoadingWindow.showView()
     }
 
     override fun disimissProgress() {
-        // mLoadingWindow.cancleView();
+         //mLoadingWindow.cancleView()
 
     }
 
 
 
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
-        mLoadingWindow!!.cancleView()
-
+        mLoadingWindow.cancleView()
         when (mType) {
-            MethodUrl.isInstallCer//{verify_type=FACE, state=0}//安装证书信息
-            -> mZhengshuMap = tData
-            MethodUrl.erleiHuList//二类户列表
-            -> {
+            MethodUrl.NOTICE_LIST -> when (tData["code"].toString() + "") {
+                "1" -> {
 
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1"->{
+                     activity!!.finish()
+                     val intent = Intent(activity, LoginActivity::class.java)
+                     startActivity(intent)
+
+                }
             }
 
         }
@@ -205,11 +235,10 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
         mLoadingWindow.cancleView()
 
-
-
         when (mType) {
             MethodUrl.erleiHuList//二类户列表
             -> {
+
             }
         }
         dealFailInfo(map, mType)

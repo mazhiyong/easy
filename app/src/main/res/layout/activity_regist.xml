@@ -134,6 +134,7 @@
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginTop="@dimen/dp_10"
             android:maxLength="20"
+            android:inputType="textPassword"
             android:textSize="@dimen/sp_15"
             android:layout_height="wrap_content"/>
         <ToggleButton
@@ -160,6 +161,7 @@
         <EditText
             android:id="@+id/etPassWordAgain"
             android:layout_width="wrap_content"
+            android:inputType="textPassword"
             android:digits="@string/shuzi_zimu"
             android:hint="@string/please_password_again"
             android:theme="@style/MyEditText"

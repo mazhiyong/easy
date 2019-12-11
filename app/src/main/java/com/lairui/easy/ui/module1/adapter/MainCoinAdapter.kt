@@ -34,7 +34,7 @@ class MainCoinAdapter(activity: Activity, data: List<Map<String, Any>>?) : Pager
     }
 
     interface ItemClickListener {
-        fun onItemClickListener(map: Map<String?, Any?>?)
+        fun onItemClickListener(map: Map<String, Any?>?)
     }
 
     override fun getCount(): Int { // 根据传入数据来判断
@@ -69,7 +69,7 @@ class MainCoinAdapter(activity: Activity, data: List<Map<String, Any>>?) : Pager
         coinInfoAdapter.setList(listUpBeans)
         coinInfoAdapter.setOnItemClickListener(object : BasicRecycleViewAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View?, position: Int) {
-                val map: Map<String?, Any?> = coinInfoAdapter.getCoinList().get(position)
+                val map: Map<String, Any?> = coinInfoAdapter.getCoinList().get(position)
                 if (itemClickListener != null) {
                     itemClickListener!!.onItemClickListener(map)
                 }

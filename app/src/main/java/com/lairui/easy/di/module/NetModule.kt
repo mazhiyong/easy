@@ -10,7 +10,10 @@ import com.google.gson.stream.JsonWriter
 import com.lairui.easy.api.ApiManagerService
 import com.lairui.easy.api.TrustAllCerts
 import com.lairui.easy.basic.MbsConstans
+import com.lairui.easy.manage.ActivityManager
 import com.lairui.easy.utils.tool.NetUtil
+import com.lzy.okgo.cookie.CookieJarImpl
+import com.lzy.okgo.cookie.store.SPCookieStore
 
 import java.io.IOException
 import java.security.cert.CertificateException
@@ -25,6 +28,7 @@ import javax.net.ssl.X509TrustManager
 import dagger.Module
 import dagger.Provides
 import okhttp3.CacheControl
+import okhttp3.CookieJar
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -134,6 +138,8 @@ class NetModule {
                             .writeTimeout(60, TimeUnit.SECONDS)
                             .addInterceptor(interceptor)//okhttp  输出日志信息
                             .retryOnConnectionFailure(true)
+                            //.cookieJar(CookieJarImpl(SPCookieStore(ActivityManager.instance.currentActivity())))
+                            .cookieJar(CookieJarImpl(SPCookieStore(ActivityManager.instance.currentActivity())))
                             /*
                              //.addNetworkInterceptor(new StethoInterceptor())
                              .retryOnConnectionFailure(false)

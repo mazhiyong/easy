@@ -4,6 +4,8 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.CountDownTimer
 import android.text.TextUtils
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.view.Gravity
 import android.view.View
 import android.widget.*
@@ -19,14 +21,12 @@ import com.lairui.easy.listener.SelectBackListener
 import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.mywidget.dialog.KindSelectDialog
 import com.lairui.easy.ui.temporary.activity.CodeMsgActivity
-import com.lairui.easy.utils.tool.SPUtils
-import com.lairui.easy.utils.tool.SelectDataUtil
-import com.lairui.easy.utils.tool.TextViewUtils
+import com.lairui.easy.utils.tool.*
 import kotlinx.android.synthetic.main.activity_regist.*
 import java.io.Serializable
 import java.util.*
 
-class ResetPassWordActivity : BasicActivity(), RequestView, SelectBackListener {
+class ResetPassWordActivity : BasicActivity(), RequestView, SelectBackListener, CompoundButton.OnCheckedChangeListener {
 
 
     @BindView(R.id.tv_zhuti)
@@ -78,6 +78,8 @@ class ResetPassWordActivity : BasicActivity(), RequestView, SelectBackListener {
             invcode = bundle.getString("result")!! + ""
         }
 
+        togglePwd.setOnCheckedChangeListener(this)
+
     }
 
 
@@ -90,26 +92,58 @@ class ResetPassWordActivity : BasicActivity(), RequestView, SelectBackListener {
         mRequestPresenterImp!!.requestGetToRes(mHeaderMap, MethodUrl.nameCode, map)
     }
 
+    /**
+     * 是否显示密码
+     */
+    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
+        if (isChecked) {
+            //显示密码
+            etPassWord.transformationMethod = HideReturnsTransformationMethod.getInstance()
+            etPassWordAgain.transformationMethod = HideReturnsTransformationMethod.getInstance()
+        } else {
+            //隐藏密码
+            etPassWord.transformationMethod = PasswordTransformationMethod.getInstance()
+            etPassWordAgain.transformationMethod = PasswordTransformationMethod.getInstance()
+        }
+    }
+
 
     @OnClick( R.id.getCodeTv, R.id.bt_next, R.id.left_back_lay)
     fun onViewClicked(view: View) {
         when (view.id) {
             R.id.left_back_lay -> finish()
             R.id.getCodeTv -> {
+                if (UtilTools.empty(etPhone.text)){
+                    showToastMsg("请输入手机号")
+                    return
+                }
                 mTimeCount.start()
+                getCodeAction()
             }
             R.id.bt_next -> {
-                mBtNext!!.isEnabled = false
+                mBtNext.isEnabled = false
+                mBtNext.setTextColor(ContextCompat.getColor(this@ResetPassWordActivity,R.color.black99))
                 registAction()
             }
         }
     }
 
+    private fun getCodeAction() {
+        mRequestTag = MethodUrl.FORGOT_CODE
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.FORGOT_CODE
+        map["phone"] = etPhone.text.toString()
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.FORGOT_CODE, map)
+
+    }
+
+
     private fun getTempTokenAction() {
         mRequestTag = MethodUrl.tempToken
         val map = HashMap<String, String>()
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestGetToMap(mHeaderMap, MethodUrl.tempToken, map)
+        mRequestPresenterImp.requestGetToMap(mHeaderMap, MethodUrl.tempToken, map)
     }
 
 
@@ -119,31 +153,47 @@ class ResetPassWordActivity : BasicActivity(), RequestView, SelectBackListener {
         val map = HashMap<String, String>()
         map["token"] = MbsConstans.TEMP_TOKEN
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestGetToRes(mHeaderMap, MethodUrl.imageCode, map)
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MethodUrl.imageCode, map)
     }
 
 
     private fun registAction() {
 
-        if (mKindMap == null || mKindMap.isEmpty()) {
-            showToastMsg("请选择账号主体")
-            mBtNext!!.isEnabled = true
+        if (TextUtils.isEmpty(etPhone.text)){
+            showToastMsg("请输入手机号")
+            mBtNext.isEnabled = true
+            mBtNext.setTextColor(ContextCompat.getColor(this@ResetPassWordActivity,R.color.white))
             return
         }
 
-        if (TextUtils.isEmpty(etPhone!!.text)) {
-            showToastMsg("请编辑手机号码信息")
-            mBtNext!!.isEnabled = true
+        if (TextUtils.isEmpty(etCode.text)) {
+            showToastMsg("请输入短信验证码")
+            mBtNext.isEnabled = true
+            mBtNext.setTextColor(ContextCompat.getColor(this@ResetPassWordActivity,R.color.white))
             return
         }
 
-        if (TextUtils.isEmpty(mEtCode!!.text)) {
-            showToastMsg("请编辑验证码信息")
-            mBtNext!!.isEnabled = true
+        if (TextUtils.isEmpty(etPassWord.text) || TextUtils.isEmpty(etPassWordAgain.text)) {
+            showToastMsg("请设置密码")
+            mBtNext.isEnabled = true
+            mBtNext.setTextColor(ContextCompat.getColor(this@ResetPassWordActivity,R.color.white))
             return
         }
 
-        cheackImageCodeAction()
+
+
+        mRequestTag = MethodUrl.FORGOT_ACTION
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.FORGOT_ACTION
+        map["phone"] = etPhone.text.toString()
+        map["code"] = etCode.text.toString()
+        map["password"] = etPassWord.text.toString()
+        map["confirm"] = etPassWordAgain.text.toString()
+
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.FORGOT_ACTION, map)
+
+
     }
 
     private fun cheackImageCodeAction() {
@@ -185,30 +235,28 @@ class ResetPassWordActivity : BasicActivity(), RequestView, SelectBackListener {
      * @date 2017/2/16 11:01
      */
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
-        mBtNext!!.isEnabled = true
+        mBtNext.isEnabled = true
+        mBtNext.setTextColor(ContextCompat.getColor(this@ResetPassWordActivity,R.color.white))
         val intent: Intent
         when (mType) {
-            MethodUrl.nameCode -> {
-                val result = tData["result"]!!.toString() + ""
-                SPUtils.put(this@ResetPassWordActivity, MbsConstans.SharedInfoConstans.NAME_CODE_DATA, result)
-                val mDataList = SelectDataUtil.getListByKeyList(SelectDataUtil.getNameCodeByType("firmKind"))
-                if (mDataList == null || mDataList.size == 0) {
-                    showToastMsg("暂无可选择的主体，请联系客服")
-                } else {
+            MethodUrl.FORGOT_CODE -> {
+                // 返回值  code  1正常  0异常    -1异常登录
+                LogUtil.i("show","code:"+tData["code"])
+                when (tData["code"].toString()){
+                    "1" -> showToastMsg(tData["msg"] as  String)
+                    "0" -> showToastMsg(tData["msg"] as  String)
 
-                    if (mDataList.size == 1) {
-                        mZhutiLay!!.isEnabled = false
-                        mArrowView!!.visibility = View.GONE
-                    } else {
-                        mZhutiLay!!.isEnabled = true
-                        mArrowView!!.visibility = View.VISIBLE
-                        mDialog = KindSelectDialog(this, true, mDataList, 10)
-                        mDialog!!.selectBackListener = this
-                        mDialog!!.showAtLocation(Gravity.BOTTOM, 0, 0)
-
-                    }
                 }
+
             }
+            MethodUrl.FORGOT_ACTION -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    showToastMsg(tData["msg"].toString() + "")
+                    finish()
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+            }
+
             MethodUrl.tempToken -> {
                 MbsConstans.TEMP_TOKEN = tData["temp_token"]!!.toString() + ""
                 getImageCodeAction()
@@ -255,7 +303,8 @@ class ResetPassWordActivity : BasicActivity(), RequestView, SelectBackListener {
      * @date 2017/2/16 11:01
      */
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
-        mBtNext!!.isEnabled = true
+        mBtNext.isEnabled = true
+        mBtNext.setTextColor(ContextCompat.getColor(this@ResetPassWordActivity,R.color.white))
         when (mType) {
             MethodUrl.imageCode -> if (type == "0") { //请求验证码失败
                 mIvCode!!.setImageResource(R.drawable.default_pic)

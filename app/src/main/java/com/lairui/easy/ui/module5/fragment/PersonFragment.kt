@@ -6,6 +6,8 @@ import android.content.Intent
 import androidx.cardview.widget.CardView
 
 import android.content.IntentFilter
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -31,6 +33,8 @@ import java.util.HashMap
 
 import butterknife.BindView
 import butterknife.Unbinder
+import com.lairui.easy.mywidget.view.TipsToast.Companion.showToastMsg
+import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module4.activity.RecordListActivity
 import com.lairui.easy.ui.module5.activity.*
 import de.hdodenhof.circleimageview.CircleImageView
@@ -67,6 +71,11 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
     private lateinit var mZoomImage: ImageView
     private lateinit var mRoundImageView: CircleImageView
     private lateinit var mUserName: TextView
+    private lateinit var mPeiziMoneyTv: TextView
+    private lateinit var mDongjieMoneyTv: TextView
+    private lateinit var mBaozhengMoneyTv: TextView
+    private lateinit var mAviableMoneyTv: TextView
+    private lateinit var mAccountTotal: TextView
     private lateinit var mBankMoneyTv: TextView
     private lateinit var mBankCardTv: TextView
     private lateinit var mShowYueLay: RelativeLayout
@@ -154,22 +163,44 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
 
         mPersonalMoreButton.setOnClickListener(this)
 
-        mRoundImageView = mPersonScrollView.findViewById<View>(R.id.headImageIv) as CircleImageView
+
         mUserName = mPersonScrollView.findViewById<View>(R.id.userAccount_Tv) as TextView
+        mAccountTotal = mPersonScrollView.findViewById<View>(R.id.account_total_tv) as TextView
+        mPeiziMoneyTv = mPersonScrollView.findViewById<View>(R.id.peiziMoneyTv) as TextView
+        mDongjieMoneyTv = mPersonScrollView.findViewById<View>(R.id.dongjieMoneyTv) as TextView
+        mBaozhengMoneyTv = mPersonScrollView.findViewById<View>(R.id.baozhengMoneyTv) as TextView
+        mAviableMoneyTv = mPersonScrollView.findViewById<View>(R.id.avaiableMoneyTv) as TextView
+
+        mRoundImageView = mPersonScrollView.findViewById<View>(R.id.headImageIv) as CircleImageView
         mRoundImageView.setOnClickListener(this)
+
 
 
         mToggleButton.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
+                if (UtilTools.empty(MbsConstans.USER_MAP)) {
+                    val s = SPUtils!![activity!!, MbsConstans.SharedInfoConstans.LOGIN_INFO, ""].toString()
+                    MbsConstans.USER_MAP = JSONUtil.instance.jsonMap(s)
+                }
+                mAccountTotal.text = MbsConstans.USER_MAP!!["total"] as String
+                mPeiziMoneyTv.text = MbsConstans.USER_MAP!!["with_capital"] as String
+                mDongjieMoneyTv.text = MbsConstans.USER_MAP!!["frozen"] as String
+                mBaozhengMoneyTv.text = MbsConstans.USER_MAP!!["bond"] as String
+                mAviableMoneyTv.text = MbsConstans.USER_MAP!!["account"] as String
 
             } else {
-
+                mAccountTotal.text = "*******"
+                mPeiziMoneyTv.text = "***"
+                mDongjieMoneyTv.text = "***"
+                mBaozhengMoneyTv.text = "***"
+                mAviableMoneyTv.text = "***"
             }
         }
-        // getCardInfoAction();
         setBarTextColor()
 
-        getShareData()
+        getUserInfoAction()
+
+
     }
 
     fun setBarTextColor() {
@@ -180,10 +211,15 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
      * 获取用户信息
      */
     private fun getUserInfoAction() {
-        mRequestTag = MethodUrl.userInfo
+        mRequestTag = MethodUrl.ACCOUNT_INFO
         val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.ACCOUNT_INFO
+         if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[activity!!, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.userInfo, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.ACCOUNT_INFO, map)
     }
 
     /**
@@ -193,7 +229,7 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
         mRequestTag = MethodUrl.shareUrl
         val map = HashMap<String, String>()
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestGetToMap(mHeaderMap, MethodUrl.shareUrl, map)
+        mRequestPresenterImp.requestGetToMap(mHeaderMap, MethodUrl.shareUrl, map)
     }
 
     /**
@@ -284,7 +320,27 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
 
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
         when (mType) {
-            MethodUrl.shareUrl -> mShareMap = tData
+
+            MethodUrl.ACCOUNT_INFO -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    MbsConstans.USER_MAP = tData["data"] as MutableMap<String, Any>?
+                    mUserName.text = MbsConstans.USER_MAP!!["phone"] as String
+                   /* mAccountTotal.text = MbsConstans.USER_MAP!!["total"] as String
+                    mPeiziMoneyTv.text = MbsConstans.USER_MAP!!["with_capital"] as String
+                    mDongjieMoneyTv.text = MbsConstans.USER_MAP!!["frozen"] as String
+                    mBaozhengMoneyTv.text = MbsConstans.USER_MAP!!["bond"] as String
+                    mAviableMoneyTv.text = MbsConstans.USER_MAP!!["account"] as String*/
+                    SPUtils.put(activity!!, MbsConstans.SharedInfoConstans.LOGIN_INFO, JSONUtil.instance.objectToJson(MbsConstans.USER_MAP!!))
+                   // initHeadPic()
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    activity!!.finish()
+                    val intent = Intent(activity!!, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
             MethodUrl.userInfo//用户信息 //{auth=1, firm_kind=0, head_pic=default, name=刘英超, tel=151****3298, idno=4107****3616, cmpl_info=0}
             -> {
                 MbsConstans.USER_MAP = tData

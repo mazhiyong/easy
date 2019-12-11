@@ -33,7 +33,6 @@ class BuyAndSellActivity : BasicActivity(), RequestView {
     private var mPhone = ""
 
     private var mRequestTag = ""
-
     override val contentView: Int
         get() = R.layout.activity_buyandsell
 

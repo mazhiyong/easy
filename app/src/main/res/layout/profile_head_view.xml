@@ -52,7 +52,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/dp_5"
                     android:gravity="left"
-                    android:text="18218281**1"
+                    android:text=""
                     android:textColor="@color/black33"
                     android:textSize="@dimen/sp_15"/>
                 <ImageView
@@ -95,10 +95,11 @@
                         android:textOn="" />
                 </RelativeLayout>
                 <TextView
+                    android:id="@+id/account_total_tv"
                     android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:layout_marginRight="@dimen/dp_10"
-                    android:text="999.99"
+                    android:text="******"
                     android:textSize="@dimen/sp_25"
                     android:textColor="@color/white"
                     android:layout_width="wrap_content"
@@ -116,8 +117,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
+                        android:id="@+id/peiziMoneyTv"
                         android:layout_alignParentRight="true"
-                        android:text="100.00"
+                        android:text="***"
                         android:textSize="@dimen/sp_12"
                         android:textColor="@color/white"
                         android:layout_width="wrap_content"
@@ -135,13 +137,15 @@
                         android:textColor="@color/white5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
+
                     <TextView
-                        android:layout_alignParentRight="true"
-                        android:text="100.00"
-                        android:textSize="@dimen/sp_12"
-                        android:textColor="@color/white"
+                        android:id="@+id/dongjieMoneyTv"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="***"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_12" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_marginTop="@dimen/dp_5"
@@ -156,8 +160,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
+                        android:id="@+id/baozhengMoneyTv"
                         android:layout_alignParentRight="true"
-                        android:text="100.00"
+                        android:text="***"
                         android:textSize="@dimen/sp_12"
                         android:textColor="@color/white"
                         android:layout_width="wrap_content"
@@ -177,8 +182,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
+                        android:id="@+id/avaiableMoneyTv"
                         android:layout_alignParentRight="true"
-                        android:text="100.00"
+                        android:text="***"
                         android:textSize="@dimen/sp_12"
                         android:textColor="@color/white"
                         android:layout_width="wrap_content"

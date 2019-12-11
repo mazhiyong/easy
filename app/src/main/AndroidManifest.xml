@@ -396,6 +396,14 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:theme="@style/AppTheme.Transparent">
         </activity>
+        <!--协议 -->
+        <activity
+            android:name="com.lairui.easy.ui.module.activity.XieYiDetialActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
 
 
 

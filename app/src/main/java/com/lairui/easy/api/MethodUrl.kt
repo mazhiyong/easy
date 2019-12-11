@@ -5,8 +5,6 @@ package com.lairui.easy.api
 object MethodUrl {
 
 
-    const val LOGIN_ACTION = "Register/userLogin" //登录
-    val K_LINE = "Coin/k_chart"//K线图
 
     val refreshToken = "token/refresh"//获取刷新的token
 
@@ -151,8 +149,35 @@ object MethodUrl {
     val jiekuanHetong = "loan/createConts"// 借款合同生成
     val jiekuanSubmit = "loan/apply"// 借款最后数据提交
 
-
     val shoumoneyLine = "loan/pondinfo"// 应收账款图示信息
     val shoumoneyList = "loan/pondinfo2"// 应收账款列表信息
+
+
+
+
+    //易随配
+    const val RIGIST_CODE = "register_code" //注册验证码
+    const val RIGIST_ACITON = "register" //注册
+    const val RIGIST_INFO = "register_protocol" //注册协议
+    const val RISK_INFO = "risk_disclosure" //风险书协议
+    const val STATEMENT_INFO = "investor_statement" //投资人声明
+    const val FORGOT_CODE = "forgot_code" //忘记密码验证码
+    const val FORGOT_ACTION = "forgot_password" //忘记密码重置
+    const val LOGIN_ACTION = "login" //登录
+
+    const val NEWS_LIST = "news_center" //新闻列表
+    const val NOTICE_LIST = "notice_list" //公告列表
+    const val HOME_INFO = "home_info" //账号信息
+
+
+    const val ACCOUNT_INFO = "account_info" //账号信息
+
+
+
+
+
+
+    val K_LINE = "Coin/k_chart"//K线图
+
 
 }

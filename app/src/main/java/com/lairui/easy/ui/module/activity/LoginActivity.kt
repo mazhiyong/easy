@@ -205,12 +205,12 @@ class LoginActivity : BasicActivity(), CompoundButton.OnCheckedChangeListener {
         mTogglePwd.setOnCheckedChangeListener(this)
         mBtnLogin.isEnabled = false
         mBtnLogin.setTextColor(ContextCompat.getColor(this@LoginActivity,R.color.black99))
-        if (ChatManagerHolder.gChatManager != null && ChatManagerHolder.gChatManager.connectionStatus == ConnectionStatus.ConnectionStatusConnected) {
+       /* if (ChatManagerHolder.gChatManager != null && ChatManagerHolder.gChatManager.connectionStatus == ConnectionStatus.ConnectionStatusConnected) {
             ChatManagerHolder.gChatManager.disconnect(true)
             LogUtil.i("show", "断开聊天服务器")
         } else {
             LogUtil.i("show", "聊天服务器已断开")
-        }
+        }*/
 
         MbsConstans.USER_MAP = null
         MbsConstans.RONGYUN_MAP = null
@@ -228,7 +228,7 @@ class LoginActivity : BasicActivity(), CompoundButton.OnCheckedChangeListener {
     fun getNameCodeInfo() {
         val map = HashMap<String, String>()
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestGetToRes(mHeaderMap, MethodUrl.nameCode, map)
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MethodUrl.nameCode, map)
     }
 
 
@@ -254,34 +254,42 @@ class LoginActivity : BasicActivity(), CompoundButton.OnCheckedChangeListener {
     }
 
     private fun loginAction() {
-        if (UtilTools.isEmpty(mEditUid, resources.getString(R.string.phone_number))) {
+        if (UtilTools.empty(edit_uid.text.toString())) {
+            showToastMsg("请输入手机号")
+            mBtnLogin.isEnabled = true
+            mBtnLogin.setTextColor(ContextCompat.getColor(this@LoginActivity,R.color.white))
             return
         }
-        if (UtilTools.isEmpty(mEditPsw, resources.getString(R.string.pass_word))) {
+        if (UtilTools.empty(mEditPsw.text.toString())) {
+            showToastMsg("请输入密码")
+            mBtnLogin.isEnabled = true
+            mBtnLogin.setTextColor(ContextCompat.getColor(this@LoginActivity,R.color.white))
             return
         }
 
         mAccount = mEditUid.text.toString() + ""
         mPassWord = mEditPsw.text.toString() + ""
 
-        if (!RegexUtil.isPhone(mAccount)) {
+       /* if (!RegexUtil.isPhone(mAccount)) {
             showToastMsg("手机格式不正确")
             return
-        }
-
+        }*/
         //String pass = AESHelper.encrypt(mPassWord, AESHelper.password);
         //val pass = RSAUtils.encryptContent(mPassWord!!, RSAUtils.publicKey)
-        val map = HashMap<String, Any>()
-        map["account"] = mAccount
-        map["password"] = mPassWord
-        try {
+      /*  try {
             map["clientId"] = ChatManagerHolder.gChatManager.clientId
             LogUtil.i("show","clientId:"+ChatManagerHolder.gChatManager.clientId)
         } catch (e: Exception) {
             e.printStackTrace()
             LogUtil.i("show","clientId is null")
-        }
+        }*/
         //String ss = AESHelper.decrypt(pass,AESHelper.password);
+
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.LOGIN_ACTION
+        map["phone"] = mAccount
+        map["password"] = mPassWord
+        map["version"] = MbsConstans.UpdateAppConstans.VERSION_APP_NAME
         val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.LOGIN_ACTION, map)
     }
@@ -341,10 +349,8 @@ class LoginActivity : BasicActivity(), CompoundButton.OnCheckedChangeListener {
             }
             R.id.btn_login -> {
                 mBtnLogin.isEnabled = false
-               // loginAction()
                 mBtnLogin.setTextColor(ContextCompat.getColor(this@LoginActivity,R.color.black99))
-                val intent = Intent(this@LoginActivity,MainActivity::class.java)
-                startActivity(intent)
+                loginAction()
             }
             R.id.img_login_clear_uid    //清除用户名
             -> clearText(mEditUid)
@@ -364,31 +370,31 @@ class LoginActivity : BasicActivity(), CompoundButton.OnCheckedChangeListener {
     }
 
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
+        //mBtnLogin.isEnabled = true
+        //mBtnLogin.setTextColor(ContextCompat.getColor(this@LoginActivity,R.color.white))
         when (mType) {
-            MethodUrl.nameCode -> {
-                val result = tData["result"]!!.toString() + ""
-                SPUtils.put(this@LoginActivity, MbsConstans.SharedInfoConstans.NAME_CODE_DATA, result)
-            }
-            //登录操作返回结果
-            MethodUrl.LOGIN_ACTION -> {
-                MbsConstans.ACCESS_TOKEN = tData["data"]!!.toString() + ""
-                /*  if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)){
-                            MbsConstans.ACCESS_TOKEN = "";
-                        }*/if (!UtilTools.empty(tData["ry_data"].toString() + "")) {
-                    MbsConstans.RONGYUN_MAP = tData["ry_data"] as Map<String, Any>?
-                    SPUtils.put(this@LoginActivity, MbsConstans.SharedInfoConstans.RONGYUN_DATA, JSONUtil.instance.objectToJson(MbsConstans.RONGYUN_MAP))
+
+            MethodUrl.LOGIN_ACTION -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    showToastMsg(tData["msg"].toString() + "")
+                    /*  if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)){
+                                MbsConstans.ACCESS_TOKEN = "";
+                            }
+                    if (!UtilTools.empty(tData["ry_data"].toString() + "")) {
+                        MbsConstans.RONGYUN_MAP = tData["ry_data"] as Map<String, Any>?
+                        SPUtils.put(this@LoginActivity, MbsConstans.SharedInfoConstans.RONGYUN_DATA, JSONUtil.instance.objectToJson(MbsConstans.RONGYUN_MAP))
+                    }*/
+                    MbsConstans.ACCESS_TOKEN = (tData["data"] as MutableMap<String,Any>)["token"] as String
+                    SPUtils.put(this@LoginActivity, MbsConstans.SharedInfoConstans.LOGIN_ACCOUNT, mEditUid.text.toString() + "")
+                    //SPUtils.put(LoginActivity.this, MbsConstans.SharedInfoConstans.LOGIN_PASSWORD,"别找了，没东西了");
+                    SPUtils.put(this@LoginActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, MbsConstans.ACCESS_TOKEN)
+
+                    intent = Intent(this@LoginActivity,MainActivity::class.java)
+                    startActivity(intent)
                 }
-
-                SPUtils.put(this@LoginActivity, MbsConstans.SharedInfoConstans.LOGIN_ACCOUNT, mEditUid.text.toString() + "")
-                //SPUtils.put(LoginActivity.this, MbsConstans.SharedInfoConstans.LOGIN_PASSWORD,"别找了，没东西了");
-                SPUtils.put(this@LoginActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, MbsConstans.ACCESS_TOKEN)
-
-                var rcDataMap = tData["ry_data"] as Map<String, Any>?
-
-                intent = Intent(this@LoginActivity,MainActivity::class.java)
-                startActivity(intent)
-
+                "0" -> showToastMsg(tData["msg"].toString() + "")
             }
+
             //获取refreshToken返回结果
             MethodUrl.refreshToken -> {
                 MbsConstans.REFRESH_TOKEN = tData["refresh_token"]!!.toString() + ""

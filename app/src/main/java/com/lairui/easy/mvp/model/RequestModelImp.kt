@@ -269,7 +269,7 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
     override fun requestPostToMap(mHeaderMap: Map<String, String>, mUrl: String, mParaMap: RequestBody, iBaseRequestCallBack: IBaseRequestCallBack<MutableMap<String, Any>>) {
         mCompositeSubscription = CompositeDisposable()
         RxApiManager.get()!!.addCompositeDisposable(context!!, mCompositeSubscription!!)
-        mCompositeSubscription!!.add(mApiManagerService!!.requestPostToMap(mHeaderMap, MbsConstans.SERVER_URL + mUrl, mParaMap)  //将subscribe添加到subscription，用于注销subscribe
+        mCompositeSubscription!!.add(mApiManagerService!!.requestPostToMap(mHeaderMap, MbsConstans.SERVER_URL, mParaMap)  //将subscribe添加到subscription，用于注销subscribe
                 .observeOn(AndroidSchedulers.mainThread())//指定事件消费线程
                 .subscribeOn(Schedulers.io())  //指定 subscribe() 发生在 IO 线程
                 .subscribeWith(object : DisposableObserver<MutableMap<String, Any>>() {

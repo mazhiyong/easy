@@ -38,7 +38,7 @@ object MbsConstans {
     val SERVER_IP_PORT = "172.16.1.65:12170"
     val WEBSOCKET_URL = "ws://$SERVER_IP_PORT/appsvr/"
 
-    val SERVER_URL = "http://by.qilinpz.com/index/"
+    val SERVER_URL = "http://fysp.bjfable.com"
 
     val XIEYI_URL = "http://ys.51zhir.cn/"
 
@@ -197,7 +197,7 @@ object MbsConstans {
     object UpdateAppConstans {
 
         //本地app版本号
-        var VERSION_APP_CODE = 100
+        var VERSION_APP_CODE = 1
         //本地app中的version_name  当前应用的版本名称
         var VERSION_APP_NAME = ""
         // 默认的网络最新程序版本号

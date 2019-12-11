@@ -14,6 +14,9 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
+import com.jaeger.library.StatusBarUtil
 import com.lairui.easy.R
 import com.lairui.easy.api.MethodUrl
 import com.lairui.easy.basic.BasicActivity
@@ -24,20 +27,15 @@ import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.mywidget.dialog.UpdateDialog
 import com.lairui.easy.service.DownloadService
 import com.lairui.easy.ui.module1.fragment.IndexFragment
-
+import com.lairui.easy.ui.module2.fragment.HangQingFragment
+import com.lairui.easy.ui.module3.fragment.CeLueFragment
+import com.lairui.easy.ui.module4.fragment.TradeFragment
 import com.lairui.easy.ui.module5.fragment.PersonFragment
-import com.lairui.easy.ui.temporary.fragment.ChatViewFragment
 import com.lairui.easy.utils.permission.PermissionsUtils
 import com.lairui.easy.utils.permission.RePermissionResultBack
 import com.lairui.easy.utils.tool.JSONUtil
 import com.lairui.easy.utils.tool.SPUtils
 import com.lairui.easy.utils.tool.UtilTools
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
-import com.jaeger.library.StatusBarUtil
-import com.lairui.easy.ui.module2.fragment.HangQingFragment
-import com.lairui.easy.ui.module3.fragment.CeLueFragment
-import com.lairui.easy.ui.module4.fragment.TradeFragment
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -162,9 +160,9 @@ class MainActivity : BasicActivity(), RequestView {
         // initPush();
         mInstance = this
 
-        getAppVersion()
+        //getAppVersion()
+        //getNameCodeInfo()
         getUserInfoAction()
-        getNameCodeInfo()
 
         //mAutoScrollTextView = findViewById(R.id.scroll_text_view);
         //mAutoScrollTextView.setSelected(true);
@@ -239,10 +237,11 @@ class MainActivity : BasicActivity(), RequestView {
      * 获取用户基本信息
      */
     fun getUserInfoAction() {
-        mRequestTag = MethodUrl.userInfo
+        mRequestTag = MethodUrl.HOME_INFO
         val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.HOME_INFO
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.userInfo, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.HOME_INFO, map)
     }
 
     /**
@@ -260,7 +259,6 @@ class MainActivity : BasicActivity(), RequestView {
      */
     fun getAppVersion() {
         mRequestTag = MethodUrl.appVersion
-
         val map = HashMap<String, String>()
         map["appCode"] = MbsConstans.UPDATE_CODE
         map["osType"] = "android"
@@ -350,11 +348,20 @@ class MainActivity : BasicActivity(), RequestView {
     }
 
      override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
-
-        // {"id":1,"appCode":"phb","downUrl":"http://ys.51zhir.cn/app_api/apk/dr20190514.apk","fileName":"dr20190514.apk",
-        // "fileSize":null,"isMust":"0","md5Code":"722f70f68c262e9c585f7dd800ae327c",
-        // "memo":null,"osType":"android","verCode":"1","verName":"V1.0.1 Beta","verUpdateMsg":"版本更新内容"}
         when (mType) {
+            MethodUrl.HOME_INFO -> when (tData["code"].toString() + "") {
+                "1" -> {
+
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1"->{
+                    closeAllActivity()
+                    intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    startActivity(intent)
+
+                }
+            }
+
             MethodUrl.appVersion -> if (tData != null && !tData.isEmpty()) {
                 //网络版本号
                 MbsConstans.UpdateAppConstans.VERSION_NET_CODE = UtilTools.getIntFromStr(tData["verCode"]!!.toString() + "")

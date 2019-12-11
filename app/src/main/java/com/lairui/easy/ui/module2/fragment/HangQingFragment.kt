@@ -138,7 +138,7 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
             map["ratio"] = "+11.09%"
             listUp.add(map)
         }
-        coinInfoAdapter = CoinInfoAdapter(activity)
+        coinInfoAdapter = CoinInfoAdapter(activity!!)
         mRvHoriList.adapter = coinInfoAdapter
         coinInfoAdapter!!.setList(listUp)
 

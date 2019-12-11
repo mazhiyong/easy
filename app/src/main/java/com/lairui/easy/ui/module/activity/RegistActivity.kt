@@ -3,7 +3,11 @@ package com.lairui.easy.ui.module.activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.CountDownTimer
+import android.text.Html
 import android.text.TextUtils
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.LinkMovementMethod
+import android.text.method.PasswordTransformationMethod
 import android.view.Gravity
 import android.view.View
 import android.widget.*
@@ -19,14 +23,12 @@ import com.lairui.easy.listener.SelectBackListener
 import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.mywidget.dialog.KindSelectDialog
 import com.lairui.easy.ui.temporary.activity.CodeMsgActivity
-import com.lairui.easy.utils.tool.SPUtils
-import com.lairui.easy.utils.tool.SelectDataUtil
-import com.lairui.easy.utils.tool.TextViewUtils
+import com.lairui.easy.utils.tool.*
 import kotlinx.android.synthetic.main.activity_regist.*
 import java.io.Serializable
 import java.util.*
 
-class RegistActivity : BasicActivity(), RequestView, SelectBackListener {
+class RegistActivity : BasicActivity(), RequestView, SelectBackListener, CompoundButton.OnCheckedChangeListener {
 
 
     @BindView(R.id.tv_zhuti)
@@ -56,6 +58,7 @@ class RegistActivity : BasicActivity(), RequestView, SelectBackListener {
     private var invcode = ""
 
 
+
     private lateinit var mKindMap: MutableMap<String, Any>
 
     private lateinit var mTimeCount:TimeCount
@@ -63,6 +66,7 @@ class RegistActivity : BasicActivity(), RequestView, SelectBackListener {
 
     override val contentView: Int
         get() = R.layout.activity_regist
+
 
 
     override fun init() {
@@ -80,33 +84,40 @@ class RegistActivity : BasicActivity(), RequestView, SelectBackListener {
 
 
        // val mDataList = SelectDataUtil.getListByKeyList(SelectDataUtil.getNameCodeByType("firmKind"))
-
         val textViewUtils = TextViewUtils()
         val s = tipTv.text.toString()
         textViewUtils.init(s, tipTv)
         textViewUtils.setTextColor(s.indexOf("《"), s.length, ContextCompat.getColor(this, R.color.font_c))
         textViewUtils.setTextClick(s.indexOf("《注"), s.indexOf("议》"), object : TextViewUtils.ClickCallBack {
             override fun onClick() {
-                Toast.makeText(this@RegistActivity, "注册协议", Toast.LENGTH_LONG).show()
+                val intent = Intent(this@RegistActivity,XieYiDetialActivity::class.java)
+                intent.putExtra("TYPE","0")
+                startActivity(intent)
+                //Toast.makeText(this@RegistActivity, "注册协议", Toast.LENGTH_LONG).show()
             }
 
         })
         textViewUtils.setTextClick(s.indexOf("《合"), s.indexOf("明》"), object : TextViewUtils.ClickCallBack {
             override fun onClick() {
-                Toast.makeText(this@RegistActivity, "合格投资人申明", Toast.LENGTH_LONG).show()
+                val intent = Intent(this@RegistActivity,XieYiDetialActivity::class.java)
+                intent.putExtra("TYPE","1")
+                startActivity(intent)
+                //Toast.makeText(this@RegistActivity, "合格投资人申明", Toast.LENGTH_LONG).show()
             }
 
         })
         textViewUtils.setTextClick(s.indexOf("《风"), s.indexOf("书》"), object : TextViewUtils.ClickCallBack {
             override fun onClick() {
-                Toast.makeText(this@RegistActivity, "风险揭示书", Toast.LENGTH_LONG).show()
+                val intent = Intent(this@RegistActivity,XieYiDetialActivity::class.java)
+                intent.putExtra("TYPE","2")
+                startActivity(intent)
+                //Toast.makeText(this@RegistActivity, "风险揭示书", Toast.LENGTH_LONG).show()
             }
 
         })
         textViewUtils.build()
 
-        //获取临时Toten
-        //getTempTokenAction()
+        togglePwd.setOnCheckedChangeListener(this)
 
     }
 
@@ -119,6 +130,21 @@ class RegistActivity : BasicActivity(), RequestView, SelectBackListener {
         val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp!!.requestGetToRes(mHeaderMap, MethodUrl.nameCode, map)
     }
+    /**
+     * 是否显示密码
+     */
+    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
+        if (isChecked) {
+            //显示密码
+            etPassWord.transformationMethod = HideReturnsTransformationMethod.getInstance()
+            etPassWordAgain.transformationMethod = HideReturnsTransformationMethod.getInstance()
+        } else {
+            //隐藏密码
+            etPassWord.transformationMethod = PasswordTransformationMethod.getInstance()
+            etPassWordAgain.transformationMethod = PasswordTransformationMethod.getInstance()
+        }
+    }
+
 
 
     @OnClick( R.id.getCodeTv, R.id.bt_next, R.id.left_back_lay)
@@ -126,10 +152,16 @@ class RegistActivity : BasicActivity(), RequestView, SelectBackListener {
         when (view.id) {
             R.id.left_back_lay -> finish()
             R.id.getCodeTv -> {
+                if (UtilTools.empty(etPhone.text)){
+                    showToastMsg("请输入手机号")
+                    return
+                }
                 mTimeCount.start()
+                getCodeAction()
             }
             R.id.bt_next -> {
-                mBtNext!!.isEnabled = false
+                mBtNext.isEnabled = false
+                mBtNext.setTextColor(ContextCompat.getColor(this@RegistActivity,R.color.black99))
                 registAction()
             }
         }
@@ -149,42 +181,74 @@ class RegistActivity : BasicActivity(), RequestView, SelectBackListener {
         val map = HashMap<String, String>()
         map["token"] = MbsConstans.TEMP_TOKEN
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestGetToRes(mHeaderMap, MethodUrl.imageCode, map)
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MethodUrl.imageCode, map)
     }
 
 
     private fun registAction() {
 
-        if (mKindMap == null || mKindMap.isEmpty()) {
-            showToastMsg("请选择账号主体")
-            mBtNext!!.isEnabled = true
+        if (TextUtils.isEmpty(etPhone.text)){
+            showToastMsg("请输入手机号")
+            mBtNext.isEnabled = true
+            mBtNext.setTextColor(ContextCompat.getColor(this@RegistActivity,R.color.white))
             return
         }
 
-        if (TextUtils.isEmpty(etPhone!!.text)) {
-            showToastMsg("请编辑手机号码信息")
-            mBtNext!!.isEnabled = true
+        if (TextUtils.isEmpty(etCode.text)) {
+            showToastMsg("请输入短信验证码")
+            mBtNext.isEnabled = true
+            mBtNext.setTextColor(ContextCompat.getColor(this@RegistActivity,R.color.white))
             return
         }
 
-        if (TextUtils.isEmpty(mEtCode!!.text)) {
-            showToastMsg("请编辑验证码信息")
-            mBtNext!!.isEnabled = true
+        if (TextUtils.isEmpty(etPassWord.text) || TextUtils.isEmpty(etPassWordAgain.text)) {
+            showToastMsg("请设置密码")
+            mBtNext.isEnabled = true
+            mBtNext.setTextColor(ContextCompat.getColor(this@RegistActivity,R.color.white))
             return
         }
 
-        cheackImageCodeAction()
+        if (!xieyiCb.isChecked){
+            showToastMsg("请阅读并同意相关协议")
+            mBtNext.isEnabled = true
+            mBtNext.setTextColor(ContextCompat.getColor(this@RegistActivity,R.color.white))
+            return
+        }
+
+        mRequestTag = MethodUrl.RIGIST_ACITON
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.RIGIST_ACITON
+        map["phone"] = etPhone.text.toString()
+        map["code"] = etCode.text.toString()
+        map["password"] = etPassWord.text.toString()
+        map["confirm"] = etPassWordAgain.text.toString()
+
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.RIGIST_ACITON, map)
+
+        //cheackImageCodeAction()
     }
+
+    private fun getCodeAction() {
+        mRequestTag = MethodUrl.RIGIST_CODE
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.RIGIST_CODE
+        map["phone"] = etPhone.text.toString()
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.RIGIST_CODE, map)
+
+    }
+
 
     private fun cheackImageCodeAction() {
         type = "1"
         mRequestTag = MethodUrl.imageCode
         val map = HashMap<String, Any>()
-        map["imgcode"] = mEtCode!!.text.toString()
+        map["imgcode"] = mEtCode.text.toString()
         map["temptoken"] = MbsConstans.TEMP_TOKEN
         map["tel"] = etPhone!!.text.toString()
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.imageCode, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.imageCode, map)
 
     }
 
@@ -215,30 +279,29 @@ class RegistActivity : BasicActivity(), RequestView, SelectBackListener {
      * @date 2017/2/16 11:01
      */
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
-        mBtNext!!.isEnabled = true
-        val intent: Intent
+        mBtNext.isEnabled = true
+        mBtNext.setTextColor(ContextCompat.getColor(this@RegistActivity,R.color.white))
+        var intent: Intent
         when (mType) {
-            MethodUrl.nameCode -> {
-                val result = tData["result"]!!.toString() + ""
-                SPUtils.put(this@RegistActivity, MbsConstans.SharedInfoConstans.NAME_CODE_DATA, result)
-                val mDataList = SelectDataUtil.getListByKeyList(SelectDataUtil.getNameCodeByType("firmKind"))
-                if (mDataList == null || mDataList.size == 0) {
-                    showToastMsg("暂无可选择的主体，请联系客服")
-                } else {
+            MethodUrl.RIGIST_CODE -> {
+               // 返回值  code  1正常  0异常    -1异常登录
+                LogUtil.i("show","code:"+tData["code"])
+               when (tData["code"].toString()){
+                   "1" -> showToastMsg(tData["msg"] as  String)
+                   "0" -> showToastMsg(tData["msg"] as  String)
 
-                    if (mDataList.size == 1) {
-                        mZhutiLay!!.isEnabled = false
-                        mArrowView!!.visibility = View.GONE
-                    } else {
-                        mZhutiLay!!.isEnabled = true
-                        mArrowView!!.visibility = View.VISIBLE
-                        mDialog = KindSelectDialog(this, true, mDataList, 10)
-                        mDialog!!.selectBackListener = this
-                        mDialog!!.showAtLocation(Gravity.BOTTOM, 0, 0)
+               }
 
-                    }
-                }
             }
+            MethodUrl.RIGIST_ACITON -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    showToastMsg(tData["msg"].toString() + "")
+                    finish()
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+            }
+
+
             MethodUrl.tempToken -> {
                 MbsConstans.TEMP_TOKEN = tData["temp_token"]!!.toString() + ""
                 getImageCodeAction()
@@ -285,10 +348,11 @@ class RegistActivity : BasicActivity(), RequestView, SelectBackListener {
      * @date 2017/2/16 11:01
      */
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
-        mBtNext!!.isEnabled = true
+        mBtNext.isEnabled = true
+        mBtNext.setTextColor(ContextCompat.getColor(this@RegistActivity,R.color.white))
         when (mType) {
             MethodUrl.imageCode -> if (type == "0") { //请求验证码失败
-                mIvCode!!.setImageResource(R.drawable.default_pic)
+                mIvCode.setImageResource(R.drawable.default_pic)
             } else { //验证验证码失败
                 getImageCodeAction()
             }
