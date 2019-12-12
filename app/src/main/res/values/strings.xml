@@ -305,7 +305,7 @@
     <string name="bind_tixian_title">维护提现账户</string>
     <string name="zhanghu_name">账户名称</string>
     <string name="zhanghu_name2">持卡人名称</string>
-    <string name="bank_card_title">银行账户</string>
+    <string name="bank_card_title">银行卡</string>
     <string name="bank_card_title2">银行卡号</string>
     <string name="bank_card_tip">您还没有绑定银行卡/银行账户</string>
     <string name="bank_card_bind">+ 绑定银行卡/银行账户</string>

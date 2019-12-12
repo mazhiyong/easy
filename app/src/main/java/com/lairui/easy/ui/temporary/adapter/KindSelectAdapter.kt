@@ -31,8 +31,9 @@ class KindSelectAdapter(private val mContext: Context, var datas: List<MutableMa
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mTextView!!.text = datas!![position]["name"]!!.toString() + ""
-        holder.mLayout!!.setOnClickListener { v ->
+        holder.mTextView.text = datas!![position]["name"]!!.toString() + ""
+
+        holder.mLayout.setOnClickListener { v ->
             if (onMyItemClickListener != null) {
                 onMyItemClickListener!!.OnMyItemClickListener(v, position)
             }
@@ -40,11 +41,7 @@ class KindSelectAdapter(private val mContext: Context, var datas: List<MutableMa
             notifyDataSetChanged()
         }
 
-        if (position == selectItem) {
-            holder.mLayout!!.isSelected = true
-        } else {
-            holder.mLayout!!.isSelected = false
-        }
+        holder.mLayout.isSelected = position == selectItem
     }
 
     override fun getItemCount(): Int {

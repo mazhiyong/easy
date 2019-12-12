@@ -59,9 +59,10 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
                 <TextView
-                    android:text="1000.00"
+                    android:id="@+id/phoneTv"
+                    android:text=""
                     android:layout_marginRight="@dimen/dp_10"
-                    android:textColor="@color/black99"
+                    android:textColor="@color/black33"
                     android:textSize="@dimen/sp_15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -114,6 +115,7 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:id="@+id/paySetTv"
                     android:text="未设置"
                     android:layout_marginRight="@dimen/dp_10"
                     android:textColor="@color/font_c"

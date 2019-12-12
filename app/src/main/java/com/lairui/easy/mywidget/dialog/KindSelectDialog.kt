@@ -1,10 +1,12 @@
 package com.lairui.easy.mywidget.dialog
 
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import android.widget.LinearLayout
-
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.flyco.animation.BaseAnimatorSet
 import com.flyco.animation.SlideEnter.SlideBottomEnter
 import com.flyco.animation.SlideExit.SlideBottomExit
@@ -12,12 +14,7 @@ import com.lairui.easy.R
 import com.lairui.easy.listener.OnMyItemClickListener
 import com.lairui.easy.listener.SelectBackListener
 import com.lairui.easy.ui.temporary.adapter.KindSelectAdapter
-
-
-import java.util.ArrayList
-
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import java.util.*
 
 /**
  * 客户类型选择：个人    企业/个体工商户
@@ -32,6 +29,10 @@ class KindSelectDialog : BaseDialog {
     private var mRecyclerView: RecyclerView? = null
 
     var selectBackListener: SelectBackListener? = null
+
+    fun setClickListener(clickListener: SelectBackListener) {
+        selectBackListener = clickListener
+    }
 
     constructor(context: Context) : super(context) {
         mContext = context
@@ -86,7 +87,7 @@ class KindSelectDialog : BaseDialog {
 
         widthScale(1f)
         dimEnabled(true)
-        // baseDialog.heightScale(1f);
+        heightScale(0.45f)
         showAnim(bas_in)
         dismissAnim(bas_out)
     }

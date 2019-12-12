@@ -129,16 +129,16 @@ class BankCardListAdapter(context: Context) : ListBaseAdapter() {
                     .error(R.color.body_bg)       //错误图
 
 
-            if (UtilTools.empty(map["opnbnknm"]!!.toString() + "")) {
+            if (UtilTools.empty(map["bank_name"]!!.toString() + "")) {
                 viewholder.mBankNameTv?.text = "暂无相关信息"
             } else {
-                viewholder.mBankNameTv?.text = map["opnbnknm"]!!.toString() + ""
+                viewholder.mBankNameTv?.text = map["bank_name"]!!.toString()
             }
-            viewholder.mBankCardValueTv?.text = "**** **** **** " + UtilTools.getCardNoFour(map["accid"]!!.toString() + "")
+            viewholder.mBankCardValueTv?.text = map["card"]!!.toString()
 
 
             Glide.with(this.mContext!!)
-                    .load(map["logopath"]!!.toString() + "")
+                    .load(  "default")
                     .apply(options)
                     .into(object : SimpleTarget<Drawable>() {
                         override fun onLoadFailed(errorDrawable: Drawable?) {

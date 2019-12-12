@@ -17,6 +17,10 @@ import java.util.HashMap
 
 import butterknife.BindView
 import butterknife.OnClick
+import com.lairui.easy.ui.module.activity.LoginActivity
+import com.lairui.easy.utils.tool.SPUtils
+import com.lairui.easy.utils.tool.UtilTools
+import kotlinx.android.synthetic.main.activity_account.*
 
 /**
  *账户设置
@@ -52,18 +56,21 @@ class AccountActivity : BasicActivity(), RequestView {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
         mTitleText.text = "账户设置"
-
-
+        getMsgCodeAction()
     }
 
 
     private fun getMsgCodeAction() {
 
-        mRequestTag = MethodUrl.resetPassCode
+        mRequestTag = MethodUrl.SETTING_INFO
         val map = HashMap<String, Any>()
-        map["tel"] = mPhone
+        map["nozzle"] = MethodUrl.SETTING_INFO
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@AccountActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.resetPassCode, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.SETTING_INFO, map)
     }
 
 
@@ -99,20 +106,25 @@ class AccountActivity : BasicActivity(), RequestView {
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
         val intent: Intent
         when (mType) {
-            MethodUrl.resetPassCode -> {
-               /* showToastMsg("获取验证码成功")
-                intent = Intent(this@AddMoneyActivity, CodeMsgActivity::class.java)
-                intent.putExtra(MbsConstans.CodeType.CODE_KEY, MbsConstans.CodeType.CODE_RESET_LOGIN_PASS)
-                intent.putExtra("DATA", tData as Serializable)
-                intent.putExtra("phonenum", mPhone + "")
-                intent.putExtra("showPhone", UtilTools.getPhoneXing(mPhone))
-                startActivity(intent)*/
-            }
-            MethodUrl.refreshToken -> {
-                MbsConstans.REFRESH_TOKEN = tData["refresh_token"]!!.toString() + ""
-                mIsRefreshToken = false
-                when (mRequestTag) {
-                    MethodUrl.resetPassCode -> getMsgCodeAction()
+            MethodUrl.SETTING_INFO -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    if (!UtilTools.empty(tData["data"])){
+                        val mapData = tData["data"] as MutableMap<String,Any>
+                        phoneTv.text = mapData["phone"].toString()
+                        if (mapData["is_safety"].toString() == "0"){ //未设置
+                            paySetTv.text = "未设置"
+                            paySetTv.setTextColor(ContextCompat.getColor(this@AccountActivity,R.color.font_c))
+                        }else{//已设置
+                            paySetTv.text = "已设置"
+                            paySetTv.setTextColor(ContextCompat.getColor(this@AccountActivity,R.color.black99))
+                        }
+                    }
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@AccountActivity, LoginActivity::class.java)
+                    startActivity(intent)
                 }
             }
         }

@@ -38,7 +38,10 @@ import java.util.HashMap
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.OnClick
+import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module5.adapter.BankCardListAdapter
+import com.lairui.easy.utils.tool.SPUtils
+import kotlinx.android.synthetic.main.activity_renzheng.*
 
 /**
  * 银行卡   界面
@@ -105,11 +108,8 @@ class BankCardListActivity : BasicActivity(), RequestView, BankCardListAdapter.O
         mTitleText.text = resources.getString(R.string.bank_card_title)
 
         initView()
-        //responseData();
-        showProgressDialog()
 
-        //cardConfig()
-        //bankCardAction()
+
 
         /**
          * 设置是否仅仅跟踪左侧边缘的滑动返回
@@ -155,47 +155,44 @@ class BankCardListActivity : BasicActivity(), RequestView, BankCardListAdapter.O
             bankCardAction()
         }
 
-        for (index in 1..3){
-            val map = HashMap<String,Any>()
-            map["opnbnknm"]="中国工商银行"
-            map["accid"]="121087886680987"
-            map["logopath"]="121087886680987"
 
-            mDataList!!.add(map)
-        }
-
-        responseData()
     }
 
     /**
      * 银行卡列表
      */
     private fun bankCardAction() {
-        mRequestTag = MethodUrl.bankCardList
-        val map = HashMap<String, String>()
-        map["isdefault"] = "" //isdefault 是否默认卡（0：否，1：是）
-        map["accsn"] = "" //accsn 业务类型(1:提现账户;A充值卡<快捷支付>;)
+        mRequestTag = MethodUrl.BANK_LIST
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.BANK_LIST
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@BankCardListActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestGetToRes(mHeaderMap, MethodUrl.bankCardList, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.BANK_LIST, map)
     }
 
     /**
-     * 解绑  提现  充值卡都可以解绑
+     * 解绑
      */
     private fun unBindCard() {
-        mRequestTag = MethodUrl.unbindCard
+        mRequestTag = MethodUrl.BANK_DELETE
         val map = HashMap<String, Any>()
-        map["accid"] = mUnBindCard["accid"]!!.toString() + ""
+        map["nozzle"] = MethodUrl.BANK_DELETE
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@BankCardListActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["mark"] = mUnBindCard["mark"]!!.toString() + ""
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.unbindCard, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.BANK_DELETE, map)
     }
 
     override fun onResume() {
         super.onResume()
-      /*  if (mIsRefresh) {
-            bankCardAction()
-        }
-        mIsRefresh = false*/
+        showProgressDialog()
+        bankCardAction()
     }
 
 
@@ -206,10 +203,10 @@ class BankCardListActivity : BasicActivity(), RequestView, BankCardListAdapter.O
 
         mRequestTag = MethodUrl.erleiMoney
         val map = HashMap<String, String>()
-        map["patncode"] = mBindMap!!["patncode"]!!.toString() + ""
-        map["crdno"] = mBindMap!!["accid"]!!.toString() + ""
+        map["patncode"] = mBindMap["patncode"]!!.toString() + ""
+        map["crdno"] = mBindMap["accid"]!!.toString() + ""
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestGetToRes(mHeaderMap, MethodUrl.bindList, map)
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MethodUrl.bindList, map)
     }
 
 
@@ -299,7 +296,7 @@ class BankCardListActivity : BasicActivity(), RequestView, BankCardListAdapter.O
         when (view.id) {
             R.id.bind_tv_lay -> {
                 intent = Intent(this@BankCardListActivity,BankCardAddActivity::class.java)
-                //intent.putExtra("backtype", "10")
+                intent.putExtra("mark", "0")
                 startActivity(intent)
             }
             R.id.back_img -> finish()
@@ -308,7 +305,7 @@ class BankCardListActivity : BasicActivity(), RequestView, BankCardListAdapter.O
     }
 
     override fun showProgress() {
-        //showProgressDialog();
+        //showProgressDialog()
     }
 
     override fun disimissProgress() {
@@ -320,45 +317,68 @@ class BankCardListActivity : BasicActivity(), RequestView, BankCardListAdapter.O
         val intent: Intent
         when (mType) {
 
-
-            MethodUrl.bindList -> {
-                var mBindList = JSONUtil.instance.jsonToList(tData["result"]!!.toString() + "")
-
-                if (mBindList == null || mBindList.size == 0) {
-                    mBindList = ArrayList()
-                    mBindMap["bindShow"] = "0"
-                    //mBindMap.put("bindCard",mBindList);
-                    showToastMsg(resources.getString(R.string.bind_card_no))
-                } else {
-                    mBindMap["bindCard"] = mBindList
-                    mBindMap!!["bindShow"] = "1"
-                    mBankCardChildAdapter?.notifyDataSetChanged()
-                }
-            }
-            MethodUrl.erleiMoney -> {
-                mMoneyMap!!["money"] = tData["acctbal"]!!.toString() + ""
-                mMoneyMap!!["isShow"] = "1"
-                mBankCardChildAdapter?.notifyDataSetChanged()
-            }
-            MethodUrl.bankCardList//
-            -> {
-                type = 0
-                val result = tData["result"]!!.toString() + ""
-                if (UtilTools.empty(result)) {
-                    mDataList = JSONUtil.instance.jsonToList(result)
-                    responseData()
-                } else {
-                    mDataList = JSONUtil.instance.jsonToList(result)
-                    if (mDataList != null && mDataList!!.size > 0) {
-                        for (map in mDataList!!) {
-                            map.put("isShow", "0")
+            MethodUrl.BANK_LIST -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    if (UtilTools.empty(tData["data"])){
+                        mPageView.showContent()
+                    }else{
+                        mDataList = tData["data"] as MutableList<MutableMap<String, Any>>?
+                        if(!UtilTools.empty(mDataList) && mDataList!!.size>0){
+                            mPageView.showContent()
+                            responseData()
+                            mRefreshListView.refreshComplete(10)
+                        }else{
+                            mPageView.showContent()
                         }
-
                     }
-                    responseData()
                 }
-                mRefreshListView!!.refreshComplete(10)
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@BankCardListActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
             }
+
+
+            MethodUrl.BANK_LIST -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    if (UtilTools.empty(tData["data"])){
+                        mPageView.showContent()
+                    }else{
+                        mDataList = tData["data"] as MutableList<MutableMap<String, Any>>?
+                        if(!UtilTools.empty(mDataList) && mDataList!!.size>0){
+                            mPageView.showContent()
+                            responseData()
+                            mRefreshListView.refreshComplete(10)
+                        }else{
+                            mPageView.showContent()
+                        }
+                    }
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@BankCardListActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+
+
+            MethodUrl.BANK_DELETE -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    showToastMsg(tData["msg"].toString() + "")
+                    bankCardAction()
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@BankCardListActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
             MethodUrl.unbindCard -> {
                 showToastMsg(tData["result"]!!.toString() + "")
                 bankCardAction()
@@ -373,15 +393,15 @@ class BankCardListActivity : BasicActivity(), RequestView, BankCardListAdapter.O
 
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
         when (mType) {
-            MethodUrl.bankCardList//
+            MethodUrl.BANK_LIST//
             -> if (mBankCardAdapter != null) {
-                if (mBankCardAdapter!!.dataList.size <= 0) {
-                    mPageView!!.showNetworkError()
+                if (mBankCardAdapter!!.dataList.isEmpty()) {
+                    mPageView.showNetworkError()
                 } else {
-                    mPageView!!.showContent()
+                    mPageView.showContent()
                 }
-                mRefreshListView!!.refreshComplete(10)
-                mRefreshListView!!.setOnNetWorkErrorListener {
+                mRefreshListView.refreshComplete(10)
+                mRefreshListView.setOnNetWorkErrorListener {
                     showProgressDialog()
                     bankCardAction()
                 }
@@ -421,12 +441,13 @@ class BankCardListActivity : BasicActivity(), RequestView, BankCardListAdapter.O
             "5"//更改
             -> {
                 val intent = Intent(this@BankCardListActivity,BankCardAddActivity::class.java)
+                intent.putExtra("mark",map["mark"]!!.toString() + "")
                 startActivity(intent)
             }
             "6"//删除
             -> {
                 val sureOrNoDialog = SureOrNoDialog(this@BankCardListActivity, true)
-                sureOrNoDialog.initValue("提示", "解除绑定后，将无法使用该银行卡办理业务,确定要解除绑定吗？")
+                sureOrNoDialog.initValue("提示", "删除后，将无法使用该银行卡办理业务,确定要删除吗？")
                 sureOrNoDialog.onClickListener = View.OnClickListener { v ->
                     when (v.id) {
                         R.id.cancel -> sureOrNoDialog.dismiss()

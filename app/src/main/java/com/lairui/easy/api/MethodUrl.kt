@@ -171,6 +171,22 @@ object MethodUrl {
 
 
     const val ACCOUNT_INFO = "account_info" //账号信息
+    const val CERTIFIED_INFO = "certified_info" //认证信息
+    const val CERTIFIED_ACTION = "certification" //认证操作
+    const val BANK_LIST = "user_bank" //银行卡列表
+    const val BINDBANK_ACTION = "bind_bank" //添加或修改银行卡
+    const val BANK_INFO = "bank_info" //银行卡信息
+    const val BANK_CODE = "bank_code" //银行卡验证码
+    const val SETTING_INFO = "set_info" //账号设置
+    const val MODIFY_PAYCODE = "modify_pay" //修改支付密码
+    const val MODIFY_PAYCODE_CODE = "modify_pay_code" //修改支付密码验证码
+    const val MODIFY_PASSWORD = "modify_login" //修改登录密码验证码
+    const val MODIFY_PHONE_OLD_CODE = "original_phone_code" //修改手机号获取原手机验证码
+    const val MODIFY_PHONE_NEXT_CODE = "modify_phone_next" //修改手机号下一步验证码
+    const val MODIFY_PHONE_NEW_CODE = "modify_phone_code" //修改手机号获取新手机验证码
+    const val MODIFY_PHONE = "modify_phone" //修改手机号
+
+
 
 
 

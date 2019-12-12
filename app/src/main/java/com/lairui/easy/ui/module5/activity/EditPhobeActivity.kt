@@ -11,8 +11,6 @@ import com.lairui.easy.api.MethodUrl
 import com.lairui.easy.basic.BasicActivity
 import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.basic.MbsConstans
-import com.lairui.easy.utils.tool.RegexUtil
-import com.lairui.easy.utils.tool.UtilTools
 import com.jaeger.library.StatusBarUtil
 
 import java.io.Serializable
@@ -20,7 +18,8 @@ import java.util.HashMap
 
 import butterknife.BindView
 import butterknife.OnClick
-import com.lairui.easy.utils.tool.TextViewUtils
+import com.lairui.easy.utils.tool.*
+import kotlinx.android.synthetic.main.activity_editphone.*
 
 /**
  *绑定手机号
@@ -56,8 +55,11 @@ class EditPhobeActivity : BasicActivity(), RequestView {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
         mTitleText.text = "修改手机号"
-
-
+        if (UtilTools.empty(MbsConstans.USER_MAP)) {
+            val s = SPUtils!![this, MbsConstans.SharedInfoConstans.LOGIN_INFO, ""].toString()
+            MbsConstans.USER_MAP = JSONUtil.instance.jsonMap(s)
+        }
+        phoneEt.setText(MbsConstans.USER_MAP!!["phone"] as String)
     }
 
 
@@ -71,12 +73,15 @@ class EditPhobeActivity : BasicActivity(), RequestView {
     }
 
 
-    @OnClick(R.id.back_img, R.id.left_back_lay)
+    @OnClick(R.id.back_img, R.id.left_back_lay,R.id.getCodeTv)
     fun onViewClicked(view: View) {
         val intent: Intent
         when (view.id) {
             R.id.back_img -> finish()
             R.id.left_back_lay -> finish()
+            R.id.getCodeTv ->{
+
+            }
 
         }
     }

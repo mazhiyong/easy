@@ -52,6 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/cardNameEt"
                     android:gravity="right"
                     android:textColor="@color/black33"
                     android:hint="请输入持卡人姓名"
@@ -63,6 +64,7 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/selectBankLay"
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:layout_margin="@dimen/dp_10"
@@ -77,6 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:id="@+id/selectBankTv"
                     android:gravity="right"
                     android:textColor="@color/black33"
                     android:text="请选择开户行"
@@ -110,6 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/cardChildBankEt"
                     android:gravity="right"
                     android:textColor="@color/black33"
                     android:hint="请输入开户支行"
@@ -136,6 +140,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/cardNumberEt"
                     android:gravity="right"
                     android:textColor="@color/black33"
                     android:hint="请输入银行卡号"
@@ -193,9 +198,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:id="@+id/phoneTv"
                     android:gravity="right"
                     android:textColor="@color/black33"
-                    android:text="130****112"
+                    android:text=""
                     android:textSize="@dimen/sp_14"
                     android:layout_gravity="center_horizontal"
                     android:background="@null"
@@ -218,6 +224,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/codeEt"
                     android:gravity="right"
                     android:textColor="@color/black33"
                     android:hint="请输入验证码"
@@ -228,6 +235,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:id="@+id/getCodeTv"
                     android:text="获取验证码"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:layout_gravity="center_horizontal"

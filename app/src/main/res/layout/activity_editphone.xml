@@ -48,8 +48,10 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/phoneEt"
+                    android:enabled="false"
                     android:background="@null"
-                    android:hint="1000.00"
+                    android:hint=""
                     android:layout_marginRight="@dimen/dp_10"
                     android:textColor="@color/black99"
                     android:textSize="@dimen/sp_15"
@@ -85,6 +87,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:id="@+id/getCodeTv"
                     android:text="获取验证码"
                     android:textSize="@dimen/sp_14"
                     android:textColor="@color/font_c"

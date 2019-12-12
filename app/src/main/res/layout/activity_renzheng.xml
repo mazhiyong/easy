@@ -44,6 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/nameEt"
                     android:gravity="right"
                     android:textColor="@color/black33"
                     android:hint="请输入您的真实姓名"
@@ -52,6 +53,7 @@
                     android:background="@null"
                     android:layout_width="@dimen/dp_0"
                     android:layout_weight="1"
+                    android:maxLength="15"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
             <LinearLayout
@@ -69,7 +71,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/idCardEt"
                     android:gravity="right"
+                    android:maxLength="30"
                     android:textColor="@color/black33"
                     android:hint="请输入您的身份证号码"
                     android:textSize="@dimen/sp_14"
