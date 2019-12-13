@@ -29,8 +29,10 @@ import java.util.HashMap
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.OnClick
-import com.lairui.easy.ui.module1.adapter.NewsListAdapter
+import com.lairui.easy.mywidget.view.TipsToast
+import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module4.adapter.RecordListAdapter
+import com.lairui.easy.utils.tool.SPUtils
 
 /**
  * 记录列表 界面
@@ -75,19 +77,30 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
     override fun init() {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
-        mTitleText.text = "支付利息记录"
+        val  bundle = intent.extras
+        if (bundle != null){
+            val type = bundle["TYPE"].toString()
+            when(type){
+                "1"->{
+                    mTitleText.text = "交易记录"
+                    tradeListAction()
+                }
+            }
+        }else{
+            finish()
+        }
+
+
         mRightLay.visibility = View.GONE
         initView()
-        for (index in 1..6){
+      /*  for (index in 1..6){
             val map = HashMap<String,Any>()
             map["title"] = "支付利息"
             map["time"] = "2019.11.10 12:56:10"
             map["money"] = "-100.00"
             mDataList.add(map)
         }
-        responseData()
-
-        //heTongAction()
+        responseData()*/
     }
 
 
@@ -101,22 +114,26 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
 
         mRefreshListView.setOnRefreshListener {
             mPage = 1
-            heTongAction()
+            tradeListAction()
         }
 
         mRefreshListView.setOnLoadMoreListener {
             mPage++
-            heTongAction()
+            tradeListAction()
         }
     }
 
-    private fun heTongAction() {
+    private fun tradeListAction() {
 
-        mRequestTag = MethodUrl.hetongList
-        val map = HashMap<String, String>()
-        map["creditfile"] = mDataMap!!["creditfile"]!!.toString() + ""
+        mRequestTag = MethodUrl.TRADE_LIST
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.TRADE_LIST
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@RecordListActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp.requestGetToRes(mHeaderMap, MethodUrl.hetongList, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.TRADE_LIST, map)
     }
 
 
@@ -210,23 +227,34 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
 
         val intent: Intent
         when (mType) {
-            MethodUrl.hetongList//
-            -> {
-                val result = tData["result"]!!.toString() + ""
-                if (UtilTools.empty(result)) {
-                    responseData()
-                } else {
-                    val list = JSONUtil.instance.jsonToList(result)
-                    if (list != null) {
-                        mDataList.clear()
-                        mDataList.addAll(list)
-                        responseData()
-                    } else {
-
+            MethodUrl.TRADE_LIST -> {
+                when (tData["code"].toString() + "") {
+                    "1" -> {
+                        if (!UtilTools.empty(tData["data"])){
+                            val result = tData["data"]!!.toString() + ""
+                            if (UtilTools.empty(result)) {
+                                responseData()
+                            } else {
+                                val list = JSONUtil.instance.jsonToList(result)
+                                if (list != null) {
+                                    mDataList.clear()
+                                    mDataList.addAll(list)
+                                    responseData()
+                                }
+                            }
+                            mRefreshListView!!.refreshComplete(10)
+                        }
+                    }
+                    "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
+                    "-1" -> {
+                        closeAllActivity()
+                        val intent = Intent(this@RecordListActivity, LoginActivity::class.java)
+                        startActivity(intent)
                     }
                 }
-                mRefreshListView!!.refreshComplete(10)
+
             }
+
             MethodUrl.refreshToken//获取refreshToken返回结果
             -> {
                 MbsConstans.REFRESH_TOKEN = tData["refresh_token"]!!.toString() + ""
@@ -234,7 +262,7 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
                 mIsRefreshToken = false
                 mIsRefreshToken = false
                 when (mRequestTag) {
-                    MethodUrl.hetongList -> heTongAction()
+                    MethodUrl.hetongList -> tradeListAction()
                 }
             }
         }
@@ -251,7 +279,7 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
                     mPageView!!.showContent()
                 }
                 mRefreshListView!!.refreshComplete(10)
-                mRefreshListView!!.setOnNetWorkErrorListener { heTongAction() }
+                mRefreshListView!!.setOnNetWorkErrorListener { tradeListAction() }
             } else {
                 mPageView!!.showNetworkError()
             }
@@ -261,7 +289,7 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
     }
 
     override fun reLoadingData() {
-        heTongAction()
+        tradeListAction()
     }
 
 

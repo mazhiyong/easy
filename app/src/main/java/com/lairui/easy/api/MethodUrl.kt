@@ -177,6 +177,7 @@ object MethodUrl {
     const val BINDBANK_ACTION = "bind_bank" //添加或修改银行卡
     const val BANK_INFO = "bank_info" //银行卡信息
     const val BANK_CODE = "bank_code" //银行卡验证码
+    const val BANK_DELETE = "delete_bank" //删除银行卡
     const val SETTING_INFO = "set_info" //账号设置
     const val MODIFY_PAYCODE = "modify_pay" //修改支付密码
     const val MODIFY_PAYCODE_CODE = "modify_pay_code" //修改支付密码验证码
@@ -185,7 +186,15 @@ object MethodUrl {
     const val MODIFY_PHONE_NEXT_CODE = "modify_phone_next" //修改手机号下一步验证码
     const val MODIFY_PHONE_NEW_CODE = "modify_phone_code" //修改手机号获取新手机验证码
     const val MODIFY_PHONE = "modify_phone" //修改手机号
-
+    const val PROMOTION = "promotion" //邀请奖励
+    const val PROMOTION_LIST = "invite_record" //邀请记录
+    const val REWARD_LIST = "push_reward" //奖励记录
+    const val TRADE_LIST = "flow_log" //交易记录
+    const val CHONGZHI_ACTION = "offline_recharge" //充值操作
+    const val CHONGZHI_INFO = "recharge_info" //充值信息获取
+    const val TIXIN_ACTION = "withdraw" //提现操作
+    const val TIXIN_CODE = "withdraw_code" //提现验证码
+    const val TIXIN_INFO = "withdraw_info" //提现信息获取
 
 
 

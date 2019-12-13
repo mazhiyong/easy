@@ -1,6 +1,9 @@
 package com.lairui.easy.ui.module5.activity
 
 import android.content.Intent
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 
 import androidx.core.content.ContextCompat
 import android.view.View
@@ -17,6 +20,12 @@ import java.util.HashMap
 
 import butterknife.BindView
 import butterknife.OnClick
+import com.lairui.easy.ui.module.activity.LoginActivity
+import com.lairui.easy.utils.tool.JSONUtil
+import com.lairui.easy.utils.tool.SPUtils
+import com.lairui.easy.utils.tool.UtilTools
+import kotlinx.android.synthetic.main.activity_account.*
+import kotlinx.android.synthetic.main.activity_password.*
 
 /**
  *修改登录密码
@@ -55,28 +64,70 @@ class EditPassWordActivity : BasicActivity(), RequestView {
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
         mTitleText.text = "修改登录密码"
 
+        if (UtilTools.empty(MbsConstans.USER_MAP)) {
+            val s = SPUtils[this@EditPassWordActivity, MbsConstans.SharedInfoConstans.LOGIN_INFO, ""].toString()
+            MbsConstans.USER_MAP = JSONUtil.instance.jsonMap(s)
+        }
+        phoneEt.setText(MbsConstans.USER_MAP!!["phone"].toString())
 
+        oldPassWordEt.addTextChangedListener(object:TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
 
+            }
 
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.toString().isNotEmpty()){
+                    mButNext.isEnabled = true
+                }
+            }
+
+        })
     }
 
 
     private fun getMsgCodeAction() {
+        if (TextUtils.isEmpty(oldPassWordEt.text)){
+            showToastMsg("请输入旧密码")
+            mButNext.isEnabled = true
+            return
+        }
 
-        mRequestTag = MethodUrl.resetPassCode
+        if (TextUtils.isEmpty(newPassWordEt.text) || TextUtils.isEmpty(newPassWordEtAgain.text)){
+            showToastMsg("请设置新密码")
+            mButNext.isEnabled = true
+            return
+        }
+
+
+        mRequestTag = MethodUrl.MODIFY_PASSWORD
         val map = HashMap<String, Any>()
-        map["tel"] = mPhone
+        map["nozzle"] = MethodUrl.MODIFY_PASSWORD
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@EditPassWordActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["original"] = oldPassWordEt.text.toString()
+        map["password"] = newPassWordEt.text.toString()
+        map["confirm"] = newPassWordEtAgain.text.toString()
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.resetPassCode, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.MODIFY_PASSWORD, map)
     }
 
 
-    @OnClick(R.id.back_img, R.id.left_back_lay)
+    @OnClick(R.id.back_img, R.id.left_back_lay,R.id.but_next)
     fun onViewClicked(view: View) {
         val intent: Intent
         when (view.id) {
             R.id.back_img -> finish()
             R.id.left_back_lay -> finish()
+            R.id.but_next -> {
+                mButNext.isEnabled = false
+                getMsgCodeAction()
+            }
         }
     }
 
@@ -91,15 +142,21 @@ class EditPassWordActivity : BasicActivity(), RequestView {
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
         val intent: Intent
         when (mType) {
-            MethodUrl.resetPassCode -> {
-               /* showToastMsg("获取验证码成功")
-                intent = Intent(this@AddMoneyActivity, CodeMsgActivity::class.java)
-                intent.putExtra(MbsConstans.CodeType.CODE_KEY, MbsConstans.CodeType.CODE_RESET_LOGIN_PASS)
-                intent.putExtra("DATA", tData as Serializable)
-                intent.putExtra("phonenum", mPhone + "")
-                intent.putExtra("showPhone", UtilTools.getPhoneXing(mPhone))
-                startActivity(intent)*/
+            MethodUrl.MODIFY_PASSWORD -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    showToastMsg(tData["msg"].toString() + "")
+                    closeAllActivity()
+                    val intent = Intent(this@EditPassWordActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@EditPassWordActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
             }
+
             MethodUrl.refreshToken -> {
                 MbsConstans.REFRESH_TOKEN = tData["refresh_token"]!!.toString() + ""
                 mIsRefreshToken = false
@@ -111,6 +168,7 @@ class EditPassWordActivity : BasicActivity(), RequestView {
     }
 
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
+        mButNext.isEnabled = true
         dealFailInfo(map, mType)
     }
 }

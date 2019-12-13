@@ -35,8 +35,8 @@ class JiangLiListAdapter(context: Context) : ListBaseAdapter() {
 
         val viewHolder = holder as ViewHolder
 
-        viewHolder.mTitle.text = item["title"]!!.toString() + ""
-        viewHolder.mContent.text = item["money"]!!.toString() + ""
+        viewHolder.mTitle.text = item["name"]!!.toString() + ""
+        viewHolder.mContent.text = item["number"]!!.toString() + "元"
         viewHolder.mTimeTv.text = item["time"]!!.toString() + ""
 
         viewHolder.mContentLay.setOnClickListener {

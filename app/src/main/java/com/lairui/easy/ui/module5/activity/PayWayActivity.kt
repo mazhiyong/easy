@@ -162,9 +162,9 @@ class PayWayActivity : BasicActivity(), RequestView, ReLoadingData {
         mRefreshListView.refreshComplete(10)
         mListAdapter!!.notifyDataSetChanged()
         if (mListAdapter!!.dataList.size <= 0) {
-            mPageView!!.showEmpty()
+            mPageView.showEmpty()
         } else {
-            mPageView!!.showContent()
+            mPageView.showContent()
         }
     }
 

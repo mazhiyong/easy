@@ -296,6 +296,7 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
             }
             R.id.trade_Lay ->{
                 intent = Intent(activity,RecordListActivity::class.java)
+                intent.putExtra("TYPE","1")
                 startActivity(intent)
             }
             R.id.account_Lay ->{

@@ -1,6 +1,7 @@
 package com.lairui.easy.ui.module5.activity
 
 import android.content.Intent
+import android.content.IntentFilter
 
 import androidx.core.content.ContextCompat
 import android.view.View
@@ -56,6 +57,11 @@ class AccountActivity : BasicActivity(), RequestView {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
         mTitleText.text = "账户设置"
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         getMsgCodeAction()
     }
 
@@ -96,7 +102,7 @@ class AccountActivity : BasicActivity(), RequestView {
     }
 
     override fun showProgress() {
-        showProgressDialog()
+        //showProgressDialog()
     }
 
     override fun disimissProgress() {

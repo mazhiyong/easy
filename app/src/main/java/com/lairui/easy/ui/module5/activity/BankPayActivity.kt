@@ -1,6 +1,11 @@
 package com.lairui.easy.ui.module5.activity
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Intent
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 
 import androidx.core.content.ContextCompat
 import android.view.View
@@ -20,7 +25,12 @@ import java.util.HashMap
 
 import butterknife.BindView
 import butterknife.OnClick
+import com.lairui.easy.ui.module.activity.LoginActivity
+import com.lairui.easy.utils.imageload.GlideUtils
+import com.lairui.easy.utils.tool.SPUtils
 import com.lairui.easy.utils.tool.TextViewUtils
+import kotlinx.android.synthetic.main.activity_bank_money.*
+import kotlinx.android.synthetic.main.activity_yaoqing_money.*
 
 /**
  * 银行卡 充值界面
@@ -49,6 +59,9 @@ class BankPayActivity : BasicActivity(), RequestView {
 
     private var mRequestTag = ""
 
+    private var mClipboardManager: ClipboardManager? = null
+    private var clipData: ClipData? = null
+
     override val contentView: Int
         get() = R.layout.activity_bank_money
 
@@ -65,28 +78,102 @@ class BankPayActivity : BasicActivity(), RequestView {
 
         textViewUtils.build()
 
+        mClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+
+
+
+        moneyEt.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                mButNext.isEnabled = s.toString().isNotEmpty()
+            }
+
+        })
+
+        getMsgCodeAction()
+
     }
 
 
     private fun getMsgCodeAction() {
 
-        mRequestTag = MethodUrl.resetPassCode
+        mRequestTag = MethodUrl.CHONGZHI_INFO
         val map = HashMap<String, Any>()
-        map["tel"] = mPhone
+        map["nozzle"] = MethodUrl.CHONGZHI_INFO
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@BankPayActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.resetPassCode, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.CHONGZHI_INFO, map)
+    }
+
+    private fun chongZhiAction() {
+        if (TextUtils.isEmpty(nameEt.text)){
+            showToastMsg("请输入付款人姓名")
+            mButNext.isEnabled = true
+            return
+        }
+
+        if (TextUtils.isEmpty(numbeEt.text)){
+            showToastMsg("请输入流水号")
+            mButNext.isEnabled = true
+            return
+        }
+
+        mRequestTag = MethodUrl.CHONGZHI_ACTION
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.CHONGZHI_ACTION
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@BankPayActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["type"] = "3"
+        map["number"] = moneyEt.text.toString()
+        map["name"] = nameEt.text.toString()
+        map["serial"] = numbeEt.text.toString()
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.CHONGZHI_ACTION, map)
+
     }
 
 
-    @OnClick(R.id.back_img, R.id.but_next, R.id.left_back_lay)
+    @OnClick(R.id.back_img, R.id.but_next, R.id.copyBankAddrress,R.id.copyBankName,R.id.copyBankNumber,R.id.copyBankPeople,R.id.left_back_lay)
     fun onViewClicked(view: View) {
         val intent: Intent
         when (view.id) {
             R.id.back_img -> finish()
             R.id.left_back_lay -> finish()
+            R.id.copyBankAddrress  -> {
+                clipData = ClipData.newPlainText("", bankAddressEt.text.toString())
+                mClipboardManager!!.primaryClip = clipData
+                showToastMsg("复制成功")
+            }
+            R.id.copyBankName   -> {
+                clipData = ClipData.newPlainText("", bankNameEt.text.toString())
+                mClipboardManager!!.primaryClip = clipData
+                showToastMsg("复制成功")
+            }
+            R.id.copyBankNumber   -> {
+                clipData = ClipData.newPlainText("", bankNumberEt.text.toString())
+                mClipboardManager!!.primaryClip = clipData
+                showToastMsg("复制成功")
+            }
+            R.id.copyBankPeople  -> {
+                clipData = ClipData.newPlainText("", bankPeopleEt.text.toString())
+                mClipboardManager!!.primaryClip = clipData
+                showToastMsg("复制成功")
+            }
             R.id.but_next -> {
-
-                getMsgCodeAction()
+                mButNext.isEnabled = false
+                chongZhiAction()
             }
         }
     }
@@ -102,20 +189,36 @@ class BankPayActivity : BasicActivity(), RequestView {
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
         val intent: Intent
         when (mType) {
-            MethodUrl.resetPassCode -> {
-               /* showToastMsg("获取验证码成功")
-                intent = Intent(this@AddMoneyActivity, CodeMsgActivity::class.java)
-                intent.putExtra(MbsConstans.CodeType.CODE_KEY, MbsConstans.CodeType.CODE_RESET_LOGIN_PASS)
-                intent.putExtra("DATA", tData as Serializable)
-                intent.putExtra("phonenum", mPhone + "")
-                intent.putExtra("showPhone", UtilTools.getPhoneXing(mPhone))
-                startActivity(intent)*/
+            MethodUrl.CHONGZHI_INFO -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    if (!UtilTools.empty(tData["data"])){
+                        val mapData = tData["data"] as MutableMap<String,Any>
+                        val mapBank = mapData["bank"] as MutableMap<String,Any>
+                        bankPeopleEt.setText(mapBank["name"].toString())
+                        bankNameEt.setText(mapBank["bank"].toString())
+                        bankNumberEt.setText(mapBank["card"].toString())
+                        bankAddressEt.setText(mapBank["address"].toString())
+                    }
+
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@BankPayActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
             }
-            MethodUrl.refreshToken -> {
-                MbsConstans.REFRESH_TOKEN = tData["refresh_token"]!!.toString() + ""
-                mIsRefreshToken = false
-                when (mRequestTag) {
-                    MethodUrl.resetPassCode -> getMsgCodeAction()
+            MethodUrl.CHONGZHI_ACTION -> when (tData["code"].toString() + "") {
+                MethodUrl.CHONGZHI_ACTION -> mButNext.isEnabled = true
+                "1" -> {
+                    showToastMsg(tData["msg"].toString() + "")
+
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@BankPayActivity, LoginActivity::class.java)
+                    startActivity(intent)
                 }
             }
         }
@@ -123,5 +226,8 @@ class BankPayActivity : BasicActivity(), RequestView {
 
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
         dealFailInfo(map, mType)
+        when(mType){
+            MethodUrl.CHONGZHI_ACTION -> mButNext.isEnabled = true
+        }
     }
 }

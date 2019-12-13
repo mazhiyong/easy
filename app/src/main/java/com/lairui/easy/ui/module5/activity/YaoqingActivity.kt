@@ -1,26 +1,28 @@
 package com.lairui.easy.ui.module5.activity
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Intent
-
-import androidx.core.content.ContextCompat
 import android.view.View
-import android.widget.*
-
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import butterknife.BindView
+import butterknife.OnClick
+import com.jaeger.library.StatusBarUtil
 import com.lairui.easy.R
 import com.lairui.easy.api.MethodUrl
 import com.lairui.easy.basic.BasicActivity
-import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.basic.MbsConstans
-import com.lairui.easy.utils.tool.RegexUtil
+import com.lairui.easy.mvp.view.RequestView
+import com.lairui.easy.mywidget.view.TipsToast
+import com.lairui.easy.ui.module.activity.LoginActivity
+import com.lairui.easy.utils.tool.SPUtils
 import com.lairui.easy.utils.tool.UtilTools
-import com.jaeger.library.StatusBarUtil
-
-import java.io.Serializable
-import java.util.HashMap
-
-import butterknife.BindView
-import butterknife.OnClick
-import com.lairui.easy.utils.tool.TextViewUtils
+import kotlinx.android.synthetic.main.activity_yaoqing_money.*
+import java.util.*
 
 /**
  *邀请界面
@@ -49,6 +51,10 @@ class YaoqingActivity : BasicActivity(), RequestView {
 
     private var mRequestTag = ""
 
+    private var mClipboardManager: ClipboardManager? = null
+    private var clipData: ClipData? = null
+
+
     override val contentView: Int
         get() = R.layout.activity_yaoqing_money
 
@@ -56,22 +62,27 @@ class YaoqingActivity : BasicActivity(), RequestView {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
         mTitleText.text = "邀请奖励"
+        getMsgCodeAction()
 
-
+        mClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
     }
 
 
     private fun getMsgCodeAction() {
 
-        mRequestTag = MethodUrl.resetPassCode
+        mRequestTag = MethodUrl.PROMOTION
         val map = HashMap<String, Any>()
-        map["tel"] = mPhone
+        map["nozzle"] = MethodUrl.PROMOTION
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@YaoqingActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.resetPassCode, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.PROMOTION, map)
     }
 
 
-    @OnClick(R.id.back_img, R.id.left_back_lay,R.id.yaoqingRecordLay,R.id.jiangliRecordLay)
+    @OnClick(R.id.back_img, R.id.left_back_lay,R.id.yaoqingRecordLay,R.id.jiangliRecordLay,R.id.copyTextTv,R.id.copyLinkTv)
     fun onViewClicked(view: View) {
         val intent: Intent
         when (view.id) {
@@ -85,6 +96,17 @@ class YaoqingActivity : BasicActivity(), RequestView {
                 val intent = Intent(this@YaoqingActivity,JiangliListActivity::class.java)
                 startActivity(intent)
             }
+            R.id.copyTextTv ->{
+                clipData = ClipData.newPlainText("", yaoQingCodeTv.text.toString())
+                mClipboardManager!!.primaryClip = clipData
+                showToastMsg("复制成功")
+            }
+            R.id.copyLinkTv ->{
+                clipData = ClipData.newPlainText("", linkTv.text.toString())
+                mClipboardManager!!.primaryClip = clipData
+                showToastMsg("复制成功")
+            }
+
         }
     }
 
@@ -99,22 +121,25 @@ class YaoqingActivity : BasicActivity(), RequestView {
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
         val intent: Intent
         when (mType) {
-            MethodUrl.resetPassCode -> {
-               /* showToastMsg("获取验证码成功")
-                intent = Intent(this@AddMoneyActivity, CodeMsgActivity::class.java)
-                intent.putExtra(MbsConstans.CodeType.CODE_KEY, MbsConstans.CodeType.CODE_RESET_LOGIN_PASS)
-                intent.putExtra("DATA", tData as Serializable)
-                intent.putExtra("phonenum", mPhone + "")
-                intent.putExtra("showPhone", UtilTools.getPhoneXing(mPhone))
-                startActivity(intent)*/
-            }
-            MethodUrl.refreshToken -> {
-                MbsConstans.REFRESH_TOKEN = tData["refresh_token"]!!.toString() + ""
-                mIsRefreshToken = false
-                when (mRequestTag) {
-                    MethodUrl.resetPassCode -> getMsgCodeAction()
+            MethodUrl.PROMOTION -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    if (!UtilTools.empty(tData["data"])){
+                        val mapData = tData["data"] as MutableMap<String, Any>
+                        yaoQingCodeTv.text = mapData["code"].toString()
+                        linkTv.text = mapData["link_url"].toString()
+                        yaoqingMountTv.text = mapData["push_team"].toString()
+                        jiangliMountTv.text = mapData["push_total"].toString()
+
+                    }
+                }
+                "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@YaoqingActivity, LoginActivity::class.java)
+                    startActivity(intent)
                 }
             }
+
         }
     }
 

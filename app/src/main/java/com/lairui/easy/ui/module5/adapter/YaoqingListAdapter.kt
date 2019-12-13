@@ -36,7 +36,7 @@ class YaoqingListAdapter(context: Context) : ListBaseAdapter() {
         val viewHolder = holder as ViewHolder
 
 
-        viewHolder.nameTv.text = item["title"]!!.toString() + ""
+        viewHolder.nameTv.text = item["name"]!!.toString() + ""
         viewHolder.phoneTv.text = item["phone"]!!.toString() + ""
         viewHolder.ipTv.text = item["ip"]!!.toString() + ""
         viewHolder.timeTv.text = item["time"]!!.toString() + ""

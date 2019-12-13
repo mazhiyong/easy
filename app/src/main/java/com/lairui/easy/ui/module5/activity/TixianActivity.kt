@@ -1,6 +1,9 @@
 package com.lairui.easy.ui.module5.activity
 
 import android.content.Intent
+import android.os.CountDownTimer
+import android.text.TextUtils
+import android.view.Gravity
 
 import androidx.core.content.ContextCompat
 import android.view.View
@@ -20,14 +23,21 @@ import java.util.HashMap
 
 import butterknife.BindView
 import butterknife.OnClick
+import com.lairui.easy.listener.SelectBackListener
 import com.lairui.easy.mywidget.dialog.AppDialog
+import com.lairui.easy.mywidget.dialog.KindSelectDialog
 import com.lairui.easy.mywidget.dialog.SimpleTipMsgDialog
+import com.lairui.easy.ui.module.activity.LoginActivity
+import com.lairui.easy.utils.imageload.GlideUtils
+import com.lairui.easy.utils.tool.SPUtils
 import com.lairui.easy.utils.tool.TextViewUtils
-
+import kotlinx.android.synthetic.main.activity_editphone.*
+import kotlinx.android.synthetic.main.activity_editphone.getCodeTv
+import kotlinx.android.synthetic.main.activity_tixian_money.*
 /**
  * 提现界面
  */
-class TixianActivity : BasicActivity(), RequestView {
+class TixianActivity : BasicActivity(), RequestView , SelectBackListener {
 
     @BindView(R.id.back_img)
     lateinit var mBackImg: ImageView
@@ -51,6 +61,13 @@ class TixianActivity : BasicActivity(), RequestView {
 
     private var mRequestTag = ""
 
+    private lateinit var mTimeCount: TimeCount
+
+    private lateinit var mDialog: KindSelectDialog
+
+    private var bankMap :MutableMap<String,Any>? = null
+
+
     override val contentView: Int
         get() = R.layout.activity_tixian_money
 
@@ -58,39 +75,87 @@ class TixianActivity : BasicActivity(), RequestView {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
         mTitleText.text = "提现"
+        mTimeCount = TimeCount(1*60*1000,1000)
 
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        getMsgCodeAction()
+    }
 
     private fun getMsgCodeAction() {
-
-        mRequestTag = MethodUrl.resetPassCode
+        mRequestTag = MethodUrl.TIXIN_INFO
         val map = HashMap<String, Any>()
-        map["tel"] = mPhone
+        map["nozzle"] = MethodUrl.TIXIN_INFO
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@TixianActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.resetPassCode, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.TIXIN_INFO, map)
     }
 
+    private fun getCodeAction() {
 
-    @OnClick(R.id.back_img, R.id.but_next, R.id.left_back_lay)
+        mRequestTag = MethodUrl.TIXIN_CODE
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.TIXIN_CODE
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@TixianActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.TIXIN_CODE, map)
+    }
+
+    private fun sumbitAction() {
+        if (TextUtils.isEmpty(moneyEt.text)){
+            showToastMsg("请输入提现金额")
+            mButNext.isEnabled = true
+            return
+        }
+
+        if (TextUtils.isEmpty(payCodeEt.text)){
+            showToastMsg("请输入提现密码")
+            mButNext.isEnabled = true
+            return
+        }
+
+
+        mRequestTag = MethodUrl.TIXIN_ACTION
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.TIXIN_ACTION
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@TixianActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["number"] = moneyEt.text.toString()
+        map["password"] = payCodeEt.text.toString()
+        //map["code"] = codeEt.text.toString
+        //map["bank_id"] = bankMap["mark"].toString()
+
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.TIXIN_ACTION, map)
+    }
+
+    @OnClick(R.id.back_img, R.id.but_next, R.id.left_back_lay,R.id.getCodeTv,R.id.bankLay)
     fun onViewClicked(view: View) {
         val intent: Intent
         when (view.id) {
             R.id.back_img -> finish()
             R.id.left_back_lay -> finish()
+            R.id.getCodeTv -> {
+                mTimeCount.start()
+                getCodeAction()
+            }
+            R.id.bankLay ->{
+                mDialog.showAtLocation(Gravity.BOTTOM, 0, 0)
+            }
             R.id.but_next -> {
-                val dialog = SimpleTipMsgDialog(this@TixianActivity,true)
-                dialog.initValue("您未通过实名认证","立即认证")
-                dialog.setClickListener(View.OnClickListener { v ->
-                    when (v.id) {
-                        R.id.cancelIv -> dialog.dismiss()
-                        R.id.dealTv -> {
-                        }
-                    }
-                })
-
-                dialog.show()
-                //getMsgCodeAction()
+                mButNext.isEnabled = false
+                sumbitAction()
             }
         }
     }
@@ -104,28 +169,139 @@ class TixianActivity : BasicActivity(), RequestView {
     }
 
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
-        val intent: Intent
+        var intent: Intent
         when (mType) {
-            MethodUrl.resetPassCode -> {
-               /* showToastMsg("获取验证码成功")
-                intent = Intent(this@AddMoneyActivity, CodeMsgActivity::class.java)
-                intent.putExtra(MbsConstans.CodeType.CODE_KEY, MbsConstans.CodeType.CODE_RESET_LOGIN_PASS)
-                intent.putExtra("DATA", tData as Serializable)
-                intent.putExtra("phonenum", mPhone + "")
-                intent.putExtra("showPhone", UtilTools.getPhoneXing(mPhone))
-                startActivity(intent)*/
-            }
-            MethodUrl.refreshToken -> {
-                MbsConstans.REFRESH_TOKEN = tData["refresh_token"]!!.toString() + ""
-                mIsRefreshToken = false
-                when (mRequestTag) {
-                    MethodUrl.resetPassCode -> getMsgCodeAction()
+            MethodUrl.TIXIN_INFO -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    if (!UtilTools.empty(tData["data"])){
+                        val mapData = tData["data"] as MutableMap<String,Any>
+                        if (mapData["certified"].toString() == "0"){
+                            val dialog = SimpleTipMsgDialog(this@TixianActivity,true)
+                            dialog.initValue("您尚未通过实名认证","立即认证")
+                            dialog.setClickListener(View.OnClickListener { v ->
+                                when (v.id) {
+                                    R.id.cancelIv -> dialog.dismiss()
+                                    R.id.dealTv -> {
+                                        intent = Intent(this@TixianActivity,RenZhengActivity::class.java)
+                                        startActivity(intent)
+                                    }
+                                }
+                            })
+                            dialog.show()
+                        }
+
+
+                        if (UtilTools.empty(mapData["bank"])){
+                            val dialog = SimpleTipMsgDialog(this@TixianActivity,true)
+                            dialog.initValue("您尚未绑定银行卡","立即绑定")
+                            dialog.setClickListener(View.OnClickListener { v ->
+                                when (v.id) {
+                                    R.id.cancelIv -> dialog.dismiss()
+                                    R.id.dealTv -> {
+                                        intent = Intent(this@TixianActivity,BankCardAddActivity::class.java)
+                                        startActivity(intent)
+                                    }
+                                }
+                            })
+                            dialog.show()
+                        }else{
+                            val bankList = mapData["bank"]  as MutableList<MutableMap<String, Any>>
+                            mDialog = KindSelectDialog(this@TixianActivity, true, bankList, 20)
+                            mDialog.setClickListener(this@TixianActivity)
+                        }
+
+                        if (mapData["password"].toString() == "0"){
+                            val dialog = SimpleTipMsgDialog(this@TixianActivity,true)
+                            dialog.initValue("您尚未设置提现密码","立即设置")
+                            dialog.setClickListener(View.OnClickListener { v ->
+                                when (v.id) {
+                                    R.id.cancelIv -> dialog.dismiss()
+                                    R.id.dealTv -> {
+                                        intent = Intent(this@TixianActivity,EditPayCodeActivity::class.java)
+                                        startActivity(intent)
+                                    }
+                                }
+                            })
+                            dialog.show()
+                        }
+
+                    }
+
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@TixianActivity, LoginActivity::class.java)
+                    startActivity(intent)
                 }
             }
+
+            MethodUrl.TIXIN_CODE-> when (tData["code"].toString() + "") {
+                "1" -> {
+                    showToastMsg(tData["msg"].toString() + "")
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@TixianActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            MethodUrl.TIXIN_ACTION-> when (tData["code"].toString() + "") {
+                "1" -> {
+                    showToastMsg(tData["msg"].toString() + "")
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@TixianActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+
         }
     }
 
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
         dealFailInfo(map, mType)
+        when(mType){
+            MethodUrl.TIXIN_ACTION -> mButNext.isEnabled = true
+        }
+    }
+
+
+    override fun onSelectBackListener(map: MutableMap<String, Any>, type: Int) {
+        when (type) {
+            20 -> {
+                bankMap = map
+                bankNumberTv.text = map["name"] as String
+                //but_next.isEnabled = true
+            }
+
+        }
+    }
+
+
+    // 倒计时内部类
+    inner class TimeCount(millisInFuture: Long, countDownInterval: Long) : CountDownTimer(millisInFuture, countDownInterval) {
+
+        override fun onFinish() {
+            getCodeTv.text = resources.getString(R.string.msg_code_again)
+            getCodeTv.setTextColor(ContextCompat.getColor(this@TixianActivity,R.color.font_c))
+            getCodeTv.isClickable = true
+            MbsConstans.CURRENT_TIME = 0
+        }
+
+        override fun onTick(millisUntilFinished: Long) {
+            //计时过程显示
+            getCodeTv.isClickable = false
+            getCodeTv.setTextColor(ContextCompat.getColor(this@TixianActivity,R.color.black99))
+            getCodeTv.text = (millisUntilFinished / 1000 ).toString()+"秒后重发"
+            MbsConstans.CURRENT_TIME = (millisUntilFinished / 1000).toInt()
+
+        }
+
     }
 }

@@ -199,7 +199,7 @@ object MbsConstans {
         //本地app版本号
         var VERSION_APP_CODE = 1
         //本地app中的version_name  当前应用的版本名称
-        var VERSION_APP_NAME = ""
+        var VERSION_APP_NAME = "1.0.0"
         // 默认的网络最新程序版本号
         var VERSION_NET_CODE = -1
         //下载的APK的对应Id

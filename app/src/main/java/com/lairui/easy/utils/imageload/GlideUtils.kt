@@ -130,10 +130,10 @@ class GlideUtils {
             // .signature(new ObjectKey(UUID.randomUUID().toString())) ;
             // .priority(Priority.HIGH)
 
-            val glideUrl = GlideUrl(url, LazyHeaders.Builder()
+           /* val glideUrl = GlideUrl(url, LazyHeaders.Builder()
                     .addHeader("access_token", MbsConstans.ACCESS_TOKEN)
                     .addHeader("refresh_token", MbsConstans.REFRESH_TOKEN)
-                    .build())
+                    .build())*/
             Glide.with(context)
                     .load(url)
                     //.thumbnail(0.3f)

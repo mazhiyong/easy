@@ -48,8 +48,10 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/phoneEt"
                     android:background="@null"
-                    android:hint="1000.00"
+                    android:enabled="false"
+                    android:hint=""
                     android:layout_marginRight="@dimen/dp_10"
                     android:textColor="@color/black99"
                     android:textSize="@dimen/sp_15"
@@ -77,13 +79,17 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/payCodeEt"
                     android:background="@null"
+                    android:maxLength="6"
+                    android:inputType="numberPassword"
                     android:hint="请输入提现密码"
                     android:layout_marginRight="@dimen/dp_10"
                     android:textColor="@color/black99"
                     android:textSize="@dimen/sp_15"
+                    android:gravity="right"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="match_parent"/>
                 <ImageView
                     android:visibility="gone"
                     android:layout_alignParentRight="true"
@@ -107,13 +113,17 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/payCodeAgainEt"
+                    android:maxLength="6"
+                    android:inputType="numberPassword"
                     android:background="@null"
                     android:hint="请再次输入密码"
                     android:layout_marginRight="@dimen/dp_10"
                     android:textColor="@color/black99"
                     android:textSize="@dimen/sp_15"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:gravity="right"
+                    android:layout_height="match_parent"/>
                 <ImageView
                     android:visibility="gone"
                     android:layout_alignParentRight="true"
@@ -137,14 +147,18 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/codeEt"
                     android:background="@null"
                     android:hint="请输入验证码"
+                    android:inputType="number"
+                    android:maxLength="10"
                     android:layout_marginRight="@dimen/dp_10"
                     android:textColor="@color/black99"
                     android:textSize="@dimen/sp_15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:id="@+id/getCodeTv"
                     android:text="获取验证码"
                     android:textSize="@dimen/sp_14"
                     android:textColor="@color/font_c"

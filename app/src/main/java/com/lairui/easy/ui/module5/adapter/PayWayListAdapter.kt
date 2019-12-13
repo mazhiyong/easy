@@ -55,9 +55,10 @@ class PayWayListAdapter(context: Context) : ListBaseAdapter() {
                  mContext!!.startActivity(intent)
             }else{
                 val intent = Intent(mContext, WeiAndAliPayActivity::class.java)
-                //intent.putExtra("DATA", mDataList[position] as Serializable)
+                intent.putExtra("TYPE", item["type"].toString())
                 mContext!!.startActivity(intent)
             }
+
 
         }
     }

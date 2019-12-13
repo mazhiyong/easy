@@ -29,9 +29,13 @@ import java.util.HashMap
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.OnClick
+import com.lairui.easy.mywidget.view.TipsToast
+import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module4.adapter.RecordListAdapter
 import com.lairui.easy.ui.module5.adapter.JiangLiListAdapter
 import com.lairui.easy.ui.module5.adapter.YaoqingListAdapter
+import com.lairui.easy.utils.tool.SPUtils
+import kotlinx.android.synthetic.main.activity_yaoqing_money.*
 
 /**
  * 邀请列表 界面
@@ -79,7 +83,7 @@ class YaoqingListActivity : BasicActivity(), RequestView, ReLoadingData {
         mTitleText.text = "邀请记录"
         mRightLay.visibility = View.GONE
         initView()
-        for (index in 1..6){
+       /* for (index in 1..6){
             val map = HashMap<String,Any>()
             map["title"] = "马五"
             map["phone"] = "1883123131"
@@ -87,9 +91,9 @@ class YaoqingListActivity : BasicActivity(), RequestView, ReLoadingData {
             map["time"] = "2019.11.20"
             mDataList.add(map)
         }
-        responseData()
+        responseData()*/
 
-        //heTongAction()
+        heTongAction()
     }
 
 
@@ -114,11 +118,15 @@ class YaoqingListActivity : BasicActivity(), RequestView, ReLoadingData {
 
     private fun heTongAction() {
 
-        mRequestTag = MethodUrl.hetongList
-        val map = HashMap<String, String>()
-        map["creditfile"] = mDataMap!!["creditfile"]!!.toString() + ""
+        mRequestTag = MethodUrl.PROMOTION_LIST
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.PROMOTION_LIST
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@YaoqingListActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp.requestGetToRes(mHeaderMap, MethodUrl.hetongList, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.PROMOTION_LIST, map)
     }
 
 
@@ -212,22 +220,31 @@ class YaoqingListActivity : BasicActivity(), RequestView, ReLoadingData {
 
         val intent: Intent
         when (mType) {
-            MethodUrl.hetongList//
-            -> {
-                val result = tData["result"]!!.toString() + ""
-                if (UtilTools.empty(result)) {
-                    responseData()
-                } else {
-                    val list = JSONUtil.instance.jsonToList(result)
-                    if (list != null) {
-                        mDataList.clear()
-                        mDataList.addAll(list)
-                        responseData()
-                    } else {
-
+            MethodUrl.PROMOTION_LIST -> {
+                when (tData["code"].toString() + "") {
+                    "1" -> {
+                        if (!UtilTools.empty(tData["data"])){
+                            val result = tData["data"]!!.toString() + ""
+                            if (UtilTools.empty(result)) {
+                                responseData()
+                            } else {
+                                val list = JSONUtil.instance.jsonToList(result)
+                                if (list != null) {
+                                    mDataList.clear()
+                                    mDataList.addAll(list)
+                                    responseData()
+                                }
+                            }
+                            mRefreshListView!!.refreshComplete(10)
+                        }
+                    }
+                    "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
+                    "-1" -> {
+                        closeAllActivity()
+                        val intent = Intent(this@YaoqingListActivity, LoginActivity::class.java)
+                        startActivity(intent)
                     }
                 }
-                mRefreshListView!!.refreshComplete(10)
             }
             MethodUrl.refreshToken//获取refreshToken返回结果
             -> {
@@ -245,17 +262,16 @@ class YaoqingListActivity : BasicActivity(), RequestView, ReLoadingData {
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
 
         when (mType) {
-            MethodUrl.hetongList//
-            -> if (mRecordAdapter != null) {
-                if (mRecordAdapter!!.dataList.size <= 0) {
-                    mPageView!!.showNetworkError()
+            MethodUrl.PROMOTION_LIST -> if (mRecordAdapter != null) {
+                if (mRecordAdapter!!.dataList.isEmpty()) {
+                    mPageView.showNetworkError()
                 } else {
-                    mPageView!!.showContent()
+                    mPageView.showContent()
                 }
-                mRefreshListView!!.refreshComplete(10)
-                mRefreshListView!!.setOnNetWorkErrorListener { heTongAction() }
+                mRefreshListView.refreshComplete(10)
+                mRefreshListView.setOnNetWorkErrorListener { heTongAction() }
             } else {
-                mPageView!!.showNetworkError()
+                mPageView.showNetworkError()
             }
         }
 
