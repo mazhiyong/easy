@@ -87,7 +87,7 @@ class KindSelectDialog : BaseDialog {
 
         widthScale(1f)
         dimEnabled(true)
-        heightScale(0.45f)
+        //heightScale(0.45f)
         showAnim(bas_in)
         dismissAnim(bas_out)
     }

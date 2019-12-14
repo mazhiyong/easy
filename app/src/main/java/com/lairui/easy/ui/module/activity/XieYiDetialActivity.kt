@@ -65,6 +65,10 @@ class XieYiDetialActivity : BasicActivity(), RequestView {
                         mTitleText.text = "风险揭示书"
                         getStatementInfoAction()
                     }
+                    "3" ->{
+                        mTitleText.text = "策略协议"
+                        getCelueInfoAction()
+                    }
                 }
             }
         }
@@ -96,6 +100,17 @@ class XieYiDetialActivity : BasicActivity(), RequestView {
         val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.STATEMENT_INFO, map)
     }
+
+    private fun getCelueInfoAction() {
+        mRequestTag = MethodUrl.PEIZI_INFO
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.PEIZI_INFO
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.PEIZI_INFO, map)
+    }
+
+
+
 
     @OnClick(R.id.back_img, R.id.left_back_lay)
     fun onViewClicked(view: View) {
@@ -163,6 +178,22 @@ class XieYiDetialActivity : BasicActivity(), RequestView {
                     startActivity(intent)
                 }
             }
+            MethodUrl.PEIZI_INFO -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    val map = tData["data"] as String
+                    if (!UtilTools.empty(map)) {
+                        tvContent.movementMethod = LinkMovementMethod.getInstance()
+                        tvContent.text = Html.fromHtml(map)
+                    }
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@XieYiDetialActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
         }
     }
 

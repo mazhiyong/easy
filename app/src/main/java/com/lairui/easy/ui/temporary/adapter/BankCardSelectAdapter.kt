@@ -1,5 +1,6 @@
 package com.lairui.easy.ui.temporary.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -27,24 +28,25 @@ class BankCardSelectAdapter(private val mContext: Context, var datas: List<Mutab
         return ViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val item = datas!![position]
-        val accid = item["accid"]!!.toString() + ""
-        val accsn = item["accsn"]!!.toString() + ""
-        var bankName = item["opnbnknm"]!!.toString() + ""
-        val logopath = item["logopath"]!!.toString() + ""
-        if (UtilTools.empty(bankName)) {
+        val accid = item["card"]!!.toString() + ""
+        var bankName = item["bank_name"]!!.toString() + ""
+        //val logopath = item["logopath"]!!.toString() + ""
+        /*if (UtilTools.empty(bankName)) {
             if (accsn == "D") {
                 bankName = "交易账户"
             } else {
                 bankName = ""
             }
-        }
+        }*/
         //设置银行和后四位卡号
-        holder.mTextView!!.text = bankName + "(" + UtilTools.getIDCardXing(accid) + ")"
+        //holder.mTextView.text = bankName + "(" + UtilTools.getIDCardXing(accid) + ")"
+        holder.mTextView.text = bankName + "(" +accid + ")"
         //设置银行卡对应的Logo
-        GlideUtils.loadImage(mContext, logopath, holder.mImageView!!, R.drawable.default_bank)
+        GlideUtils.loadImage(mContext, "", holder.mImageView, R.drawable.default_bank)
 
         holder.mLayout!!.setOnClickListener { v ->
             if (onMyItemClickListener != null) {
@@ -54,11 +56,7 @@ class BankCardSelectAdapter(private val mContext: Context, var datas: List<Mutab
             notifyDataSetChanged()
         }
 
-        if (position == selectItem) {
-            holder.mLayout!!.isSelected = true
-        } else {
-            holder.mLayout!!.isSelected = false
-        }
+        holder.mLayout!!.isSelected = position == selectItem
     }
 
     override fun getItemCount(): Int {

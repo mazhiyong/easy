@@ -198,6 +198,15 @@ object MethodUrl {
 
 
 
+    const val PEIZI_INFO = "trading_agreement" //配资协议
+    const val PEIZI_DAY_INFO = "capital_day" //按天配资
+    const val PEIZI_DAY_APPLY = "apply_day" //申请按天配资
+
+
+
+
+
+
 
 
 

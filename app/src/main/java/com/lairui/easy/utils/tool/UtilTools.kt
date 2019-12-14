@@ -561,8 +561,8 @@ class UtilTools {
          * @return
          */
         fun getIDCardXing(s: String): String {
-            return if (!empty(s) && s.length > 5) {
-                s.substring(0, 4) + "******" + s.substring(s.length - 4, s.length)
+            return if (!empty(s) && s.length > 7) {
+                s.substring(0, 6) + "******" + s.substring(s.length - 6, s.length)
             } else {
                 "******"
             }

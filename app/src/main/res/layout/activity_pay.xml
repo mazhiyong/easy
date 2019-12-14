@@ -31,14 +31,15 @@
                 <TextView
                     android:text="保证金"
                     android:textColor="@color/black33"
-                    android:textSize="@dimen/sp_16"
+                    android:textSize="@dimen/sp_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:id="@+id/boundTv"
                     android:layout_alignParentRight="true"
-                    android:text="1000.00"
+                    android:text="0.00"
                     android:textColor="@color/black33"
-                    android:textSize="@dimen/sp_16"
+                    android:textSize="@dimen/sp_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -50,14 +51,15 @@
                 <TextView
                     android:text="预存管理费"
                     android:textColor="@color/black33"
-                    android:textSize="@dimen/sp_16"
+                    android:textSize="@dimen/sp_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:id="@+id/lixiTv"
                     android:layout_alignParentRight="true"
-                    android:text="1000.00"
+                    android:text="0.00"
                     android:textColor="@color/black33"
-                    android:textSize="@dimen/sp_16"
+                    android:textSize="@dimen/sp_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -70,14 +72,14 @@
                 <TextView
                     android:text="操盘期限"
                     android:textColor="@color/black33"
-                    android:textSize="@dimen/sp_16"
+                    android:textSize="@dimen/sp_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:layout_alignParentRight="true"
                     android:text="1天"
                     android:textColor="@color/black33"
-                    android:textSize="@dimen/sp_16"
+                    android:textSize="@dimen/sp_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -98,15 +100,16 @@
                 <TextView
                     android:text="付款金额"
                     android:textColor="@color/black33"
-                    android:textSize="@dimen/sp_19"
+                    android:textSize="@dimen/sp_18"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:id="@+id/payTv"
                     android:layout_alignParentRight="true"
-                    android:text="100.00"
+                    android:text="0.00"
                     android:textStyle="bold"
                     android:textColor="@color/font_c"
-                    android:textSize="@dimen/sp_18"
+                    android:textSize="@dimen/sp_16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -117,13 +120,14 @@
 
 
     <TextView
+        android:id="@+id/tipTv"
         android:layout_alignParentRight="true"
         android:lineSpacingExtra="@dimen/dp_5"
-        android:text="您的账户余额1.00元，赠送金额1000.00元，还需支付9.00元，请"
+        android:text=""
         android:layout_marginLeft="@dimen/dp_20"
         android:layout_marginRight="@dimen/dp_20"
         android:textColor="@color/font_c"
-        android:textSize="@dimen/sp_16"
+        android:textSize="@dimen/sp_13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

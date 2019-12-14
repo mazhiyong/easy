@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 
-class SelectMoneyAdapter(private val mContext: Context, var datas: List<MutableMap<String, Any>>?) : RecyclerView.Adapter<SelectMoneyAdapter.ViewHolder>() {
+class SelectMoneyAdapter(private val mContext: Context, var datas: MutableList<MutableMap<String, Any>>?) : RecyclerView.Adapter<SelectMoneyAdapter.ViewHolder>() {
 
     var onMyItemClickListener: OnMyItemClickListener? = null
     var selectItem = 0
@@ -27,7 +27,8 @@ class SelectMoneyAdapter(private val mContext: Context, var datas: List<MutableM
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val item = datas!![position]
-        holder.mItemInfoTv.text = item["item"]!!.toString() + ""
+        holder.mItemInfoTv.text = item["multiple"]!!.toString() + "倍\n"+item["money"]!!.toString()+"元"
+
         /*   GlideApp.with(mContext)
                 .load(logopath)
                 .apply(new RequestOptions().placeholder(R.drawable.tip_orange).error(R.drawable.tip_orange))

@@ -53,9 +53,10 @@ class BankCardSelectDialog : BaseDialog {
         mRecyclerView = view.findViewById(R.id.rcv_bankcard)
         mAddTv = view.findViewById(R.id.tv_add_card)
         mAddCardLay = view.findViewById(R.id.add_card_lay)
+
         mAllLay = view.findViewById(R.id.all_lay)
         mAllLay!!.setOnClickListener { dismiss() }
-        if (mType == 30) {
+        if (mType == 20) {
             mAddCardLay!!.visibility = View.GONE
         } else {
             mAddCardLay!!.visibility = View.VISIBLE

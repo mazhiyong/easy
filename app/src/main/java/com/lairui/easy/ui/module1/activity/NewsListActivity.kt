@@ -13,7 +13,6 @@ import com.github.jdsjlzx.recyclerview.LRecyclerView
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter
 import com.github.jdsjlzx.recyclerview.ProgressStyle
 import com.lairui.easy.R
-import com.lairui.easy.ui.temporary.adapter.HeTongListAdapter
 import com.lairui.easy.api.MethodUrl
 import com.lairui.easy.basic.BasicActivity
 import com.lairui.easy.listener.ReLoadingData

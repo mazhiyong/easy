@@ -189,12 +189,13 @@
                                 android:textColor="@color/black33"
                                 android:layout_height="wrap_content"/>
                             <EditText
+                                android:id="@+id/boundEt"
                                 android:inputType="number"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
                                 android:layout_gravity="center_vertical"
-                                android:hint="最少200,最多200万,百的整数倍"
                                 android:background="@null"
-                                android:gravity="center_vertical"
+                                android:gravity="right"
                                 android:layout_margin="@dimen/dp_10"
                                 android:textSize="@dimen/sp_12"
                                 android:textColor="@color/black99"
@@ -222,14 +223,15 @@
                                 android:background="@null"
                                 android:enabled="false"
                                 android:gravity="center_vertical"
-                                android:layout_margin="@dimen/dp_10"
+                                android:padding="@dimen/dp_10"
                                 android:textSize="@dimen/sp_12"
                                 android:textColor="@color/black99"
-                                android:layout_height="wrap_content"/>
+                                android:layout_height="match_parent"/>
                         </LinearLayout>
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/dayRv"
+                            android:visibility="gone"
                             xmlns:tools="http://schemas.android.com/tools"
                             android:layout_width="match_parent"
                             android:layout_marginLeft="@dimen/dp_5"
@@ -256,15 +258,17 @@
                                 android:textColor="@color/black33"
                                 android:layout_height="wrap_content"/>
                             <TextView
+                                android:id="@+id/timeTv"
                                 android:layout_width="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_vertical"
                                 android:layout_margin="@dimen/dp_10"
                                 android:textSize="@dimen/sp_12"
-                                android:text="一个交易日"
+                                android:text=""
                                 android:textColor="@color/black33"
                                 android:layout_height="wrap_content"/>
                             <ImageView
+                                android:visibility="gone"
                                 android:layout_width="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_height="wrap_content"
@@ -287,6 +291,7 @@
                                 android:textColor="@color/black33"
                                 android:layout_height="wrap_content"/>
                             <TextView
+                                android:id="@+id/totalMoneyTv"
                                 android:layout_width="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_vertical"
@@ -311,6 +316,7 @@
                                 android:textColor="@color/black33"
                                 android:layout_height="wrap_content"/>
                             <TextView
+                                android:id="@+id/jingjieLineTv"
                                 android:layout_width="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_vertical"
@@ -335,6 +341,7 @@
                                 android:textColor="@color/black33"
                                 android:layout_height="wrap_content"/>
                             <TextView
+                                android:id="@+id/pingcangLineTv"
                                 android:layout_width="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_vertical"
@@ -360,6 +367,7 @@
                                 android:textColor="@color/black33"
                                 android:layout_height="wrap_content"/>
                             <TextView
+                                android:id="@+id/lixiTv"
                                 android:layout_width="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_vertical"
@@ -373,6 +381,7 @@
                         <LinearLayout
                             android:id="@+id/selectTimeLay2"
                             android:orientation="horizontal"
+                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <TextView
@@ -432,6 +441,7 @@
                     android:gravity="center_horizontal"
                     android:layout_gravity="center_horizontal"
                     android:padding="@dimen/dp_8"
+                    android:enabled="false"
                     android:background="@drawable/btn_next"
                     android:textColor="@color/white"
                     android:layout_height="wrap_content" />

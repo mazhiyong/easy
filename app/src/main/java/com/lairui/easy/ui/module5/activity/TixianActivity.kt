@@ -2,7 +2,9 @@ package com.lairui.easy.ui.module5.activity
 
 import android.content.Intent
 import android.os.CountDownTimer
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.Gravity
 
 import androidx.core.content.ContextCompat
@@ -14,8 +16,6 @@ import com.lairui.easy.api.MethodUrl
 import com.lairui.easy.basic.BasicActivity
 import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.basic.MbsConstans
-import com.lairui.easy.utils.tool.RegexUtil
-import com.lairui.easy.utils.tool.UtilTools
 import com.jaeger.library.StatusBarUtil
 
 import java.io.Serializable
@@ -25,15 +25,16 @@ import butterknife.BindView
 import butterknife.OnClick
 import com.lairui.easy.listener.SelectBackListener
 import com.lairui.easy.mywidget.dialog.AppDialog
+import com.lairui.easy.mywidget.dialog.BankCardSelectDialog
 import com.lairui.easy.mywidget.dialog.KindSelectDialog
 import com.lairui.easy.mywidget.dialog.SimpleTipMsgDialog
 import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.utils.imageload.GlideUtils
-import com.lairui.easy.utils.tool.SPUtils
-import com.lairui.easy.utils.tool.TextViewUtils
-import kotlinx.android.synthetic.main.activity_editphone.*
+import com.lairui.easy.utils.tool.*
 import kotlinx.android.synthetic.main.activity_editphone.getCodeTv
 import kotlinx.android.synthetic.main.activity_tixian_money.*
+import java.util.ArrayList
+
 /**
  * 提现界面
  */
@@ -63,9 +64,9 @@ class TixianActivity : BasicActivity(), RequestView , SelectBackListener {
 
     private lateinit var mTimeCount: TimeCount
 
-    private lateinit var mDialog: KindSelectDialog
+    private lateinit var mDialog: BankCardSelectDialog
 
-    private var bankMap :MutableMap<String,Any>? = null
+    private lateinit var  bankMap :MutableMap<String,Any>
 
 
     override val contentView: Int
@@ -77,6 +78,18 @@ class TixianActivity : BasicActivity(), RequestView , SelectBackListener {
         mTitleText.text = "提现"
         mTimeCount = TimeCount(1*60*1000,1000)
 
+        codeEt.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+               mButNext.isEnabled = s.toString().isNotEmpty()
+            }
+
+        })
     }
 
 
@@ -133,8 +146,8 @@ class TixianActivity : BasicActivity(), RequestView , SelectBackListener {
         map["token"] = MbsConstans.ACCESS_TOKEN
         map["number"] = moneyEt.text.toString()
         map["password"] = payCodeEt.text.toString()
-        //map["code"] = codeEt.text.toString
-        //map["bank_id"] = bankMap["mark"].toString()
+        map["code"] = codeEt.text.toString()
+        map["bank_id"] = bankMap["mark"].toString()
 
         val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.TIXIN_ACTION, map)
@@ -182,16 +195,14 @@ class TixianActivity : BasicActivity(), RequestView , SelectBackListener {
                                 when (v.id) {
                                     R.id.cancelIv -> dialog.dismiss()
                                     R.id.dealTv -> {
+                                        dialog.dismiss()
                                         intent = Intent(this@TixianActivity,RenZhengActivity::class.java)
                                         startActivity(intent)
                                     }
                                 }
                             })
                             dialog.show()
-                        }
-
-
-                        if (UtilTools.empty(mapData["bank"])){
+                        }else if (UtilTools.empty(mapData["bank"].toString())){
                             val dialog = SimpleTipMsgDialog(this@TixianActivity,true)
                             dialog.initValue("您尚未绑定银行卡","立即绑定")
                             dialog.setClickListener(View.OnClickListener { v ->
@@ -199,15 +210,41 @@ class TixianActivity : BasicActivity(), RequestView , SelectBackListener {
                                     R.id.cancelIv -> dialog.dismiss()
                                     R.id.dealTv -> {
                                         intent = Intent(this@TixianActivity,BankCardAddActivity::class.java)
+                                        intent.putExtra("mark", "0")
                                         startActivity(intent)
+                                        dialog.dismiss()
                                     }
                                 }
                             })
                             dialog.show()
                         }else{
                             val bankList = mapData["bank"]  as MutableList<MutableMap<String, Any>>
-                            mDialog = KindSelectDialog(this@TixianActivity, true, bankList, 20)
-                            mDialog.setClickListener(this@TixianActivity)
+                            if (bankList.size>0 ){
+                                for (item in bankList){
+                                    item["name"] = item["card"].toString()
+                                }
+                                bankMap = bankList[0]
+                                bankNumberTv.text = bankList[0]["name"] as String
+                                mDialog = BankCardSelectDialog(this@TixianActivity, true, bankList, 20)
+                                mDialog.selectBackListener = this@TixianActivity
+                            }else{
+                                val dialog = SimpleTipMsgDialog(this@TixianActivity,true)
+                                dialog.initValue("您尚未绑定银行卡","立即绑定")
+                                dialog.setClickListener(View.OnClickListener { v ->
+                                    when (v.id) {
+                                        R.id.cancelIv -> dialog.dismiss()
+                                        R.id.dealTv -> {
+                                            intent = Intent(this@TixianActivity,BankCardAddActivity::class.java)
+                                            intent.putExtra("mark", "0")
+                                            startActivity(intent)
+                                            dialog.dismiss()
+                                        }
+                                    }
+                                })
+                                dialog.show()
+                            }
+
+
                         }
 
                         if (mapData["password"].toString() == "0"){
@@ -219,6 +256,7 @@ class TixianActivity : BasicActivity(), RequestView , SelectBackListener {
                                     R.id.dealTv -> {
                                         intent = Intent(this@TixianActivity,EditPayCodeActivity::class.java)
                                         startActivity(intent)
+                                        dialog.dismiss()
                                     }
                                 }
                             })
@@ -250,6 +288,7 @@ class TixianActivity : BasicActivity(), RequestView , SelectBackListener {
 
             MethodUrl.TIXIN_ACTION-> when (tData["code"].toString() + "") {
                 "1" -> {
+                    mButNext.isEnabled = true
                     showToastMsg(tData["msg"].toString() + "")
                 }
                 "0" -> showToastMsg(tData["msg"].toString() + "")
@@ -276,6 +315,7 @@ class TixianActivity : BasicActivity(), RequestView , SelectBackListener {
         when (type) {
             20 -> {
                 bankMap = map
+                LogUtil.i("show","mark:"+bankMap["mark"].toString())
                 bankNumberTv.text = map["name"] as String
                 //but_next.isEnabled = true
             }
