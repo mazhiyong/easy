@@ -189,7 +189,7 @@ class AddFileActivity : BasicActivity(), RequestView, ReLoadingData {
             }
         }
 
-        LogUtil.i("打印log日志", "$mSign!!!!!!!!!!$mTitleList")
+        LogUtil.i("show", "$mSign!!!!!!!!!!$mTitleList")
 
         mRightImg!!.visibility = View.VISIBLE
         mRightImg!!.setImageResource(R.drawable.shuaixuan)
@@ -319,7 +319,7 @@ class AddFileActivity : BasicActivity(), RequestView, ReLoadingData {
                     localMedia.setCompressPath(MbsConstans.UPLOAD_PATH + fileName);
                     BitmapUtil.saveCompressImg(localMedia.getPath(),MbsConstans.UPLOAD_PATH+fileName+".png");*/
                     uploadFile(localMedia, code)
-                    LogUtil.i("打印log日志", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@开始上传")
+                    LogUtil.i("show", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@开始上传")
                 }
                 // 例如 LocalMedia 里面返回三种path
                 // 1.media.getPath(); 为原图path

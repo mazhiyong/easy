@@ -379,7 +379,7 @@ class QiyeCardInfoActivity : BasicActivity(), RequestView, SelectBackListener {
                     for (i in selectList.indices) {
                         val localMedia = selectList[i]
                         // uploadFile(localMedia,code);
-                        LogUtil.i("打印log日志", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@开始上传")
+                        LogUtil.i("show", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@开始上传")
                         uploadFile(localMedia, "1")
                     }
                 }

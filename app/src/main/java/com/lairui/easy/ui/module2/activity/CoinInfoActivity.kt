@@ -1,23 +1,28 @@
 package com.lairui.easy.ui.module2.activity
 
+import android.content.Intent
+import android.text.TextUtils
+import android.util.Log
 import android.view.View
+import android.widget.AdapterView
 import androidx.core.content.ContextCompat
+import butterknife.OnClick
+import com.google.android.material.tabs.TabLayout
+import com.google.gson.Gson
+import com.jaeger.library.StatusBarUtil
 import com.lairui.easy.R
 import com.lairui.easy.api.MethodUrl
 import com.lairui.easy.basic.BasicActivity
 import com.lairui.easy.basic.MbsConstans
+import com.lairui.easy.bean.StockInfoBean
 import com.lairui.easy.mvp.view.RequestView
-import com.lairui.easy.mywidget.depthview.DepthBuySellData
 import com.lairui.easy.mywidget.kview.KViewListener
 import com.lairui.easy.mywidget.kview.Quotes
+import com.lairui.easy.ui.module2.adapter.BuyAndSellAdapter
 import com.lairui.easy.utils.tool.JSONUtil
 import com.lairui.easy.utils.tool.LogUtil
-import com.lairui.easy.utils.tool.UtilTools
-import com.google.android.material.tabs.TabLayout
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.jaeger.library.StatusBarUtil
 import com.lairui.easy.utils.tool.SelectDataUtil
+import com.lairui.easy.utils.tool.UtilTools
 import com.zhangke.websocket.SocketListener
 import com.zhangke.websocket.WebSocketHandler.getDefault
 import com.zhangke.websocket.response.ErrorResponse
@@ -26,8 +31,8 @@ import kotlinx.android.synthetic.main.title_leftbut_bar.*
 import org.java_websocket.framing.Framedata
 import java.lang.reflect.Type
 import java.nio.ByteBuffer
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+import java.text.SimpleDateFormat
+
 
 class CoinInfoActivity : BasicActivity(), RequestView {
 
@@ -36,6 +41,17 @@ class CoinInfoActivity : BasicActivity(), RequestView {
     private var kLineData = ArrayList<List<String>>()
 
     private var period:String = "60"
+    private var mapData :MutableMap<String,Any> ? = null
+    private var stockInfoBean :StockInfoBean? = null
+    private var buyData: MutableList<MutableMap<String,Any>> =  java.util.ArrayList()
+    private var sellData: MutableList<MutableMap<String,Any>> =java.util.ArrayList()
+
+    private var mSelladapter: BuyAndSellAdapter? = null
+    private var mBuyadapter: BuyAndSellAdapter? = null
+
+    private var mRequestTag:Int = 0
+
+    private var dateformat: SimpleDateFormat? = null
 
     //不支持滑动返回
     override fun isSupportSwipeBack(): Boolean {
@@ -49,16 +65,106 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
     override fun init() {
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
-        title_text.setText("行情")
-        divide_line.visibility = View.GONE
 
-        val timeChoose = resources.getStringArray(R.array.timeChoose)
-        val klineTimeParams = resources.getStringArray(R.array.klineTimeParams)
+        divide_line.visibility = View.GONE
+        right_img.visibility = View.VISIBLE
+        right_text_tv.visibility = View.VISIBLE
+        right_img.setBackgroundResource(R.drawable.zixuan_selected)
+
+        dateformat =  SimpleDateFormat("yyyyMMddHHmmss")
+
+        val bundle = intent.extras
+        if (bundle == null){
+            finish()
+        }else{
+            mapData = bundle.getSerializable("DATA") as MutableMap<String,Any> ?
+            title_text.text = mapData!!["name"].toString()
+            mRequestTag = 0
+            //getTimeMinuteDataActin()
+            getKLineMinuteDataActin("m1")
+            getDetialDataAction()
+        }
+
+
+        akv_kv_kview.isShowTimSharing = true
+
 
         val mKLineData = SelectDataUtil.kLineParams
         for (item in mKLineData){
             tabLayout.addTab(tabLayout.newTab().setText(item.get("name") as String))
         }
+
+        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when(tabLayout.selectedTabPosition){
+                    0 -> {
+                        mRequestTag = 0
+                        //getTimeMinuteDataActin() //1分时图
+                        getKLineMinuteDataActin("m1") //1分时图
+
+                    }
+                    1 -> {
+                        mRequestTag = 1 //五日分时图
+
+
+                    }
+                    2 -> {
+                        mRequestTag = 2 //日K
+                    }
+                    3 -> {
+                        mRequestTag = 3 //周K
+                    }
+                    4 -> {
+                        mRequestTag = 4//月K
+                    }
+                }
+            }
+
+        })
+
+        spinner.onItemSelectedListener = object:AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when(position){
+                    0 ->{
+                        mRequestTag = 5 //1分钟 K
+                        getKLineMinuteDataActin("m1")
+                    }
+                    1 ->{
+                        mRequestTag = 6 //5分钟 K
+                        getKLineMinuteDataActin("m5")
+                    }
+                    2 ->{
+                        mRequestTag = 7 //10分钟 K
+                        getKLineMinuteDataActin("m10")
+                    }
+                    3 ->{
+                        mRequestTag = 8 //15分钟 K
+                        getKLineMinuteDataActin("m15")
+                    }
+                    4 ->{
+                        mRequestTag = 9 //30分钟 K
+                        getKLineMinuteDataActin("m30")
+                    }
+                    5 ->{
+                        mRequestTag = 10 //60分钟 K
+                        getKLineMinuteDataActin("m60")
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+
+
+
+
+        LogUtil.i("show","mRequestTag:"+mRequestTag)
+
 
         /*tabLayout.addOnTabSelectedListener(object:TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -100,22 +206,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
         }*/
         //分时图/K线图切换
         //Lambda 若只有一个重写方法,且方法只有一个参数,参数无用,可以简写为以下格式
-        akv_btn_showCandle.setOnClickListener {
-            akv_kv_kview.visibility = View.VISIBLE
-            depthMapView.visibility = View.GONE
 
-            val showTimSharing = akv_kv_kview.isShowTimSharing
-            akv_kv_kview.isShowTimSharing = !showTimSharing
-            //设置数据
-            updateDataAndUI(dataList)
-
-            if (!showTimSharing) {
-                akv_btn_showCandle.text = "切换到K线图"
-            } else {
-                akv_btn_showCandle.text = "切换到分时图"
-            }
-
-        }
         //副图显示切换
         akv_btn_showMinnor.setOnClickListener {
             akv_kv_kview.visibility = View.VISIBLE
@@ -134,6 +225,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
         }
 
         //深度图
+/*
         akv_btn_showDepth.setOnClickListener {
 
             akv_kv_kview.visibility = View.GONE
@@ -156,49 +248,64 @@ class CoinInfoActivity : BasicActivity(), RequestView {
             }
             depthMapView.setData(buyList, sellList, "BTC", 6, 4)
         }
-
-
-        getDefault().addListener(object : SocketListener{
-            override fun onConnectFailed(e: Throwable?) {
-                LogUtil.i("show","ws ConnectFailed &&&")
-                getDefault().reconnect()
-            }
-
-            override fun onSendDataError(errorResponse: ErrorResponse?) {
-                LogUtil.i("show"," ws errorResponse:"+errorResponse!!.errorCode)
-            }
-
-            override fun onConnected() {
-                LogUtil.i("show","ws onConnected &&&")
-            }
-
-            override fun <T : Any?> onMessage(message: String?, data: T) {
-                LogUtil.i("show","Kline Message:"+message)
-
-            }
-
-            override fun <T : Any?> onMessage(bytes: ByteBuffer?, data: T) {
-
-            }
-
-            override fun onDisconnect() {
-                LogUtil.i("show","ws onDisconnect &&&")
-                getDefault().reconnect()
-
-            }
-
-            override fun onPong(framedata: Framedata?) {
-
-            }
-
-            override fun onPing(framedata: Framedata?) {
-
-            }
-
-        })
+*/
 
 
     }
+
+    //获取详情
+    private fun getDetialDataAction() {
+        val map = HashMap<String, String>()
+        map["q"] = mapData!!["code"].toString()
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.DETIAL_SERVER_URL, map)
+    }
+
+    //获取1分 分时图
+    private fun getTimeMinuteDataActin() {
+        val map = HashMap<String, String>()
+        map["code"] = mapData!!["code"].toString()
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.TIME_MINUTE_SERVER_URL, map)
+    }
+
+    //分钟K线图
+    private fun  getKLineMinuteDataActin(param:String) {
+        val map = HashMap<String, String>()
+        map["_var"] = param+"_today"
+        map["param"] = mapData!!["code"].toString()+","+param+",,320"
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.KLINE_MINUTE_SERVER_URL, map)
+    }
+
+
+
+
+
+    @OnClick(R.id.back_img, R.id.left_back_lay,R.id.right_lay)
+    fun onViewClicked(view: View) {
+        var intent: Intent
+        when (view.id) {
+            R.id.left_back_lay, R.id.back_img -> finish()
+            R.id.right_lay -> {
+                if (right_img.isSelected){
+                    right_img.isSelected = false
+                    right_img.setBackgroundResource(R.drawable.zixuan_unselected)
+                }else{
+                    right_img.isSelected = true
+                    right_img.setBackgroundResource(R.drawable.zixuan_selected)
+
+                }
+
+            }
+
+        }
+    }
+
+
+
+
+
 
     override fun onPause() {
         super.onPause()
@@ -229,7 +336,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
     private val cnyRunnable = object : Runnable {
         override fun run() {
-            //轮询 获取K线数据
+            /*//轮询 获取K线数据
             getKLineAction()
 
             //websocket获取K线数据
@@ -238,21 +345,57 @@ class CoinInfoActivity : BasicActivity(), RequestView {
             map.put("method","k_coinChart")
             map.put("range",period)
             map.put("symbol","BTC")
-            getDefault().send(JSONUtil.instance.objectToJson(map))
-            handler.postDelayed(this, 60 * 1000)
+            getDefault().send(JSONUtil.instance.objectToJson(map))*/
+
+            if (UtilTools.empty(mapData)){
+                return
+            }
+            getDetialDataAction()
+            when(mRequestTag){
+                0 ->{
+
+                }
+                1 ->{
+
+                }
+                2 ->{
+
+                }
+                3 ->{
+
+                }
+                4 ->{
+
+                }
+                5 ->{
+
+                }
+                6 ->{
+
+                }
+                7 ->{
+
+                }
+                8 ->{
+
+                }
+                9 ->{
+
+                }
+                10 ->{
+
+                }
+
+
+
+
+            }
+
+
+            handler.postDelayed(this, 10 * 1000)
 
 
         }
-    }
-
-
-    private fun getKLineAction() {
-        val map = HashMap<String, String>()
-        map["symbol"] = "btc_usdt"
-        map["period"] = period
-        val headerMap = HashMap<String, String>()
-        mRequestPresenterImp.requestGetToMap(headerMap, MethodUrl.K_LINE, map)
-
     }
 
 
@@ -266,14 +409,163 @@ class CoinInfoActivity : BasicActivity(), RequestView {
         dismissProgressDialog()
     }
 
+
+
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
         when (mType) {
+
+            MbsConstans.KLINE_MINUTE_SERVER_URL ->{
+                var  result = tData["result"]!!.toString() + ""
+                result = result.substring(result.indexOf("=")+1)
+                val mapInfo = JSONUtil.instance.jsonMap(result)
+                if (mapInfo != null){
+                    if (UtilTools.empty(mapInfo["data"])){
+                        akv_kv_kview.loadMoreNoData()
+                        return
+                    }
+                    val dataMap = mapInfo["data"] as MutableMap<String,Any>
+                    val  dataMap1 = dataMap[mapData!!["code"].toString()] as MutableMap<String,Any>
+                    var resultStr:String? = null
+                    when(mRequestTag){
+                        0 ->  {
+                            resultStr = dataMap1["m1"] .toString().replace("{","").replace("},","")
+                            akv_kv_kview.isShowTimSharing = true
+                        }
+                        5 ->  {
+                            resultStr = dataMap1["m1"] .toString().replace("{","").replace("},","")
+                            akv_kv_kview.isShowTimSharing = true
+                        }
+                        6 ->  {
+                            resultStr = dataMap1["m5"] .toString().replace("{","").replace("},","")
+                            akv_kv_kview.isShowTimSharing = true
+                        }
+                        7 ->  {
+                            resultStr = dataMap1["m10"] .toString().replace("{","").replace("},","")
+                            akv_kv_kview.isShowTimSharing = true
+                        }
+                        8 ->  {
+                            resultStr = dataMap1["m15"] .toString().replace("{","").replace("},","")
+                            akv_kv_kview.isShowTimSharing = true
+                        }
+                        9 ->  {
+                            resultStr = dataMap1["m30"] .toString().replace("{","").replace("},","")
+                            akv_kv_kview.isShowTimSharing = false
+                        }
+                        9 ->  {
+                            resultStr = dataMap1["m60"] .toString().replace("{","").replace("},","")
+                            akv_kv_kview.isShowTimSharing = false
+                        }
+
+                    }
+                    if (UtilTools.empty(resultStr)){
+                        return
+                    }
+                    val data = JSONUtil.instance.jsonToListStr2(resultStr!!)
+                    if (data != null) {
+                        dataList.clear()
+                        for (item in data){
+                            val timeStr =item[0]
+                            val time = dateformat!!.parse(timeStr+"00").time
+                            //开收高低
+                            val quotes = Quotes(item[1].toDouble(), item[3].toDouble(), item[4].toDouble(), item[2].toDouble(), time,item[5].toDouble())
+                            dataList.add(quotes)
+                        }
+                        //设置数据
+                        LogUtil.i("show","$$$$:"+dataList.size)
+                        updateDataAndUI(dataList)
+                    }
+
+
+                }
+            }
+
+
+            MbsConstans.TIME_MINUTE_SERVER_URL ->{
+                var  result = tData["result"]!!.toString() + ""
+                result = result.substring(result.indexOf("=")+1)
+                val mapInfo = JSONUtil.instance.jsonMap(result)
+                if (mapInfo != null){
+                    val dataMap = mapInfo["data"] as MutableMap<String,Any>
+                    val  dataMap1 = dataMap[mapData!!["code"].toString()] as MutableMap<String,Any>
+                    val  dataMap2 = dataMap1["data"] as MutableMap<String,Any>
+                    val  date = dataMap2["date"].toString()
+                    val data = JSONUtil.instance.jsonToListStr2(dataMap2["data"].toString())
+                    if (data != null) {
+                        for (item in data){
+                            val timeStr = date+item[0]
+                            val quotes = Quotes(item[1].toDouble(), item[2].toDouble(), item[3].toDouble(), item[4].toDouble(), item[0].toLong() * 1000)
+                            dataList.add(quotes)
+                        }
+
+                    }
+
+
+                }
+
+            }
+
+            MbsConstans.DETIAL_SERVER_URL-> {
+                val result = tData["result"]!!.toString() + ""
+                handInfoData(result)
+                if(!UtilTools.empty(stockInfoBean)){
+                    topPriceTv.text = stockInfoBean!!.stockCurrentPrice
+                    if (stockInfoBean!!.stockRiseAndFallAmplitude.contains("-")){
+                        topAmountTv.text = stockInfoBean!!.stockRiseAndFallAmount
+                        topRatioTv.text = stockInfoBean!!.stockRiseAndFallAmplitude+"%"
+                    }else{
+                        topAmountTv.text ="+"+ stockInfoBean!!.stockRiseAndFallAmount
+                        topRatioTv.text ="+" +stockInfoBean!!.stockRiseAndFallAmplitude+"%"
+                    }
+
+
+                    tv1.text = stockInfoBean!!.stockHighestPrice
+                    tv2.text = stockInfoBean!!.stockTodayPrice
+                    tv3.text = stockInfoBean!!.stockRiseTop
+                    tv4.text = stockInfoBean!!.stockAveragePrice
+                    tv5.text = stockInfoBean!!.stockLowestPrice
+                    tv6.text = stockInfoBean!!.stockYesterdayPrice
+                    tv7.text = stockInfoBean!!.stockRiseTop
+                    tv8.text = stockInfoBean!!.stockAmplitude
+                    tv9.text = "--"
+                    tv10.text = stockInfoBean!!.stockPriceEarningsRatio
+                    tv11.text = stockInfoBean!!.stockTransactionVolume
+                    tv12.text = stockInfoBean!!.stockTotalMarketValue
+                    tv13.text = stockInfoBean!!.stockEntrustRatio+"%"
+                    tv14.text = stockInfoBean!!.stockTurnoverRate
+                    tv15.text = stockInfoBean!!.stockTransactionAccount
+                    tv16.text = stockInfoBean!!.stockCirculationMarketValue
+
+                }
+
+                if ( buyData.size >0){
+                    if (mBuyadapter == null){
+                        mBuyadapter = BuyAndSellAdapter(this@CoinInfoActivity)
+                    }
+                    mBuyadapter!!.clear()
+                    mBuyadapter!!.addAll(buyData)
+                    rvBuy.adapter = mBuyadapter
+                }
+
+                if ( sellData.size >0){
+                    if (mSelladapter == null){
+                        mSelladapter = BuyAndSellAdapter(this@CoinInfoActivity)
+                    }
+                    mSelladapter!!.clear()
+                    mSelladapter!!.addAll(sellData)
+                    rvSell.adapter = mSelladapter
+                }
+
+
+            }
+
             MethodUrl.K_LINE -> {
                 val str = tData["data"].toString()
                 kLineData = JSONUtil.instance.jsonToListStr2(str) as ArrayList<List<String>>
                 dataList.clear()
                 for (item in kLineData) {
+                    //val quotes = Quotes(item[1].toDouble(), item[2].toDouble(), item[3].toDouble(), item[4].toDouble(), item[0].toLong() * 1000)
                     val quotes = Quotes(item[1].toDouble(), item[2].toDouble(), item[3].toDouble(), item[4].toDouble(), item[0].toLong() * 1000)
+
                     dataList.add(quotes)
                     //akv_kv_kview.pushKViewData(quotes, 0)
 
@@ -282,10 +574,11 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                 //设置数据
                 updateDataAndUI(dataList)
 
-
             }
         }
     }
+
+
 
     //拓展属性
     /* var Quotes.a:Double
@@ -319,13 +612,13 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                 }
 
                 override fun onUnLongTouch() {
-                    akv_ll_container.visibility = View.INVISIBLE
+
                 }
 
                 override fun needLoadMore() {
                     //滑动加载更多?
-                    showProgressDialog()
-                    getKLineAction()
+                    //showProgressDialog()
+                    //getKLineAction()
                 }
             })
 
@@ -335,44 +628,148 @@ class CoinInfoActivity : BasicActivity(), RequestView {
     }
 
     private fun showContanier(preQuotes: Quotes, currentQuotes: Quotes) {
-        akv_ll_container.visibility = View.VISIBLE
-        val digits = 4
-        var isPositive: Boolean
-        var precent: String
-        var dis = (currentQuotes.c - preQuotes.c) / currentQuotes.c * 100
-        isPositive = dis >= 0
-        precent = UtilTools.formatBySubString(dis, 2)
-        precent += "%"
-
-        akv_tv_h.text = UtilTools.numFormat(currentQuotes.h, digits)
-        akv_tv_o.text = UtilTools.numFormat(currentQuotes.o, digits)
-        akv_tv_l.text = UtilTools.numFormat(currentQuotes.l, digits)
-        akv_tv_c.text = UtilTools.numFormat(currentQuotes.c, digits)
-        akv_tv_amount.text = UtilTools.numFormat(currentQuotes.getAmount(currentQuotes), 2)
-
-        akv_tv_p.text = precent
-        if (isPositive) {
-            akv_tv_h.setTextColor(resources.getColor(R.color.color_timeSharing_callBackRed))
-            akv_tv_o.setTextColor(resources.getColor(R.color.color_timeSharing_callBackRed))
-            akv_tv_l.setTextColor(resources.getColor(R.color.color_timeSharing_callBackRed))
-            akv_tv_c.setTextColor(resources.getColor(R.color.color_timeSharing_callBackRed))
-            akv_tv_p.setTextColor(resources.getColor(R.color.color_timeSharing_callBackRed))
-            akv_tv_amount.setTextColor(resources.getColor(R.color.color_timeSharing_callBackRed))
-        } else {
-            akv_tv_h.setTextColor(resources.getColor(R.color.color_timeSharing_callBackGreen))
-            akv_tv_o.setTextColor(resources.getColor(R.color.color_timeSharing_callBackGreen))
-            akv_tv_l.setTextColor(resources.getColor(R.color.color_timeSharing_callBackGreen))
-            akv_tv_c.setTextColor(resources.getColor(R.color.color_timeSharing_callBackGreen))
-            akv_tv_p.setTextColor(resources.getColor(R.color.color_timeSharing_callBackGreen))
-            akv_tv_amount.setTextColor(resources.getColor(R.color.color_timeSharing_callBackGreen))
-
-        }
 
 
     }
 
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
         dealFailInfo(map, mType)
+
+    }
+
+
+    private fun handInfoData(result: String) {
+        if (!TextUtils.isEmpty(result) && result.contains("~")) {
+            val stockArray = result.split(";\n").toTypedArray()
+            for (stockInfo in stockArray) {
+                stockInfoBean = StockInfoBean()
+                val split = stockInfo.split("~").toTypedArray()
+                stockInfoBean!!.stockName = split[1]
+                stockInfoBean!!.stockCode = split[2]
+                stockInfoBean!!.stockCurrentPrice = split[3]
+                stockInfoBean!!.stockYesterdayPrice = split[4]
+                stockInfoBean!!.stockTodayPrice = split[5]
+                stockInfoBean!!.stockVolume = split[6]
+                stockInfoBean!!.stockOuterDisk = split[7]
+                stockInfoBean!!.stockInnerDisk = split[8]
+                stockInfoBean!!.stockBuy1Price = split[9]
+                stockInfoBean!!.stockBuy1Amount = split[10]
+                stockInfoBean!!.stockBuy2Price = split[11]
+                stockInfoBean!!.stockBuy2Amount = split[12]
+                stockInfoBean!!.stockBuy3Price = split[13]
+                stockInfoBean!!.stockBuy3Amount = split[14]
+                stockInfoBean!!.stockBuy4Price = split[15]
+                stockInfoBean!!.stockBuy4Amount = split[16]
+                stockInfoBean!!.stockBuy5Price = split[17]
+                stockInfoBean!!.stockBuy5Amount = split[18]
+                stockInfoBean!!.stockSell1Price = split[19]
+                stockInfoBean!!.stockSell1Amount = split[20]
+                stockInfoBean!!.stockSell2Price = split[21]
+                stockInfoBean!!.stockSell2Amount = split[22]
+                stockInfoBean!!.stockSell3Price = split[23]
+                stockInfoBean!!.stockSell3Amount = split[24]
+                stockInfoBean!!.stockSell4Price = split[25]
+                stockInfoBean!!.stockSell4Amount = split[26]
+                stockInfoBean!!.stockSell5Price = split[27]
+                stockInfoBean!!.stockSell5Amount = split[28]
+                stockInfoBean!!.stockRiseAndFallAmount = split[31]
+                stockInfoBean!!.stockRiseAndFallAmplitude = split[32]
+                stockInfoBean!!.stockHighestPrice = split[33]
+                stockInfoBean!!.stockLowestPrice = split[34]
+                stockInfoBean!!.stockTransactionVolume = split[36]
+                stockInfoBean!!.stockTransactionAccount = split[37]
+                stockInfoBean!!.stockTurnoverRate = split[38]
+                stockInfoBean!!.stockPriceEarningsRatio = split[39]
+                stockInfoBean!!.stockAmplitude = split[43]
+                stockInfoBean!!.stockCirculationMarketValue = split[44]
+                stockInfoBean!!.stockTotalMarketValue = split[45]
+                stockInfoBean!!.stockPBRatio = split[46]
+                stockInfoBean!!.stockRiseTop = split[47]
+                stockInfoBean!!.stockFallBottom = split[48]
+                stockInfoBean!!.stockEntrustDifference = split[50]
+                stockInfoBean!!.stockAveragePrice = split[51]
+                val totalBuyAccount: Int = Integer.valueOf(stockInfoBean!!.stockBuy1Amount) +
+                        Integer.valueOf(stockInfoBean!!.stockBuy2Amount) +
+                        Integer.valueOf(stockInfoBean!!.stockBuy3Amount) +
+                        Integer.valueOf(stockInfoBean!!.stockBuy4Amount) +
+                        Integer.valueOf(stockInfoBean!!.stockBuy5Amount)
+                val totalSellAccount: Int = Integer.valueOf(stockInfoBean!!.stockSell1Amount) +
+                        Integer.valueOf(stockInfoBean!!.stockSell2Amount) +
+                        Integer.valueOf(stockInfoBean!!.stockSell3Amount) +
+                        Integer.valueOf(stockInfoBean!!.stockSell4Amount) +
+                        Integer.valueOf(stockInfoBean!!.stockSell5Amount)
+                if (totalBuyAccount > 0 && totalSellAccount > 0) {
+                    stockInfoBean!!.stockEntrustRatio = ((totalBuyAccount - totalSellAccount) / (totalBuyAccount + totalSellAccount) * 100).toString()
+                } else {
+                    stockInfoBean!!.stockEntrustRatio = "0"
+                }
+
+
+            }
+            if (!UtilTools.empty(stockInfoBean)){
+                buyData.clear()
+                sellData.clear()
+
+
+                val  map1 = HashMap<String,Any>()
+                map1["price"] = stockInfoBean!!.stockBuy1Price
+                map1["amount"] = stockInfoBean!!.stockBuy1Amount
+                map1["type"] = "买1"
+                buyData.add(map1)
+                val  map2 = HashMap<String,Any>()
+                map2["price"] = stockInfoBean!!.stockBuy2Price
+                map2["amount"] = stockInfoBean!!.stockBuy2Amount
+                map2["type"] = "买2"
+                buyData.add(map2)
+                val  map3 = HashMap<String,Any>()
+                map3["price"] = stockInfoBean!!.stockBuy3Price
+                map3["amount"] = stockInfoBean!!.stockBuy3Amount
+                map3["type"] = "买3"
+                buyData.add(map3)
+                val  map4 = HashMap<String,Any>()
+                map4["price"] = stockInfoBean!!.stockBuy4Price
+                map4["amount"] = stockInfoBean!!.stockBuy4Amount
+                map4["type"] = "买4"
+                buyData.add(map4)
+                val  map5 = HashMap<String,Any>()
+                map5["price"] = stockInfoBean!!.stockBuy5Price
+                map5["amount"] = stockInfoBean!!.stockBuy5Amount
+                map5["type"] = "买5"
+                buyData.add(map5)
+
+
+                val  map6 = HashMap<String,Any>()
+                map6["price"] = stockInfoBean!!.stockSell1Price
+                map6["amount"] = stockInfoBean!!.stockSell1Amount
+                map6["type"] = "卖1"
+                sellData.add(map6)
+                val  map7 = HashMap<String,Any>()
+                map7["price"] = stockInfoBean!!.stockSell2Price
+                map7["amount"] = stockInfoBean!!.stockSell1Amount
+                map7["type"] = "卖2"
+                sellData.add(map7)
+                val  map8 = HashMap<String,Any>()
+                map8["price"] = stockInfoBean!!.stockSell3Price
+                map8["amount"] = stockInfoBean!!.stockSell3Amount
+                map8["type"] = "卖3"
+                sellData.add(map8)
+                val  map9 = HashMap<String,Any>()
+                map9["price"] = stockInfoBean!!.stockSell4Price
+                map9["amount"] = stockInfoBean!!.stockSell4Amount
+                map9["type"] = "卖4"
+                sellData.add(map9)
+                val  map10 = HashMap<String,Any>()
+                map10["price"] = stockInfoBean!!.stockSell5Price
+                map10["amount"] = stockInfoBean!!.stockSell5Amount
+                map10["type"] = "卖5"
+                sellData.add(map10)
+
+
+
+            }
+
+        }
+
 
     }
 

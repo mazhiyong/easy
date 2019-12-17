@@ -191,7 +191,7 @@ class BorrowMoneyActivity : BasicActivity(), RequestView, SelectBackListener {
                 lixi = UtilTools.divide2(nianlilv,12);//换算成月利率
                 lixi = UtilTools.mul(lixi,day);//乘以多少月
                 lixi = UtilTools.mul(lixi,money);//然后乘以本金
-                LogUtil.i("打印log日志",lixi+"####################"+UtilTools.divide(nianlilv,100)+" "+UtilTools.divide(UtilTools.divide(nianlilv,100),12));
+                LogUtil.i("show",lixi+"####################"+UtilTools.divide(nianlilv,100)+" "+UtilTools.divide(UtilTools.divide(nianlilv,100),12));
                 break;
             case "3":
                 double ll = UtilTools.divide2(nianlilv,12);//换算成月利率
@@ -249,7 +249,7 @@ class BorrowMoneyActivity : BasicActivity(), RequestView, SelectBackListener {
                     }
                     mFileNum = num
                     mFileNumTv!!.text = num.toString() + "个"
-                    LogUtil.i("打印log日志", "上传文件列表$mFileList")
+                    LogUtil.i("show", "上传文件列表$mFileList")
                 }
             } else if (action == MbsConstans.BroadcastReceiverAction.JIE_HUAN_UPDATE) {
                 finish()
@@ -371,7 +371,7 @@ class BorrowMoneyActivity : BasicActivity(), RequestView, SelectBackListener {
 
             }
             mFileNumTv!!.text = num.toString() + "个"
-            LogUtil.i("打印log日志", "上传文件列表$mFileList")
+            LogUtil.i("show", "上传文件列表$mFileList")
 
             initHetongList()
 
@@ -533,7 +533,7 @@ class BorrowMoneyActivity : BasicActivity(), RequestView, SelectBackListener {
 
         //map.put("contList", mFileList);//附件列表
 
-        LogUtil.i("打印log日志", "提交借款申请的参数" + mParamMap!!)
+        LogUtil.i("show", "提交借款申请的参数" + mParamMap!!)
         val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.jiekuanHetong, mParamMap!!)
     }
@@ -623,7 +623,7 @@ class BorrowMoneyActivity : BasicActivity(), RequestView, SelectBackListener {
 
         map.put("contList", mFileList);//附件列表*/
 
-        LogUtil.i("打印log日志", "提交借款申请的参数" + mParamMap!!)
+        LogUtil.i("show", "提交借款申请的参数" + mParamMap!!)
         val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.jiekuanSubmit, mParamMap!!)
     }
@@ -789,7 +789,7 @@ class BorrowMoneyActivity : BasicActivity(), RequestView, SelectBackListener {
                     errorCode = java.lang.Double.valueOf(errcodeStr).toInt()
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    LogUtil.i("打印log日志", "这里出现异常了" + e.message)
+                    LogUtil.i("show", "这里出现异常了" + e.message)
                 }
 
                 if (errorCode != ErrorHandler.REFRESH_TOKEN_DATE_CODE

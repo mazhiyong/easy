@@ -104,7 +104,7 @@ class ErrorHandler {
                     //                    errorMap = new HashMap<>();
                     //                }
                 } catch (e1: Exception) {
-                    LogUtil.i("打印log日志", "解析结果错误" + e.code())
+                    LogUtil.i("show", "解析结果错误" + e.code())
                     errorMap = HashMap()
                     e1.printStackTrace()
                 }

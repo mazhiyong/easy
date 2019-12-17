@@ -155,7 +155,7 @@ class ViewPagerAdapter(private val mContext: Context, private val mViews: List<V
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         e.printStackTrace();
-                        LogUtil.i("打印log日志",e.getMessage());
+                        LogUtil.i("show",e.getMessage());
                         return false;
                     }
 

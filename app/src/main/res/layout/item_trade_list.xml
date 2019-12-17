@@ -75,7 +75,7 @@
                     android:paddingLeft="@dimen/dp_5"
                     android:textColor="@color/black99"
                     android:text="亏损警戒线"
-                    android:textSize="@dimen/sp_15"
+                    android:textSize="@dimen/sp_14"
                     />
                 <TextView
 
@@ -87,8 +87,37 @@
                     android:text="@string/tv_loading_value"
                     android:layout_gravity="right"
                     android:gravity="right"
-                    android:textSize="@dimen/sp_15"
+                    android:textSize="@dimen/sp_14"
                     android:textColor="@color/font_c"
+                    />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_2"
+                android:paddingBottom="@dimen/dp_2"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dp_5"
+                    android:text="亏损平仓线"
+                    android:textColor="@color/black99"
+                    android:textSize="@dimen/sp_14" />
+                <TextView
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/pingcangMoneyTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/dp_5"
+                    android:text="@string/tv_loading_value"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/colorPrimary"
                     />
 
             </RelativeLayout>
@@ -104,19 +133,19 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/dp_5"
                     android:textColor="@color/black99"
-                    android:text="亏损平仓线"
-                    android:textSize="@dimen/sp_15"
+                    android:text="当前额度"
+                    android:textSize="@dimen/sp_14"
                     />
                 <TextView
                     android:layout_alignParentRight="true"
-                    android:id="@+id/pingcangMoneyTv"
+                    android:id="@+id/eduMoneyTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="@dimen/dp_5"
                     android:text="@string/tv_loading_value"
                     android:layout_gravity="right"
                     android:gravity="right"
-                    android:textSize="@dimen/sp_15"
+                    android:textSize="@dimen/sp_14"
                     android:textColor="@color/colorPrimary"
                     />
 

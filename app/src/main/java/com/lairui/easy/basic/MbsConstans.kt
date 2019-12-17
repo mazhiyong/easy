@@ -39,8 +39,25 @@ object MbsConstans {
     val WEBSOCKET_URL = "ws://$SERVER_IP_PORT/appsvr/"
 
     val SERVER_URL = "http://fysp.bjfable.com"
+    val HANGQING_SERVER_URL = "http://hq.sinajs.cn/"  //涨跌幅
+    val HOME_SERVER_URL = "http://qt.gtimg.cn/q=sh000001,sz399001,sz399006" //三大板块
+    val DETIAL_SERVER_URL = "http://qt.gtimg.cn/" //详情
 
-    val XIEYI_URL = "http://ys.51zhir.cn/"
+    val TIME_MINUTE_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/minute/query?_var=min_data_sz000656 " //1分 分时
+    val TIME_FDAY_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/day/query?_var=fdays_data_sz000656&code=sz000656" //5日 分时
+
+    val KLINE_MINUTE_SERVER_URL = "http://ifzq.gtimg.cn/appstock/app/kline/mkline?" //分钟 K线
+    val KLINE_DAY_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_dayqfq&param=sz000656,day,,,320,qfq " //日 K线
+    val KLINE_WEEK_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_weekqfq&param=sz000656,week,,,320,qfq " //周 K线
+    val KLINE_MONTHS_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_monthqfq&param=sz000656,month,,,320,qfq" //月 K线
+
+
+
+
+
+
+    val CHENGJIAO_SERVER_URL = "http://stock.gtimg.cn/data/view/rank.php"
+
 
     val PIC_URL = SERVER_URL + "viewer/image?path="
 

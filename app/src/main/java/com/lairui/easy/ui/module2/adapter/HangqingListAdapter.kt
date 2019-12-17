@@ -13,6 +13,7 @@ import butterknife.ButterKnife
 import com.lairui.easy.R
 import com.lairui.easy.ui.module2.activity.CoinInfoActivity
 import com.lairui.easy.ui.temporary.adapter.ListBaseAdapter
+import java.io.Serializable
 
 class HangqingListAdapter(context: Context) : ListBaseAdapter() {
     private var mHeaderView: View? = null
@@ -60,11 +61,16 @@ class HangqingListAdapter(context: Context) : ListBaseAdapter() {
             val viewHolder = holder as ViewHolder
             viewHolder.nameTv.text = item["name"].toString() + ""
             viewHolder.priceTv.text = item["price"].toString() + ""
-            viewHolder.ratioTv.text = item["ratio"].toString() + ""
-            viewHolder.typeTv.text = item["type"].toString() + ""
-            viewHolder.numberTv.text = item["number"].toString() + ""
+            if (item["rise"].toString().contains("-")){
+                viewHolder.ratioTv.text =item["rise"].toString() + "%"
+            }else{
+                viewHolder.ratioTv.text ="+" +item["rise"].toString() + "%"
+            }
+            viewHolder.typeTv.text = (item["code"].toString().substring(0,2)).toUpperCase()
+            viewHolder.numberTv.text = item["code"].toString() + ""
             viewHolder.lay!!.setOnClickListener {
                 val intent = Intent(mContext,CoinInfoActivity::class.java)
+                intent.putExtra("DATA", item as Serializable)
                 mContext!!.startActivity(intent)
             }
         }

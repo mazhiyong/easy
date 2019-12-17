@@ -51,8 +51,8 @@ object FileUtils {
         val dir = File(SDPATH + dirName)
         if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
 
-            LogUtil.i("打印log日志", "createSDDir:" + dir.absolutePath)
-            LogUtil.i("打印log日志", "createSDDir:" + dir.mkdir())
+            LogUtil.i("show", "createSDDir:" + dir.absolutePath)
+            LogUtil.i("show", "createSDDir:" + dir.mkdir())
         }
         return dir
     }

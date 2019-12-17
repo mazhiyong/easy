@@ -262,12 +262,26 @@
             android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
             android:theme="@style/AppTheme.Transparent">
         </activity>
-        <!-- 策略详情 -->
+        <!-- 策略详情  操盘中-->
         <activity
-            android:name="com.lairui.easy.ui.module4.activity.CeLueItemActivity"
+            android:name="com.lairui.easy.ui.module4.activity.CeLueItemCurrentActivity"
             android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
             android:theme="@style/AppTheme.Transparent">
         </activity>
+        <!-- 策略详情  已结算-->
+        <activity
+            android:name="com.lairui.easy.ui.module4.activity.CeLueItemFinishActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+
+        <!-- 搜索-->
+        <activity
+            android:name="com.lairui.easy.ui.module2.activity.SearchListActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+
         <!-- 追加保证金 -->
         <activity
             android:name="com.lairui.easy.ui.module4.activity.AddMoneyActivity"

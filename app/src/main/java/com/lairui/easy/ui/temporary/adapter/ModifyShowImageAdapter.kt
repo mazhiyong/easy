@@ -135,7 +135,7 @@ class ModifyShowImageAdapter(private val context: Context, private val mDataList
                     }
                 })
 
-        LogUtil.i("打印log日志", imgUrl)
+        LogUtil.i("show", imgUrl)
 
     }
 

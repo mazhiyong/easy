@@ -182,7 +182,7 @@ class UploadDkYongTActivity : BasicActivity(), RequestView {
                     mFileNum = num
                     mFileNumTv.text = num.toString() + "个"
 
-                    LogUtil.i("打印log日志", "UploadDkYongTActivity########################$mFileList")
+                    LogUtil.i("show", "UploadDkYongTActivity########################$mFileList")
                 }
             }
         }

@@ -16,9 +16,9 @@ import com.lairui.easy.mywidget.dialog.AppDialog
 import java.util.*
 
 /**
- * 策略详情
+ * 策略详情 已结算
  */
-class CeLueItemActivity : BasicActivity(), RequestView {
+class CeLueItemFinishActivity : BasicActivity(), RequestView {
 
     @BindView(R.id.back_img)
     lateinit var mBackImg: ImageView
@@ -80,12 +80,12 @@ class CeLueItemActivity : BasicActivity(), RequestView {
     private var mOpType = 0
 
     override val contentView: Int
-        get() = R.layout.activity_celue_item
+        get() = R.layout.activity_celue_item_finish
 
     override fun init() {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
-        mTitleText.text = "确认支付"
+        mTitleText.text = "策略详情"
     }
 
     /**
@@ -104,19 +104,19 @@ class CeLueItemActivity : BasicActivity(), RequestView {
         when (view.id) {
             R.id.left_back_lay, R.id.back_img -> finish()
             R.id.addMoneyTv -> {
-                intent = Intent(this@CeLueItemActivity,AddMoneyActivity::class.java)
+                intent = Intent(this@CeLueItemFinishActivity,AddMoneyActivity::class.java)
                 startActivity(intent)
             }
             R.id.extendMoneyTv -> {
-                intent = Intent(this@CeLueItemActivity,ExtendMoneyActivity::class.java)
+                intent = Intent(this@CeLueItemFinishActivity,ExtendMoneyActivity::class.java)
                 startActivity(intent)
             }
             R.id.tiquBt -> {
-                intent = Intent(this@CeLueItemActivity,TixuMoneyActivity::class.java)
+                intent = Intent(this@CeLueItemFinishActivity,TixuMoneyActivity::class.java)
                 startActivity(intent)
             }
             R.id.stopBt -> {
-                val dialog = AppDialog(this@CeLueItemActivity,true)
+                val dialog = AppDialog(this@CeLueItemFinishActivity,true)
                 dialog.initValue("终止操盘须知","请确保账户内已经全部清仓完 否则我们将有权把您的股票进行平仓处理","取消","确定")
                 dialog.setClickListener(View.OnClickListener { v ->
                     when (v.id) {
@@ -129,19 +129,19 @@ class CeLueItemActivity : BasicActivity(), RequestView {
                 dialog.show()
             }
             R.id.addMoneyRecordLay-> {
-                intent = Intent(this@CeLueItemActivity,RecordListActivity::class.java)
+                intent = Intent(this@CeLueItemFinishActivity,RecordListActivity::class.java)
                 startActivity(intent)
             }
             R.id.extendRecordLay-> {
-                intent = Intent(this@CeLueItemActivity,RecordListActivity::class.java)
+                intent = Intent(this@CeLueItemFinishActivity,RecordListActivity::class.java)
                 startActivity(intent)
             }
             R.id.lixiRecordLay-> {
-                intent = Intent(this@CeLueItemActivity,RecordListActivity::class.java)
+                intent = Intent(this@CeLueItemFinishActivity,RecordListActivity::class.java)
                 startActivity(intent)
             }
             R.id.shouyiRecordLay-> {
-                intent = Intent(this@CeLueItemActivity,RecordListActivity::class.java)
+                intent = Intent(this@CeLueItemFinishActivity,RecordListActivity::class.java)
                 startActivity(intent)
             }
 

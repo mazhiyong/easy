@@ -99,7 +99,7 @@ private constructor() : RxActionManager<Any> {
         if (list2 != null && list2.size > 0) {
             for (compositeDisposable in list2) {
                 if (compositeDisposable != null) {
-                    LogUtil.i("打印log日志", tag.javaClass.simpleName + "onUnsubscribe  " + compositeDisposable.isDisposed)
+                    LogUtil.i("show", tag.javaClass.simpleName + "onUnsubscribe  " + compositeDisposable.isDisposed)
                     //判断状态
                     if (!compositeDisposable.isDisposed) {
                         compositeDisposable.clear()  //注销

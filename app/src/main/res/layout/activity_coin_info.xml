@@ -19,12 +19,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/topPriceTv"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:textSize="@dimen/sp_25"
                 android:textColor="@color/font_c"
-                android:text="9.66"
+                android:text="0.00"
                 android:textStyle="bold"
                 android:layout_margin="@dimen/dp_5"
                 android:layout_gravity="center_vertical"
@@ -37,19 +38,21 @@
                 android:layout_gravity="center_vertical"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/topAmountTv"
                     android:layout_width="wrap_content"
                     android:gravity="right"
                     android:textSize="@dimen/sp_14"
                     android:textColor="@color/font_c"
-                    android:text="+9.66"
+                    android:text="+0.00"
                     android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:id="@+id/topRatioTv"
                     android:layout_width="wrap_content"
                     android:gravity="right"
                     android:textSize="@dimen/sp_14"
                     android:textColor="@color/font_c"
-                    android:text="+9.66%"
+                    android:text="+0.00%"
                     android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -73,6 +76,7 @@
                 app:tabSelectedTextColor="@color/blue"
                 android:layout_height="@dimen/dp_45"/>
              <Spinner
+                 android:id="@+id/spinner"
                  android:layout_gravity="center_vertical"
                  android:entries="@array/timeChoose"
                  android:layout_width="wrap_content"
@@ -97,12 +101,14 @@
                 android:layout_height="match_parent">
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvSell"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_0"
                     android:layout_weight="1"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvBuy"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:layout_marginTop="@dimen/dp_15"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_0"
@@ -139,6 +145,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_15"
             android:orientation="vertical">
 
             <LinearLayout
@@ -162,7 +169,7 @@
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
-                        android:id="@+id/akv_tv_h"
+                        android:id="@+id/tv1"
                         android:text="--"
                         android:gravity="right"
                         android:layout_width="0dp"
@@ -187,7 +194,7 @@
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
-                        android:id="@+id/akv_tv_o"
+                        android:id="@+id/tv2"
                         android:text="--"
                         android:gravity="right"
                         android:layout_width="0dp"
@@ -210,6 +217,7 @@
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
                     <TextView
+                        android:id="@+id/tv3"
                         android:gravity="right"
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -231,7 +239,7 @@
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
                     <TextView
-                        android:id="@+id/akv_tv_amount"
+                        android:id="@+id/tv4"
                         android:text="--"
                         android:gravity="right"
                         android:layout_width="0dp"
@@ -265,7 +273,7 @@
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
-                        android:id="@+id/akv_tv_l"
+                        android:id="@+id/tv5"
                         android:text="--"
                         android:gravity="right"
                         android:layout_width="@dimen/dp_0"
@@ -290,6 +298,7 @@
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
+                        android:id="@+id/tv6"
                         android:gravity="right"
                         android:layout_width="0dp"
                         android:text="--"
@@ -314,7 +323,7 @@
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
-                        android:id="@+id/akv_tv_c"
+                        android:id="@+id/tv7"
                         android:text="--"
                         android:gravity="right"
                         android:layout_weight="1"
@@ -341,7 +350,7 @@
 
                     <TextView
                         android:text="--"
-                        android:id="@+id/akv_tv_p"
+                        android:id="@+id/tv8"
                         android:gravity="right"
                         android:layout_width="@dimen/dp_0"
                         android:layout_weight="1"
@@ -373,6 +382,7 @@
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
+                        android:id="@+id/tv9"
                         android:text="--"
                         android:gravity="right"
                         android:layout_width="@dimen/dp_0"
@@ -397,6 +407,7 @@
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
+                        android:id="@+id/tv10"
                         android:gravity="right"
                         android:layout_width="0dp"
                         android:text="--"
@@ -421,6 +432,7 @@
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
+                        android:id="@+id/tv11"
                         android:text="--"
                         android:gravity="right"
                         android:layout_weight="1"
@@ -446,6 +458,7 @@
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
+                        android:id="@+id/tv12"
                         android:text="--"
                         android:gravity="right"
                         android:layout_width="@dimen/dp_0"
@@ -479,6 +492,7 @@
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
+                        android:id="@+id/tv13"
                         android:text="--"
                         android:gravity="right"
                         android:layout_width="@dimen/dp_0"
@@ -503,6 +517,7 @@
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
+                        android:id="@+id/tv14"
                         android:gravity="right"
                         android:layout_width="0dp"
                         android:text="--"
@@ -527,6 +542,7 @@
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
+                        android:id="@+id/tv15"
                         android:text="--"
                         android:gravity="right"
                         android:layout_weight="1"
@@ -552,6 +568,7 @@
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
+                        android:id="@+id/tv16"
                         android:text="--"
                         android:gravity="right"
                         android:layout_width="@dimen/dp_0"
@@ -570,6 +587,7 @@
             android:layout_marginTop="@dimen/dp_15"
             android:layout_width="match_parent"
             android:layout_marginBottom="@dimen/dp_5"
+            android:visibility="gone"
             android:layout_height="wrap_content">
             <TextView
                 android:drawableTop="@drawable/buy"

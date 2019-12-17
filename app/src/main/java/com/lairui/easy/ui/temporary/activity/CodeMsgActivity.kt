@@ -581,7 +581,7 @@ class CodeMsgActivity : BasicActivity(), RequestView {
             errorCode = java.lang.Double.valueOf(errcodeStr).toInt()
         } catch (e: Exception) {
             e.printStackTrace()
-            LogUtil.i("打印log日志", "这里出现异常了" + e.message)
+            LogUtil.i("show", "这里出现异常了" + e.message)
         }
 
         when (mType) {

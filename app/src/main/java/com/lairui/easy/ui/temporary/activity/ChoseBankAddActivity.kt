@@ -177,7 +177,7 @@ class ChoseBankAddActivity : BasicActivity(), RequestView, SelectBackListener {
                 if (mAddressMap == null) {
                     mAddressMap = map
                 } else {
-                    LogUtil.i("打印log日志", (mAddressMap === map).toString() + "  " + (mAddressMap == map))
+                    LogUtil.i("show", (mAddressMap === map).toString() + "  " + (mAddressMap == map))
                     if (mAddressMap == map) {
 
                     } else {

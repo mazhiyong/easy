@@ -1078,7 +1078,7 @@ class UtilTools {
                 e.printStackTrace()
             }
 
-            LogUtil.i("打印log日志", params)
+            LogUtil.i("show", params)
 
             val chars = params.toCharArray()
 

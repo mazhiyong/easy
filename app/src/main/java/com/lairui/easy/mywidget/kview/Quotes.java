@@ -57,6 +57,15 @@ public class Quotes implements Serializable {
         this(o, h, l, c, t, -1, -1);
     }
 
+    /**
+     * 适配数据的构造方法，包括五个参数，全部必须。价格格式为String类型
+     *
+     * @param o 开盘价
+     * @param h 最高价
+     * @param l 最低价
+     * @param c 收盘价
+     * @param t 时间
+     */
     public Quotes(double o, double h, double l, double c, long t, double vol) {
         this(o, h, l, c, t, -1, vol);
     }
@@ -64,12 +73,13 @@ public class Quotes implements Serializable {
     /**
      * 最原始构造方法
      *
-     * @param o
-     * @param h
-     * @param l
-     * @param c
-     * @param t
-     * @param e
+     * @param o 闭盘价
+     * @param h 最高价
+     * @param l 最低价
+     * @param c 收盘价
+     * @param t  时间
+     * @param vol 成交量
+
      */
     public Quotes(double o, double h, double l, double c, long t, long e, double vol) {
         this.o = o;

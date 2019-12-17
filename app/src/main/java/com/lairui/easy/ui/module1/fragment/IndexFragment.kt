@@ -285,7 +285,7 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
                 intent = Intent(activity, BorrowMoneyActivity::class.java)
                 intent.putExtra("DATA", mJieKuanMap as Serializable?)
                 startActivity(intent)
-                LogUtil.i("打印log日志", mJieKuanMap!!)
+                LogUtil.i("show", mJieKuanMap!!)
             }
         }
     }

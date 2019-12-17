@@ -421,7 +421,7 @@ class BankOpenXieyiActivity : BasicActivity(), RequestView {
             }
             LogUtil.i("开户人姓名", name)
             intent.putExtra("title", "开户协议")
-            intent.putExtra("id", MbsConstans.XIEYI_URL + "H5/static/html/khxy.html?name=" + name)
+            //intent.putExtra("id", MbsConstans.XIEYI_URL + "H5/static/html/khxy.html?name=" + name)
             startActivity(intent)
         }
     }

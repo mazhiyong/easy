@@ -141,7 +141,7 @@ class GlideUtils {
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
                             e!!.printStackTrace()
-                            e.message?.let { LogUtil.i("打印log日志", it) }
+                            e.message?.let { LogUtil.i("show", it) }
                             return false
                         }
 
@@ -174,7 +174,7 @@ class GlideUtils {
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
                             e!!.printStackTrace()
-                            e.message?.let { LogUtil.i("打印log日志", it) }
+                            e.message?.let { LogUtil.i("show", it) }
                             return false
                         }
 
@@ -205,7 +205,7 @@ class GlideUtils {
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
                             e!!.printStackTrace()
-                            e.message?.let { LogUtil.i("打印log日志", it) }
+                            e.message?.let { LogUtil.i("show", it) }
                             return false
                         }
 
@@ -233,7 +233,7 @@ class GlideUtils {
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
                             e!!.printStackTrace()
-                            e.message?.let { LogUtil.i("打印log日志", it) }
+                            e.message?.let { LogUtil.i("show", it) }
                             return false
                         }
 
@@ -286,7 +286,7 @@ class GlideUtils {
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
                             e!!.printStackTrace()
-                            e.message?.let { LogUtil.i("打印log日志", it) }
+                            e.message?.let { LogUtil.i("show", it) }
                             return false
                         }
 

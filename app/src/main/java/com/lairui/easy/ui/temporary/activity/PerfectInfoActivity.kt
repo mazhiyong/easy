@@ -518,7 +518,7 @@ class PerfectInfoActivity : BasicActivity(), SelectBackListener, RequestView {
         valueMap["cmnaddr"] = mTxdetailValueEdit!!.text.toString() + ""//通讯地址  详细地址
 
 
-        LogUtil.i("打印log日志", "最后的结果是$valueMap")
+        LogUtil.i("show", "最后的结果是$valueMap")
         val intent = Intent(this, WorkInfoActivity::class.java)
         intent.putExtra("DATA", valueMap as Serializable)
         intent.putExtra("DEFAULT_DATA", mData as Serializable?)

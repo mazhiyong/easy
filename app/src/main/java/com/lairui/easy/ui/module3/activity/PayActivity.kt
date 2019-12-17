@@ -52,6 +52,7 @@ class PayActivity : BasicActivity(), RequestView {
 
 
     private var mOpType = 0
+    private var total = 0.0
 
     var bound =""
     var multiple = ""
@@ -67,26 +68,42 @@ class PayActivity : BasicActivity(), RequestView {
             multiple = bundle["multiple"].toString()
             boundTv.text ="¥ "+UtilTools.getNormalMoney(bundle["bound"].toString())
             lixiTv.text ="¥ "+UtilTools.getNormalMoney(bundle["lixi"].toString())
-            payTv.text = "¥ "+UtilTools.getNormalMoney((bundle["bound"].toString().toInt()+bundle["lixi"].toString().toFloat()).toString())
+            total = (bundle["bound"].toString().toInt()+bundle["lixi"].toString().toFloat()).toDouble()
+            payTv.text = "¥ "+UtilTools.getNormalMoney(total.toString())
         }else{
             finish()
         }
 
+        if (UtilTools.empty(MbsConstans.USER_MAP)) {
+            val s = SPUtils!![this, MbsConstans.SharedInfoConstans.LOGIN_INFO, ""].toString()
+            MbsConstans.USER_MAP = JSONUtil.instance.jsonMap(s)
+        }
+        val chongzhiMoney  =  total - ((MbsConstans.USER_MAP!!["account"] as String).toDouble() +1000)
+        if (chongzhiMoney > 0){
+            tipTv.text = "您的账户余额"+MbsConstans.USER_MAP!!["account"]+"元,赠送金额1000元,还需支付"+chongzhiMoney+"元,请前往充值"
 
-        val textViewUtils = TextViewUtils()
-        tipTv.text = "您的账户余额"+"0"+"元,赠送金额1000,元,还需支付"+"0"+"元,请前往充值"
-        val s =tipTv.text.toString()
-        textViewUtils.init(s, tipTv)
-        textViewUtils.setTextColor(s.indexOf("前"), s.length, ContextCompat.getColor(this, R.color.btn_blue_normal))
-        textViewUtils.setTextClick(s.indexOf("前"), s.length, object : TextViewUtils.ClickCallBack {
-            override fun onClick() {
-                // 充值
-                val intent = Intent(this@PayActivity, PayWayActivity::class.java)
-                startActivity(intent)
-            }
+            val textViewUtils = TextViewUtils()
+            val s =tipTv.text.toString()
+            textViewUtils.init(s, tipTv)
+            textViewUtils.setTextColor(s.indexOf("前"), s.length, ContextCompat.getColor(this, R.color.btn_blue_normal))
+            textViewUtils.setTextClick(s.indexOf("前"), s.length, object : TextViewUtils.ClickCallBack {
+                override fun onClick() {
+                    // 充值
+                    val intent = Intent(this@PayActivity, PayWayActivity::class.java)
+                    startActivity(intent)
+                }
 
-        })
-        textViewUtils.build()
+            })
+            textViewUtils.build()
+        }
+
+
+
+
+
+
+
+
 
 
 

@@ -202,7 +202,7 @@ class QiyeCaActivity : BasicActivity(), RequestView, ReLoadingData {
         }
         var loadImgUrl = mConfigMap!!["remotepath"]!!.toString() + ""
 
-        LogUtil.i("打印log日志--------------------------------------------------------", loadImgUrl)
+        LogUtil.i("show--------------------------------------------------------", loadImgUrl)
 
 
         /* if (UtilTools.empty(loadImgUrl)){

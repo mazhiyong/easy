@@ -124,7 +124,7 @@ class PullToZoomScrollViewEx @JvmOverloads constructor(private val mContext: Con
             mZoomView!!.layoutParams = zoomLayoutParams
         }
 
-        LogUtil.i("打印log日志", "###############################################################")
+        LogUtil.i("show", "###############################################################")
     }
 
     /**
@@ -256,7 +256,7 @@ class PullToZoomScrollViewEx @JvmOverloads constructor(private val mContext: Con
                     localLayoutParams = mHeaderContainer!!.layoutParams
                     Log.d(TAG, "ScalingRunnable --> f2 = $f2")
                     if (f2 > 1.2f) {
-                        //                        LogUtil.i("打印log日志","##############ddddddddddddddd#################################################");
+                        //                        LogUtil.i("show","##############ddddddddddddddd#################################################");
                         //                        Toast.makeText(mContext,"ddd",Toast.LENGTH_LONG).show();
                     }
                     if (f2 > 1.0f) {

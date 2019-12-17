@@ -68,7 +68,7 @@ class ActivityManager private constructor() {
     fun removeActivity(activity: Activity) {
         if (activityStack != null && !activityStack!!.isEmpty()) {
             activityStack!!.remove(activity)
-            LogUtil.i("打印log日志", "栈中的activity $activityStack     已经移除的activity   $activity")
+            LogUtil.i("show", "栈中的activity $activityStack     已经移除的activity   $activity")
         }
     }
 

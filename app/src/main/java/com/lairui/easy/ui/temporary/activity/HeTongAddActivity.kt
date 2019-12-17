@@ -210,7 +210,7 @@ class HeTongAddActivity : BasicActivity(), RequestView, SelectBackListener {
                     }
                     mFileNum = num
                     mFileNumTv!!.text = num.toString() + "个"
-                    LogUtil.i("打印log日志", "上传文件列表$mFileList")
+                    LogUtil.i("show", "上传文件列表$mFileList")
                 }
             } else if (action == MbsConstans.BroadcastReceiverAction.JIE_HUAN_UPDATE) {
                 finish()
@@ -486,14 +486,14 @@ class HeTongAddActivity : BasicActivity(), RequestView, SelectBackListener {
 
 
         mParamMap!!["contList"] = mFileList
-        LogUtil.i("打印log日志", "提交借款申请的参数" + mParamMap!!)
+        LogUtil.i("show", "提交借款申请的参数" + mParamMap!!)
         val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.addHetongInfo, mParamMap!!)
 
     }
 
     private fun submitDataAction() {
-        LogUtil.i("打印log日志", "提交借款申请的参数" + mParamMap!!)
+        LogUtil.i("show", "提交借款申请的参数" + mParamMap!!)
         val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.jiekuanSubmit, mParamMap!!)
     }

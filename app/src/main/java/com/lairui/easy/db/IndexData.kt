@@ -79,7 +79,7 @@ class IndexData private constructor() {
     fun updateDB(key: String, value: String) {
         openDb()
 
-        LogUtil.i("打印log日志", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        LogUtil.i("show", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         if (db!!.isOpen) {
             val cursor = db!!.rawQuery("select * from tb_index_data", null)
             if (cursor.count == 0) {

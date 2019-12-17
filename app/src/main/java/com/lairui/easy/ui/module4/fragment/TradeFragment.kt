@@ -24,9 +24,12 @@ import com.lairui.easy.mvp.presenter.RequestPresenterImp
 import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.mywidget.view.LoadingWindow
 import com.lairui.easy.mywidget.view.PageView
+import com.lairui.easy.mywidget.view.TipsToast.Companion.showToastMsg
+import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module4.adapter.TradeListAdapter
 import com.lairui.easy.utils.tool.AnimUtil
 import com.lairui.easy.utils.tool.JSONUtil
+import com.lairui.easy.utils.tool.SPUtils
 import com.lairui.easy.utils.tool.UtilTools
 import java.util.*
 
@@ -49,7 +52,7 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
     private var mTradeListAdapter: TradeListAdapter? = null
     private var mRequestTag = ""
 
-    private val mDataList = ArrayList<MutableMap<String, Any>>()
+    private var mDataList = ArrayList<MutableMap<String, Any>>()
 
     private var mStartTime = ""
     private var mEndTime = ""
@@ -74,7 +77,7 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
         mTitleBarView.layoutParams = layoutParams
         mTitleBarView.setPadding(0, UtilTools.getStatusHeight2(activity!!), 0, 0)
 
-        mTabLayout.addTab(mTabLayout.newTab().setText("全部"))
+        //mTabLayout.addTab(mTabLayout.newTab().setText("全部"))
         mTabLayout.addTab(mTabLayout.newTab().setText("操盘中"))
         mTabLayout.addTab(mTabLayout.newTab().setText("已结算"))
         mTabLayout.addOnTabSelectedListener(object :XTabLayout.OnTabSelectedListener{
@@ -103,14 +106,16 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
         mRefreshListView.layoutManager = linearLayoutManager
 
         mRefreshListView.setOnRefreshListener {
+            mLoadingWindow.showView()
             borrowListAction()
         }
 
         mLoadingWindow.showView()
-        //borrowListAction()
+        borrowListAction()
 
 
-        for (index in 1..10){
+
+      /*  for (index in 1..10){
             val map = HashMap<String,Any>()
             if(index % 2 == 0 ) {
                 map["status"] = "1"
@@ -124,24 +129,8 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
             map["b"] = "100.00元"
             mDataList.add(map)
         }
-
-        mPageView.setContentView(mContent)
-        mPageView.reLoadingData
-        mPageView.showLoading()
-     
-        mRefreshListView.layoutManager = linearLayoutManager
-        mRefreshListView.setOnRefreshListener {
-            //getMyTreamInfoAction()
-
-        }
-
-        mRefreshListView.setOnLoadMoreListener {
-            mRefreshListView.setNoMore(true)
-        }
-
-
         mPageView.showContent()
-        responseData()
+        responseData()*/
 
 
         setBarTextColor()
@@ -152,16 +141,15 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
     }
 
     private fun borrowListAction() {
-        mRequestPresenterImp = RequestPresenterImp(this, activity!!)
-        mRequestTag = MethodUrl.borrowList
-        val map = HashMap<String, String>()
-        map["loansqid"] = ""
-        map["startdate"] = mStartTime
-        map["enddate"] = mEndTime
-        map["loanstate"] = mJieKuanStatus
-        map["creditfile"] = ""
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.PEIZI_LIST
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[activity!!, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestGetToRes(mHeaderMap, MethodUrl.borrowList, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.PEIZI_LIST, map)
     }
 
 
@@ -239,14 +227,14 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
             mLRecyclerViewAdapter!!.notifyDataSetChanged()//必须调用此方法
         }
 
-        mRefreshListView!!.setFooterViewHint("拼命加载中", "已经全部为你呈现了", "网络不给力啊，点击再试一次吧")
+        mRefreshListView.setFooterViewHint("拼命加载中", "已经全部为你呈现了", "网络不给力啊，点击再试一次吧")
         if (mDataList.size < 10) {
-            mRefreshListView!!.setNoMore(true)
+            mRefreshListView.setNoMore(true)
         } else {
-            mRefreshListView!!.setNoMore(false)
+            mRefreshListView.setNoMore(false)
         }
 
-        if (mTradeListAdapter!!.dataList.size <= 0) {
+        if (mTradeListAdapter!!.dataList.isEmpty()) {
             mPageView!!.showEmpty()
         } else {
             mPageView!!.showContent()
@@ -263,42 +251,41 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
     }
 
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
-        mLoadingWindow!!.cancleView()
+        mLoadingWindow.cancleView()
         val intent: Intent
         when (mType) {
-            MethodUrl.borrowList//
-            -> {
-                val result = tData["result"]!!.toString() + ""
-                if (UtilTools.empty(result)) {
-                    val list = JSONUtil.instance.jsonToList(result)
-                    responseData()
-                } else {
-                    val list = JSONUtil.instance.jsonToList(result)
-                    if (list != null) {
-                        mDataList.clear()
-                        mDataList.addAll(list)
-                        responseData()
-                    } else {
-
+            MethodUrl.PEIZI_LIST -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    if (UtilTools.empty(tData["data"])){
+                        mPageView.showEmpty()
+                    }else{
+                        mDataList = tData["data"] as ArrayList<MutableMap<String, Any>>
+                        if(!UtilTools.empty(mDataList) && mDataList.size>0){
+                            mPageView.showContent()
+                            responseData()
+                            mRefreshListView.refreshComplete(10)
+                        }else{
+                            mPageView.showEmpty()
+                        }
                     }
                 }
-                mRefreshListView!!.refreshComplete(10)
-            }
-            MethodUrl.refreshToken//获取refreshToken返回结果
-            -> {
-                MbsConstans.REFRESH_TOKEN = tData["refresh_token"]!!.toString() + ""
-                mIsRefreshToken = false
-                when (mRequestTag) {
-                    MethodUrl.borrowList -> borrowListAction()
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    activity!!.finish()
+                    val intent = Intent(activity, LoginActivity::class.java)
+                    startActivity(intent)
                 }
             }
+
+
+
         }
     }
 
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
         when (mType) {
             MethodUrl.borrowList -> if (mTradeListAdapter != null) {
-                if (mTradeListAdapter!!.dataList.size <= 0) {
+                if (mTradeListAdapter!!.dataList.isEmpty()) {
                     mPageView.showNetworkError()
                 } else {
                     mPageView.showContent()
@@ -311,7 +298,7 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
         }
 
 
-        mLoadingWindow!!.cancleView()
+        mLoadingWindow.cancleView()
         dealFailInfo(map, mType)
     }
 

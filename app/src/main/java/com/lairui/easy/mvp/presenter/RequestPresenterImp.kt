@@ -78,7 +78,7 @@ class RequestPresenterImp(view: RequestView, context: Context) : BasePresenterIm
         //请求参数为json类型的时候的请求，需要做下面操作
         val gson = Gson()
         val jsonStr = gson.toJson(mParaMap)
-        LogUtil.i("打印log日志", "请求的参数$jsonStr")
+        LogUtil.i("show", "请求的参数$jsonStr")
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonStr)
         mRequestModelImp.requestDeleteToRes(mHeaderMap, mUrl, body, this)
     }
@@ -108,7 +108,7 @@ class RequestPresenterImp(view: RequestView, context: Context) : BasePresenterIm
         //请求参数为json类型的时候的请求，需要做下面操作
         val gson = Gson()
         val jsonStr = gson.toJson(mParaMap)
-        LogUtil.i("打印log日志", "请求的参数$jsonStr")
+        LogUtil.i("show", "请求的参数$jsonStr")
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonStr)
         mRequestModelImp.requestDeleteToMap(mHeaderMap, mUrl, body, this)
     }
@@ -140,7 +140,7 @@ class RequestPresenterImp(view: RequestView, context: Context) : BasePresenterIm
         val gson = Gson()
         val jsonStr = gson.toJson(mParaMap)
 
-        LogUtil.i("打印log日志", "请求的参数$jsonStr")
+        LogUtil.i("show", "请求的参数$jsonStr")
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonStr)
         mRequestModelImp.requestPutToRes(mHeaderMap, mUrl, body, this)
     }
@@ -171,7 +171,7 @@ class RequestPresenterImp(view: RequestView, context: Context) : BasePresenterIm
         val gson = Gson()
         val jsonStr = gson.toJson(mParaMap)
 
-        LogUtil.i("打印log日志", "请求的参数$jsonStr")
+        LogUtil.i("show", "请求的参数$jsonStr")
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonStr)
         mRequestModelImp.requestPutToMap(mHeaderMap, mUrl, body, this)
     }
@@ -190,12 +190,12 @@ class RequestPresenterImp(view: RequestView, context: Context) : BasePresenterIm
             this.requestError(errorMap, mUrl)
             return
         }
-        if (!UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+      /*  if (!UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
             mHeaderMap["access_token"] = MbsConstans.ACCESS_TOKEN
         }
         if (!UtilTools.empty(MbsConstans.REFRESH_TOKEN)) {
             mHeaderMap["refresh_token"] = MbsConstans.REFRESH_TOKEN
-        }
+        }*/
 
         mRequestModelImp.requestGetToRes(mHeaderMap, mUrl, mParaMap, this)
     }
@@ -217,13 +217,13 @@ class RequestPresenterImp(view: RequestView, context: Context) : BasePresenterIm
 
         LogUtil.i("requestGetToMap.ACCESS_TOKEN", MbsConstans.ACCESS_TOKEN)
         LogUtil.i("requestGetToMap.REFRESH_TOKEN", MbsConstans.REFRESH_TOKEN)
-        if (!UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+       /* if (!UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
             mHeaderMap["access_token"] = MbsConstans.ACCESS_TOKEN
         }
         if (!UtilTools.empty(MbsConstans.REFRESH_TOKEN)) {
             mHeaderMap["refresh_token"] = MbsConstans.REFRESH_TOKEN
         }
-
+*/
         mRequestModelImp.requestGetToMap(mHeaderMap, mUrl, mParaMap, this)
     }
 
@@ -255,7 +255,7 @@ class RequestPresenterImp(view: RequestView, context: Context) : BasePresenterIm
         val gson = Gson()
         val jsonStr = gson.toJson(mParaMap)
 
-        LogUtil.i("打印log日志", "请求的参数$jsonStr")
+        LogUtil.i("show", "请求的参数$jsonStr")
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonStr)
         mRequestModelImp.requestPostToRes(mHeaderMap, mUrl, body, this)
     }
@@ -276,19 +276,19 @@ class RequestPresenterImp(view: RequestView, context: Context) : BasePresenterIm
         }
 
 
-        if (!UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+      /*  if (!UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
             mHeaderMap["access_token"] = MbsConstans.ACCESS_TOKEN
         }
         if (!UtilTools.empty(MbsConstans.REFRESH_TOKEN)) {
             mHeaderMap["refresh_token"] = MbsConstans.REFRESH_TOKEN
         }
-
+*/
 
         //请求参数为json类型的时候的请求，需要做下面操作
         val gson = Gson()
         val jsonStr = gson.toJson(mParaMap)
 
-        LogUtil.i("打印log日志", "请求的参数$jsonStr")
+        LogUtil.i("show", "请求的参数$jsonStr")
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonStr)
         mRequestModelImp.requestPostToMap(mHeaderMap, mUrl, body, this)
     }
@@ -444,7 +444,7 @@ class RequestPresenterImp(view: RequestView, context: Context) : BasePresenterIm
         for (`in` in map.keys) {
             //map.keySet()返回的是所有key的值
             val str = map[`in`]!!.toString() + ""//得到每个key多对用value的值
-            LogUtil.i("打印log日志", "$`in`     $str")
+            LogUtil.i("show", "$`in`     $str")
             param[`in`] = RequestBody.create(MediaType.parse("text/plain"), str)
         }
 

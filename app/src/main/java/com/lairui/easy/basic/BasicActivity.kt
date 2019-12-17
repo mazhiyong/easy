@@ -486,17 +486,17 @@ abstract class BasicActivity : AppCompatActivity(), BGASwipeBackHelper.Delegate,
             errorCode = java.lang.Double.valueOf(errcodeStr).toInt()
         } catch (e: Exception) {
             e.printStackTrace()
-            LogUtil.i("打印log日志", "这里出现异常了" + e.message)
+            LogUtil.i("show", "这里出现异常了" + e.message)
         }
 
         if (errorCode == ErrorHandler.REFRESH_TOKEN_DATE_CODE) {
             mRequestTagList.add(mType)
             if (!mIsRefreshToken) {
                 mIsRefreshToken = true
-                LogUtil.i("打印log日志", "refreshToken过期重新请求refreshtoken接口")
+                LogUtil.i("show", "refreshToken过期重新请求refreshtoken接口")
                 getRefreshToken()
             } else {
-                LogUtil.i("打印log日志", "refreshToken过期重新请求refreshtoken接口，正在请求。不需要再请求了")
+                LogUtil.i("show", "refreshToken过期重新请求refreshtoken接口，正在请求。不需要再请求了")
             }
         } else if (errorCode == ErrorHandler.ACCESS_TOKEN_DATE_CODE) {
             closeAllActivity()

@@ -172,7 +172,7 @@ class TradeListActivity : BasicActivity(), RequestView, ReLoadingData, SelectBac
         map["start_time"] = mStartTime
         map["end_time"] = mEndTime
         map["busi_type"] = mBusiType
-        LogUtil.i("打印log日志", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@$map")
+        LogUtil.i("show", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@$map")
         val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp!!.requestGetToRes(mHeaderMap, MethodUrl.tradeList, map)
     }

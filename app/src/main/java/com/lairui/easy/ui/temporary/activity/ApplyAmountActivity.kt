@@ -230,7 +230,7 @@ class ApplyAmountActivity : BasicActivity(), RequestView, SelectBackListener {
                     }
                     mFileNum = num
                     mFileNumTv!!.text = num.toString() + "个"
-                    LogUtil.i("打印log日志", "###################################################" + mFileList!!)
+                    LogUtil.i("show", "###################################################" + mFileList!!)
                 }
             }
         }
@@ -500,7 +500,7 @@ class ApplyAmountActivity : BasicActivity(), RequestView, SelectBackListener {
             map["contList"] = mFileList!!//附件列表
         }
 
-        LogUtil.i("打印log日志", "申请额度提交参数$map")
+        LogUtil.i("show", "申请额度提交参数$map")
 
         if (!mXieyiCheckBox!!.isChecked) {
             showToastMsg(resources.getString(R.string.xieyi_tips))

@@ -71,11 +71,11 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                     override fun onError(e: Throwable) {
                         iBaseRequestCallBack.requestComplete()
                         e.printStackTrace()
-                        LogUtil.i("打印log日志", "################################################" + mCompositeSubscription!!.isDisposed)
+                        LogUtil.i("show", "################################################" + mCompositeSubscription!!.isDisposed)
                         //回调接口：请求异常
                         val map = ErrorHandler.handleException(e)
                         iBaseRequestCallBack.requestError(map, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl   $map------------------获取请求异常信息--------------$e")
+                        LogUtil.i("show", "$mUrl   $map------------------获取请求异常信息--------------$e")
                     }
 
                     override fun onNext(responseBody: Response<ResponseBody>) {
@@ -90,7 +90,7 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                             e.printStackTrace()
                         }
 
-                        LogUtil.i("打印log日志", "$mUrl------------------获取get请求结果json字符串-----------------$result")
+                        LogUtil.i("show", "$mUrl------------------获取get请求结果json字符串-----------------$result")
                         if (!TextUtils.isEmpty(result)) {
                             mDataMap["result"] = result!!
                         } else {
@@ -98,7 +98,7 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                         }
                         //回调接口：请求成功，获取实体类对象
                         iBaseRequestCallBack.requestSuccess(mDataMap, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl------------------获取请求结果-----------------$mDataMap")
+                        LogUtil.i("show", "$mUrl------------------获取请求结果-----------------$mDataMap")
 
                     }
                 }))
@@ -134,18 +134,18 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                     override fun onError(e: Throwable) {
                         iBaseRequestCallBack.requestComplete()
                         e.printStackTrace()
-                        LogUtil.i("打印log日志", "################################################" + mCompositeSubscription!!.isDisposed)
+                        LogUtil.i("show", "################################################" + mCompositeSubscription!!.isDisposed)
                         //回调接口：请求异常
                         val map = ErrorHandler.handleException(e)
                         iBaseRequestCallBack.requestError(map, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl   $map------------------获取请求异常信息--------------$e")
+                        LogUtil.i("show", "$mUrl   $map------------------获取请求异常信息--------------$e")
                     }
 
                     override fun onNext(mDataMap: MutableMap<String, Any>) {
                         iBaseRequestCallBack.requestComplete()
                         //回调接口：请求成功，获取实体类对象
                         iBaseRequestCallBack.requestSuccess(mDataMap, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl------------------获取请求结果-----------------$mDataMap")
+                        LogUtil.i("show", "$mUrl------------------获取请求结果-----------------$mDataMap")
 
                     }
                 }))
@@ -181,11 +181,11 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                     override fun onError(e: Throwable) {
                         iBaseRequestCallBack.requestComplete()
                         e.printStackTrace()
-                        LogUtil.i("打印log日志", "################################################" + mCompositeSubscription!!.isDisposed)
+                        LogUtil.i("show", "################################################" + mCompositeSubscription!!.isDisposed)
                         //回调接口：请求异常
                         val map = ErrorHandler.handleException(e)
                         iBaseRequestCallBack.requestError(map, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl   $map------------------获取请求异常信息--------------$e")
+                        LogUtil.i("show", "$mUrl   $map------------------获取请求异常信息--------------$e")
                     }
 
                     override fun onNext(responseBody: Response<ResponseBody>) {
@@ -193,10 +193,10 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                         val mDataMap = HashMap<String, Any>()
                         //回调接口：请求成功，获取实体类对象
                         // iBaseRequestCallBack.requestSuccess(mDataMap,mUrl);
-                        // LogUtil.i("打印log日志",mUrl+"------------------获取请求结果-----------------"+mDataMap);
+                        // LogUtil.i("show",mUrl+"------------------获取请求结果-----------------"+mDataMap);
                         try {
                             val result = responseBody.body()!!.string().trim { it <= ' ' }
-                            LogUtil.i("打印log日志", "$mUrl------------------获取put请求结果json字符串-----------------$result")
+                            LogUtil.i("show", "$mUrl------------------获取put请求结果json字符串-----------------$result")
                             if (!TextUtils.isEmpty(result)) {
                                 mDataMap["msg"] = result
                             } else {
@@ -241,18 +241,18 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                     override fun onError(e: Throwable) {
                         iBaseRequestCallBack.requestComplete()
                         e.printStackTrace()
-                        LogUtil.i("打印log日志", "################################################" + mCompositeSubscription!!.isDisposed)
+                        LogUtil.i("show", "################################################" + mCompositeSubscription!!.isDisposed)
                         //回调接口：请求异常
                         val map = ErrorHandler.handleException(e)
                         iBaseRequestCallBack.requestError(map, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl   $map------------------获取请求异常信息--------------$e")
+                        LogUtil.i("show", "$mUrl   $map------------------获取请求异常信息--------------$e")
                     }
 
                     override fun onNext(mDataMap: MutableMap<String, Any>) {
                         iBaseRequestCallBack.requestComplete()
                         //回调接口：请求成功，获取实体类对象
                         iBaseRequestCallBack.requestSuccess(mDataMap, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl------------------获取请求结果-----------------$mDataMap")
+                        LogUtil.i("show", "$mUrl------------------获取请求结果-----------------$mDataMap")
 
                     }
                 }))
@@ -288,11 +288,11 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                     override fun onError(e: Throwable) {
                         iBaseRequestCallBack.requestComplete()
                         e.printStackTrace()
-                        LogUtil.i("打印log日志", "################################################" + mCompositeSubscription!!.isDisposed)
+                        LogUtil.i("show", "################################################" + mCompositeSubscription!!.isDisposed)
                         //回调接口：请求异常
                         val map = ErrorHandler.handleException(e)
                         iBaseRequestCallBack.requestError(map, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl   $map------------------获取请求异常信息--------------$e")
+                        LogUtil.i("show", "$mUrl   $map------------------获取请求异常信息--------------$e")
 
                     }
 
@@ -304,7 +304,7 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
 
                             SPUtils.put(context!!, MbsConstans.SharedInfoConstans.REFRESH_TOKEN, MbsConstans.REFRESH_TOKEN)
                         }
-                        LogUtil.i("打印log日志", "$mUrl------------------获取请求结果-----------------$mDataMap")
+                        LogUtil.i("show", "$mUrl------------------获取请求结果-----------------$mDataMap")
                     }
                 }))
     }
@@ -340,11 +340,11 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                     override fun onError(e: Throwable) {
                         iBaseRequestCallBack.requestComplete()
                         e.printStackTrace()
-                        LogUtil.i("打印log日志", "################################################" + mCompositeSubscription!!.isDisposed)
+                        LogUtil.i("show", "################################################" + mCompositeSubscription!!.isDisposed)
                         //回调接口：请求异常
                         val map = ErrorHandler.handleException(e)
                         iBaseRequestCallBack.requestError(map, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl   $map------------------获取请求异常信息--------------$e")
+                        LogUtil.i("show", "$mUrl   $map------------------获取请求异常信息--------------$e")
 
                     }
 
@@ -355,7 +355,7 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                         //iBaseRequestCallBack.requestSuccess(mDataMap,mUrl);
                         try {
                             val result = responseBody.body()!!.string().trim { it <= ' ' }
-                            LogUtil.i("打印log日志", "$mUrl------------------获取get请求结果json字符串-----------------$result")
+                            LogUtil.i("show", "$mUrl------------------获取get请求结果json字符串-----------------$result")
 
                             if (!TextUtils.isEmpty(result)) {
                                 mDataMap["result"] = result
@@ -381,7 +381,10 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
     override fun requestGetToMap(mHeaderMap: Map<String, String>, mUrl: String, mParam: Map<String, String>, iBaseRequestCallBack: IBaseRequestCallBack<MutableMap<String, Any>>) {
         mCompositeSubscription = CompositeDisposable()
         RxApiManager.get()!!.addCompositeDisposable(context!!, mCompositeSubscription!!)
-        mCompositeSubscription!!.add(mApiManagerService!!.requestGetToMap(mHeaderMap, MbsConstans.SERVER_URL + mUrl, mParam)  //将subscribe添加到subscription，用于注销subscribe
+        if (!mUrl.contains("http")){
+            val mUrl = MbsConstans.SERVER_URL + mUrl
+        }
+        mCompositeSubscription!!.add(mApiManagerService!!.requestGetToMap(mHeaderMap,mUrl , mParam)  //将subscribe添加到subscription，用于注销subscribe
                 .observeOn(AndroidSchedulers.mainThread())//指定事件消费线程
                 .subscribeOn(Schedulers.io())  //指定 subscribe() 发生在 IO 线程
                 .subscribeWith(object : DisposableObserver<MutableMap<String, Any>>() {
@@ -400,18 +403,18 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                     override fun onError(e: Throwable) {
                         iBaseRequestCallBack.requestComplete()
                         e.printStackTrace()
-                        LogUtil.i("打印log日志", "requestGetToMap################################################" + mCompositeSubscription!!.isDisposed)
+                        LogUtil.i("show", "requestGetToMap################################################" + mCompositeSubscription!!.isDisposed)
                         //回调接口：请求异常
                         val map = ErrorHandler.handleException(e)
                         iBaseRequestCallBack.requestError(map, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl   $map------------------获取请求异常信息--------------$e")
+                        LogUtil.i("show", "$mUrl   $map------------------获取请求异常信息--------------$e")
                     }
 
                     override fun onNext(mDataMap: MutableMap<String, Any>) {
                         iBaseRequestCallBack.requestComplete()
                         //回调接口：请求成功，获取实体类对象
                         iBaseRequestCallBack.requestSuccess(mDataMap, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl------------------获取请求结果-----------------$mDataMap")
+                        LogUtil.i("show", "$mUrl------------------获取请求结果-----------------$mDataMap")
                     }
                 }))
     }
@@ -426,7 +429,10 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
     override fun requestGetToRes(mHeaderMap: Map<String, String>, mUrl: String, mParamMap: Map<String, String>, iBaseRequestCallBack: IBaseRequestCallBack<MutableMap<String, Any>>) {
         mCompositeSubscription = CompositeDisposable()
         RxApiManager.get()!!.addCompositeDisposable(context!!, mCompositeSubscription!!)
-        mCompositeSubscription!!.add(mApiManagerService!!.requestGetToRes(mHeaderMap, MbsConstans.SERVER_URL + mUrl, mParamMap)  //将subscribe添加到subscription，用于注销subscribe
+        if (!mUrl.contains("http")){
+            val mUrl = MbsConstans.SERVER_URL + mUrl
+        }
+        mCompositeSubscription!!.add(mApiManagerService.requestGetToRes(mHeaderMap, mUrl, mParamMap)  //将subscribe添加到subscription，用于注销subscribe
                 .observeOn(AndroidSchedulers.mainThread())//指定事件消费线程
                 .subscribeOn(Schedulers.io())  //指定 subscribe() 发生在 IO 线程
                 .subscribeWith(object : DisposableObserver<ResponseBody>() {
@@ -445,11 +451,11 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                     override fun onError(e: Throwable) {
                         iBaseRequestCallBack.requestComplete()
                         e.printStackTrace()
-                        LogUtil.i("打印log日志", "loadGetStringData################################################" + mCompositeSubscription!!.isDisposed)
+                        LogUtil.i("show", "loadGetStringData################################################" + mCompositeSubscription!!.isDisposed)
                         //回调接口：请求异常
                         val map = ErrorHandler.handleException(e)
                         iBaseRequestCallBack.requestError(map, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl   $map------------------获取请求异常信息--------------$e   ")
+                        LogUtil.i("show", "$mUrl   $map------------------获取请求异常信息--------------$e   ")
                     }
 
                     override fun onNext(responseBody: ResponseBody) {
@@ -457,7 +463,7 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                         val mDataMap = HashMap<String, Any>()
                         //回调接口：请求成功，获取实体类对象
                         //iBaseRequestCallBack.requestSuccess(mDataMap,mUrl);
-                        LogUtil.i(" System.out 打印log日志", "$mUrl------------------获取get请求结果json字符串-----------------$responseBody")
+                        LogUtil.i(" show", "$mUrl------------------获取get请求结果json字符串-----------------$responseBody")
                         try {
                             if (responseBody == null) {
                                 LogUtil.i("System.out  responseBody为空", "$mUrl------------------获取get请求结果json字符串-----------------")
@@ -578,7 +584,7 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                         iBaseRequestCallBack.requestComplete()
                         //回调接口：请求成功，获取实体类对象
                         iBaseRequestCallBack.requestSuccess(mDataMap, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl------------------获取请求结果-----------------$mDataMap")
+                        LogUtil.i("show", "$mUrl------------------获取请求结果-----------------$mDataMap")
                     }
                 }) as Disposable
         )
@@ -615,11 +621,11 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                     override fun onError(e: Throwable) {
                         iBaseRequestCallBack.requestComplete()
                         e.printStackTrace()
-                        LogUtil.i("打印log日志", "################################################" + mCompositeSubscription!!.isDisposed)
+                        LogUtil.i("show", "################################################" + mCompositeSubscription!!.isDisposed)
                         //回调接口：请求异常
                         val map = ErrorHandler.handleException(e)
                         iBaseRequestCallBack.requestError(map, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl   $map------------------获取请求异常信息--------------$e")
+                        LogUtil.i("show", "$mUrl   $map------------------获取请求异常信息--------------$e")
 
                     }
 
@@ -629,7 +635,7 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                         iBaseRequestCallBack.requestComplete()
                         //回调接口：请求成功，获取实体类对象
                         iBaseRequestCallBack.requestSuccess(map, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl------------------获取请求结果-----------------$mDataMap")
+                        LogUtil.i("show", "$mUrl------------------获取请求结果-----------------$mDataMap")
                     }
                 }))
     }
@@ -673,7 +679,7 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                         map as MutableMap<String,Any>
                         map.putAll(mSignMap)
                         iBaseRequestCallBack.requestError(map, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl$map------------------获取请求异常信息--------------$e")
+                        LogUtil.i("show", "$mUrl$map------------------获取请求异常信息--------------$e")
 
                     }
 
@@ -683,7 +689,7 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                         mDataMap as MutableMap<String,Any>
                         mDataMap.putAll(mSignMap)
                         iBaseRequestCallBack.requestSuccess(mDataMap, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl------------------获取请求结果-----------------$mDataMap")
+                        LogUtil.i("show", "$mUrl------------------获取请求结果-----------------$mDataMap")
                     }
                 }))
     }
@@ -721,7 +727,7 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
                         //回调接口：请求异常
                         val map = ErrorHandler.handleException(e)
                         iBaseRequestCallBack.requestError(map, mUrl)
-                        LogUtil.i("打印log日志", "$mUrl$map------------------获取请求异常信息--------------$e")
+                        LogUtil.i("show", "$mUrl$map------------------获取请求异常信息--------------$e")
                     }
 
                     override fun onNext(responseBody: Response<ResponseBody>) {
@@ -745,14 +751,14 @@ class RequestModelImp(mContext: Context) : BaseModel(), RequestModel<MutableMap<
 
     override fun onUnsubscribe() {
         if (mCompositeSubscription != null) {
-            LogUtil.i("打印log日志", "onUnsubscribe  " + mCompositeSubscription!!.isDisposed)
+            LogUtil.i("show", "onUnsubscribe  " + mCompositeSubscription!!.isDisposed)
             //判断状态
             if (!mCompositeSubscription!!.isDisposed) {
                 mCompositeSubscription!!.clear()  //注销
                 mCompositeSubscription!!.dispose()
             }
         } else {
-            LogUtil.i("打印log日志", "onUnsubscribe  为空" + context!!.packageName)
+            LogUtil.i("show", "onUnsubscribe  为空" + context!!.packageName)
 
         }
 

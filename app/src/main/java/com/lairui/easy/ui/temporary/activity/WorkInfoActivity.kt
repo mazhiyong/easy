@@ -313,7 +313,7 @@ class WorkInfoActivity : BasicActivity(), RequestView, SelectBackListener {
         mValueMap!!["tradesstartdate"] = mCongyeTime//所在行业开始时间(格式：yyyymmdd)
 
 
-        LogUtil.i("打印log日志", mValueMap!!)
+        LogUtil.i("show", mValueMap!!)
         mRequestTag = MethodUrl.submitUserInfo
 
         val mHeaderMap = HashMap<String, String>()

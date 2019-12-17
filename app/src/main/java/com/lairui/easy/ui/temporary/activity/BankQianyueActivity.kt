@@ -312,7 +312,7 @@ class BankQianyueActivity : BasicActivity(), RequestView {
 
         override fun onClick(v: View) {
             val intent = Intent(this@BankQianyueActivity, HtmlActivity::class.java)
-            intent.putExtra("id", MbsConstans.XIEYI_URL + "H5/static/html/wyxy.html")
+            //intent.putExtra("id", MbsConstans.XIEYI_URL + "H5/static/html/wyxy.html")
             intent.putExtra("title", "网银协议")
             //intent.putExtra("id",MbsConstans.XIEYI_URL+"H5/static/html/khxy.html?name="+MbsConstans.USER_MAP.get("name"));
 

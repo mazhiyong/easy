@@ -36,10 +36,18 @@ class CoinInfoAdapter( mContext: Context) : BasicRecycleViewAdapter(mContext) {
     override fun bindClickListener(viewHolder: RecyclerView.ViewHolder?, position: Int) {
         val coinInfoViewHolder = viewHolder as CoinInfoViewHolder?
         val map: Map<*, *> = coinList!![position]
+
         coinInfoViewHolder!!.tvCoinName.text = map["name"].toString() + ""
         coinInfoViewHolder.tvCoinPrice.text = map["price"].toString() + ""
-        coinInfoViewHolder.tvCoinConvert.text = map["cny"].toString() + ""
-        coinInfoViewHolder.tvCoinRatio.text = map["ratio"].toString() + ""
+
+        if (map["ratio"].toString().contains("-") || map["amount"].toString().contains("-")){
+            coinInfoViewHolder.tvCoinConvert.text = map["amount"].toString() + ""
+            coinInfoViewHolder.tvCoinRatio.text = map["ratio"].toString() + "%"
+        }else{
+            coinInfoViewHolder.tvCoinConvert.text ="+"+ map["amount"].toString() + ""
+            coinInfoViewHolder.tvCoinRatio.text = "+"+map["ratio"].toString() + "%"
+        }
+
         //coinInfoViewHolder.tvCoinConvert.setText(UiTools.getString(R.string.defaultCny).replace("%S", frontBean.getCnyNumber()));
 /* if (UtilTools.empty(MbsConstans.COLOR_LOW) || UtilTools.empty(MbsConstans.COLOR_TOP)){
             //0 红跌绿涨   1红涨绿跌

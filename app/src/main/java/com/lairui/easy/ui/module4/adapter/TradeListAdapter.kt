@@ -2,27 +2,19 @@ package com.lairui.easy.ui.module4.adapter
 
 import android.content.Context
 import android.content.Intent
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 
 import com.lairui.easy.R
-import com.lairui.easy.ui.temporary.activity.BorrowDetailActivity
-import com.lairui.easy.ui.temporary.activity.UploadDkYongTActivity
-import com.lairui.easy.utils.tool.SelectDataUtil
-import com.lairui.easy.utils.tool.UtilTools
-
-import java.io.Serializable
 
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.lairui.easy.ui.module2.activity.BuyAndSellActivity
-import com.lairui.easy.ui.module4.activity.CeLueItemActivity
+import com.lairui.easy.ui.module4.activity.CeLueItemCurrentActivity
 import com.lairui.easy.ui.temporary.adapter.ListBaseAdapter
 
 /**
@@ -48,11 +40,11 @@ class TradeListAdapter(context: Context) : ListBaseAdapter() {
         val viewHolder = holder as ViewHolder
 
         //状态（1：操盘中 2：已结清 ）
-        var ss = item["status"]!!.toString() + ""
+       /* var ss = item["status"]!!.toString() + ""
         if (UtilTools.empty(ss)) {
             ss = "1"
-        }
-        val status = Integer.valueOf(ss)
+        }*/
+        val status = Integer.valueOf("1")
         when (status) {
             1 -> {
                 viewHolder.mStatusTv.text = "操盘中"
@@ -65,18 +57,18 @@ class TradeListAdapter(context: Context) : ListBaseAdapter() {
                 viewHolder.mTradeIv.visibility = View.GONE
             }
         }
-        viewHolder.mTitleTv.text = item["title"]!!.toString() + ""
-        viewHolder.mTimeTv.text = item["time"]!!.toString() + ""
+        viewHolder.mTitleTv.text = item["name"]!!.toString() + "元"
+        viewHolder.mTimeTv.text = item["time"]!!.toString() + "元"
 
         //val dateTime = UtilTools.getStringFromSting2(item["flowdate"]!!.toString() + "", "yyyyMMdd", "yyyy-MM-dd")
         //viewHolder.mTimeTv!!.text = dateTime + ""
 
-        viewHolder.mJingJieMoneyTv.text = item["a"]!!.toString() + ""
-        viewHolder.mPingCangMoneyTv.text = item["b"]!!.toString() + ""
+        viewHolder.mJingJieMoneyTv.text = item["warning"]!!.toString() + ""
+        viewHolder.mPingCangMoneyTv.text = item["close"]!!.toString() + ""
 
 
         viewHolder.mItemIv.setOnClickListener {
-            val intent = Intent(mContext,CeLueItemActivity::class.java)
+            val intent = Intent(mContext,CeLueItemCurrentActivity::class.java)
             mContext!!.startActivity(intent)
         }
         viewHolder.mTradeIv.setOnClickListener {

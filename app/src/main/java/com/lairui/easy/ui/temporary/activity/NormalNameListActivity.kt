@@ -288,7 +288,7 @@ class NormalNameListActivity : BasicActivity(), RequestView, ReLoadingData {
             MethodUrl.zhiyeList, MethodUrl.minZuList//
             -> {
                 val result = tData["result"]!!.toString() + ""
-                LogUtil.i("打印log日志", result)
+                LogUtil.i("show", result)
                 if (UtilTools.empty(result)) {
                     val list = JSONUtil.instance.jsonToList(result)
                     responseData()
