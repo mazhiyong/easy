@@ -1,6 +1,7 @@
 package com.lairui.easy.ui.module2.activity
 
 import android.content.Intent
+import android.text.TextUtils
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,7 +9,6 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 
 import com.github.jdsjlzx.recyclerview.LRecyclerView
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter
@@ -19,9 +19,7 @@ import com.lairui.easy.basic.BasicActivity
 import com.lairui.easy.listener.ReLoadingData
 import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.mywidget.view.PageView
-import com.lairui.easy.utils.tool.JSONUtil
 import com.lairui.easy.basic.MbsConstans
-import com.lairui.easy.utils.tool.UtilTools
 import com.jaeger.library.StatusBarUtil
 
 import java.util.ArrayList
@@ -32,8 +30,9 @@ import butterknife.BindView
 import butterknife.OnClick
 import com.lairui.easy.mywidget.view.TipsToast
 import com.lairui.easy.ui.module.activity.LoginActivity
+import com.lairui.easy.ui.module2.adapter.SearchListAdapter
 import com.lairui.easy.ui.module4.adapter.RecordListAdapter
-import com.lairui.easy.utils.tool.SPUtils
+import com.lairui.easy.utils.tool.*
 
 /**
  * 搜索 界面
@@ -59,7 +58,7 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
 
     private var mDataMap: MutableMap<String, Any>? = null
 
-    private var mRecordAdapter: RecordListAdapter? = null
+    private var mRecordAdapter: SearchListAdapter? = null
     private var mLRecyclerViewAdapter: LRecyclerViewAdapter? = null
     private val mDataList = ArrayList<MutableMap<String, Any>>()
     private var mPage = 1
@@ -73,14 +72,7 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
 
 
         initView()
-      /*  for (index in 1..6){
-            val map = HashMap<String,Any>()
-            map["title"] = "支付利息"
-            map["time"] = "2019.11.10 12:56:10"
-            map["money"] = "-100.00"
-            mDataList.add(map)
-        }
-        responseData()*/
+
     }
 
 
@@ -92,34 +84,23 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
         manager.orientation = RecyclerView.VERTICAL
         mRefreshListView.layoutManager = manager
 
-        mRefreshListView.setOnRefreshListener {
-            mPage = 1
-            tradeListAction()
-        }
 
-        mRefreshListView.setOnLoadMoreListener {
-            mPage++
-            tradeListAction()
-        }
     }
 
-    private fun tradeListAction() {
-
-        mRequestTag = MethodUrl.TRADE_LIST
-        val map = HashMap<String, Any>()
-        map["nozzle"] = MethodUrl.TRADE_LIST
-        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
-            MbsConstans.ACCESS_TOKEN = SPUtils[this@SearchListActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
-        }
-        map["token"] = MbsConstans.ACCESS_TOKEN
+    private fun searchListAction(keyWord:String) {
+        val map = HashMap<String, String>()
+        map["q"] = keyWord
+        map["t"] = "gp"
+        map["c"] = "1"
+        map["v"] = "1"
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.TRADE_LIST, map)
+        mRequestPresenterImp.requestGetToRes(mHeaderMap,MbsConstans.QUERY_SERVER_URL, map)
     }
 
 
     private fun responseData() {
         if (mRecordAdapter == null) {
-            mRecordAdapter = RecordListAdapter( this@SearchListActivity)
+            mRecordAdapter = SearchListAdapter( this@SearchListActivity)
             mRecordAdapter!!.addAll(mDataList)
 
             /*AnimationAdapter adapter = new ScaleInAnimationAdapter(mDataAdapter);
@@ -141,7 +122,7 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
             mRefreshListView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader)
             mRefreshListView.setArrowImageView(R.drawable.ic_pulltorefresh_arrow)
 
-            mRefreshListView.setPullRefreshEnabled(true)
+            mRefreshListView.setPullRefreshEnabled(false)
             mRefreshListView.setLoadMoreEnabled(false)
 
 
@@ -171,7 +152,7 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
 
         mRefreshListView.setFooterViewHint("拼命加载中", "已经全部为你呈现了", "网络不给力啊，点击再试一次吧")
         if (mDataList.size < 10) {
-            mRefreshListView.setNoMore(true)
+            mRefreshListView.setNoMore(false)
         } else {
             mRefreshListView.setNoMore(false)
         }
@@ -190,7 +171,12 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
     fun onViewClicked(view: View) {
         when (view.id) {
             R.id.back_img -> finish()
-            R.id.right_img -> {
+            R.id.right_img -> { //搜索
+                if (TextUtils.isEmpty(inputEt.text)){
+                    showToastMsg("请输入检索关键字")
+                    return
+                }
+                searchListAction(inputEt.text.toString())
 
             }
 
@@ -209,69 +195,47 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
 
         val intent: Intent
         when (mType) {
-            MethodUrl.TRADE_LIST -> {
-                when (tData["code"].toString() + "") {
-                    "1" -> {
-                        if (!UtilTools.empty(tData["data"])){
-                            val result = tData["data"]!!.toString() + ""
-                            if (UtilTools.empty(result)) {
-                                responseData()
-                            } else {
-                                val list = JSONUtil.instance.jsonToList(result)
-                                if (list != null) {
-                                    mDataList.clear()
-                                    mDataList.addAll(list)
-                                    responseData()
-                                }
-                            }
-                            mRefreshListView!!.refreshComplete(10)
-                        }
+            MbsConstans.QUERY_SERVER_URL -> {
+                var result = tData["result"]!!.toString() + ""
+                result = result.substring(result.indexOf("=")+1).replace("\"","")
+                LogUtil.i("show","搜索结果"+result)
+
+                val array = result.split("^")
+                if (array.isNotEmpty()){ //多条数据
+                    mDataList.clear()
+                    if (mRecordAdapter != null){
+                        mRecordAdapter!!.clear()
                     }
-                    "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
-                    "-1" -> {
-                        closeAllActivity()
-                        val intent = Intent(this@SearchListActivity, LoginActivity::class.java)
-                        startActivity(intent)
+                    for (item in array){
+                        val arrayChild = item.split("~")
+                        val map = HashMap<String,Any>()
+                        map["jc"] = arrayChild[0]
+                        map["code"] = arrayChild[1]
+                        map["name"] =UicodeBackslashU.unicodeToCn(arrayChild[2])
+                        mDataList.add(map)
                     }
+                    responseData()
+
+                }else{
+                    showToastMsg("未检索到相关数据")
+                    mPageView.showEmpty()
                 }
+
 
             }
 
-            MethodUrl.refreshToken//获取refreshToken返回结果
-            -> {
-                MbsConstans.REFRESH_TOKEN = tData["refresh_token"]!!.toString() + ""
-                mIsRefreshToken = false
-                mIsRefreshToken = false
-                mIsRefreshToken = false
-                when (mRequestTag) {
-                    MethodUrl.hetongList -> tradeListAction()
-                }
-            }
+
         }
     }
 
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
 
-        when (mType) {
-            MethodUrl.hetongList//
-            -> if (mRecordAdapter != null) {
-                if (mRecordAdapter!!.dataList.size <= 0) {
-                    mPageView!!.showNetworkError()
-                } else {
-                    mPageView!!.showContent()
-                }
-                mRefreshListView!!.refreshComplete(10)
-                mRefreshListView!!.setOnNetWorkErrorListener { tradeListAction() }
-            } else {
-                mPageView!!.showNetworkError()
-            }
-        }
 
         dealFailInfo(map, mType)
     }
 
     override fun reLoadingData() {
-        tradeListAction()
+
     }
 
 

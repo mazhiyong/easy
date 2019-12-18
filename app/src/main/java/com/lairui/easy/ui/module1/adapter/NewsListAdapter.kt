@@ -44,18 +44,12 @@ class NewsListAdapter(context: Context) : ListBaseAdapter() {
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.tvTitle)
-        lateinit var mTitle: TextView
-        @BindView(R.id.tvContent)
-        lateinit var mContent: TextView
-        @BindView(R.id.ivImage)
-        lateinit var mImage: ImageView
-        @BindView(R.id.content_lay)
-        lateinit var mContentLay: LinearLayout
 
-        init {
-            ButterKnife.bind(this, itemView)
-        }
+        var mTitle: TextView = itemView.findViewById(R.id.tvTitle)
+        var mContent: TextView = itemView.findViewById(R.id.tvContent)
+        var mImage: ImageView = itemView.findViewById(R.id.ivImage)
+        var mContentLay: LinearLayout = itemView.findViewById(R.id.content_lay)
+
     }
 
 

@@ -18,11 +18,10 @@ import com.lairui.easy.bean.StockInfoBean
 import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.mywidget.kview.KViewListener
 import com.lairui.easy.mywidget.kview.Quotes
+import com.lairui.easy.mywidget.view.TipsToast
+import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module2.adapter.BuyAndSellAdapter
-import com.lairui.easy.utils.tool.JSONUtil
-import com.lairui.easy.utils.tool.LogUtil
-import com.lairui.easy.utils.tool.SelectDataUtil
-import com.lairui.easy.utils.tool.UtilTools
+import com.lairui.easy.utils.tool.*
 import com.zhangke.websocket.SocketListener
 import com.zhangke.websocket.WebSocketHandler.getDefault
 import com.zhangke.websocket.response.ErrorResponse
@@ -83,6 +82,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
             //getTimeMinuteDataActin()
             getKLineMinuteDataActin("m1")
             getDetialDataAction()
+            queryConcernAction()
         }
 
 
@@ -253,6 +253,48 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
     }
 
+    //查询自选
+    private fun queryConcernAction() {
+        val map = java.util.HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.QUERY_CONCERN
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@CoinInfoActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["code"] = mapData!!["code"].toString()
+        val mHeaderMap = java.util.HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.QUERY_CONCERN, map)
+    }
+
+    //取消自选
+    private fun cancelConcernAction() {
+        val map = java.util.HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.CANCEL_CONCERN
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@CoinInfoActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["code"] = mapData!!["code"].toString()
+        val mHeaderMap = java.util.HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.CANCEL_CONCERN, map)
+    }
+
+    //添加自选
+    private fun addConcernAction() {
+        val map = java.util.HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.ADD_CONCERN
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@CoinInfoActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["code"] = mapData!!["code"].toString()
+        val mHeaderMap = java.util.HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.ADD_CONCERN, map)
+    }
+
+
+
+
     //获取详情
     private fun getDetialDataAction() {
         val map = HashMap<String, String>()
@@ -289,12 +331,11 @@ class CoinInfoActivity : BasicActivity(), RequestView {
             R.id.left_back_lay, R.id.back_img -> finish()
             R.id.right_lay -> {
                 if (right_img.isSelected){
-                    right_img.isSelected = false
-                    right_img.setBackgroundResource(R.drawable.zixuan_unselected)
+                    //取消
+                    cancelConcernAction()
                 }else{
-                    right_img.isSelected = true
-                    right_img.setBackgroundResource(R.drawable.zixuan_selected)
-
+                    //添加
+                    addConcernAction()
                 }
 
             }
@@ -557,6 +598,58 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
 
             }
+
+            MethodUrl.QUERY_CONCERN -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    if (tData["data"].toString() == "0"){ //加入
+                        right_img.isSelected = false
+                        right_img.setBackgroundResource(R.drawable.zixuan_unselected)
+                    }else{//已加入
+                        right_img.isSelected = true
+                        right_img.setBackgroundResource(R.drawable.zixuan_selected)
+                    }
+                }
+                "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@CoinInfoActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            MethodUrl.CANCEL_CONCERN -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    TipsToast.showToastMsg(tData["msg"].toString() + "")
+                    right_img.isSelected = false
+                    right_img.setBackgroundResource(R.drawable.zixuan_unselected)
+                }
+                "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@CoinInfoActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            MethodUrl.ADD_CONCERN -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    TipsToast.showToastMsg(tData["msg"].toString() + "")
+                    right_img.isSelected = true
+                    right_img.setBackgroundResource(R.drawable.zixuan_selected)
+                }
+                "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@CoinInfoActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+
+
+
+
+
 
             MethodUrl.K_LINE -> {
                 val str = tData["data"].toString()

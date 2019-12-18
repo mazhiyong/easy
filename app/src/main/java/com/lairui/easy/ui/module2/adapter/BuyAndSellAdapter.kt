@@ -60,15 +60,12 @@ class BuyAndSellAdapter(context: Context) : ListBaseAdapter() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        @BindView(R.id.typeTv)
-        lateinit var mTypeTv: TextView
-        @BindView(R.id.priceTv)
-        lateinit var mPriceTv: TextView
-        @BindView(R.id.amountTv)
-        lateinit var mAmountTv: TextView
 
-        init {
-            ButterKnife.bind(this, itemView)
-        }
+        var mTypeTv: TextView = itemView.findViewById(R.id.typeTv)
+
+        var mPriceTv: TextView = itemView.findViewById(R.id.priceTv)
+
+        var mAmountTv: TextView = itemView.findViewById(R.id.amountTv)
+
     }
 }

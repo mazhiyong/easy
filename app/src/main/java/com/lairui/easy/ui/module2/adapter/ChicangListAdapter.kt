@@ -15,7 +15,7 @@ import com.lairui.easy.ui.module2.activity.CoinInfoActivity
 import com.lairui.easy.ui.temporary.adapter.ListBaseAdapter
 import java.io.Serializable
 
-class HangqingListAdapter(context: Context) : ListBaseAdapter() {
+class ChicangListAdapter(context: Context) : ListBaseAdapter() {
     private var mHeaderView: View? = null
     private val mLayoutInflater: LayoutInflater
     private val ITEM_TYPE_NORMAL = 0
@@ -24,7 +24,7 @@ class HangqingListAdapter(context: Context) : ListBaseAdapter() {
         return if (arg1 == ITEM_TYPE_HEADER) {
             ViewHolder(mHeaderView, ITEM_TYPE_HEADER)
         } else {
-            ViewHolder(mLayoutInflater.inflate(R.layout.item_hangqing, arg0, false), ITEM_TYPE_NORMAL)
+            ViewHolder(mLayoutInflater.inflate(R.layout.item_chicang, arg0, false), ITEM_TYPE_NORMAL)
         }
     }
 
@@ -61,12 +61,13 @@ class HangqingListAdapter(context: Context) : ListBaseAdapter() {
             val viewHolder = holder as ViewHolder
             viewHolder.nameTv.text = item["name"].toString() + ""
             viewHolder.priceTv.text = item["price"].toString() + ""
-            if (item["rise"].toString().contains("-")){
+            viewHolder.priceCurTv.text = item["current"].toString() + ""
+           /* if (item["rise"].toString().contains("-")){
                 viewHolder.ratioTv.text =item["rise"].toString() + "%"
             }else{
                 viewHolder.ratioTv.text ="+" +item["rise"].toString() + "%"
-            }
-            viewHolder.typeTv.text = (item["code"].toString().substring(0,2)).toUpperCase()
+            }*/
+            viewHolder.typeTv.text = (item["short"].toString().substring(0,2)).toUpperCase()
             viewHolder.numberTv.text = item["code"].toString() + ""
             viewHolder.lay!!.setOnClickListener {
                 val intent = Intent(mContext,CoinInfoActivity::class.java)
@@ -79,14 +80,13 @@ class HangqingListAdapter(context: Context) : ListBaseAdapter() {
     inner class ViewHolder(itemView: View?, type: Int) : RecyclerView.ViewHolder(itemView!!) {
 
         var nameTv: TextView = itemView!!.findViewById(R.id.nameTv)
-
         var priceTv: TextView = itemView!!.findViewById(R.id.priceTv)
 
         var ratioTv: TextView = itemView!!.findViewById(R.id.ratioTv)
-
         var typeTv: TextView = itemView!!.findViewById(R.id.typeTv)
-
         var numberTv: TextView = itemView!!.findViewById(R.id.numberTv)
+        var amountTv: TextView = itemView!!.findViewById(R.id.amountTv)
+        var priceCurTv: TextView = itemView!!.findViewById(R.id.priceCurTv)
 
         var lay: CardView? = null
 

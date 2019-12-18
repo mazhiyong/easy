@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -15,7 +16,7 @@ import com.lairui.easy.ui.module2.activity.CoinInfoActivity
 import com.lairui.easy.ui.temporary.adapter.ListBaseAdapter
 import java.io.Serializable
 
-class HangqingListAdapter(context: Context) : ListBaseAdapter() {
+class ChengjiaoListAdapter(context: Context) : ListBaseAdapter() {
     private var mHeaderView: View? = null
     private val mLayoutInflater: LayoutInflater
     private val ITEM_TYPE_NORMAL = 0
@@ -24,7 +25,7 @@ class HangqingListAdapter(context: Context) : ListBaseAdapter() {
         return if (arg1 == ITEM_TYPE_HEADER) {
             ViewHolder(mHeaderView, ITEM_TYPE_HEADER)
         } else {
-            ViewHolder(mLayoutInflater.inflate(R.layout.item_hangqing, arg0, false), ITEM_TYPE_NORMAL)
+            ViewHolder(mLayoutInflater.inflate(R.layout.item_chengjiao, arg0, false), ITEM_TYPE_NORMAL)
         }
     }
 
@@ -60,14 +61,20 @@ class HangqingListAdapter(context: Context) : ListBaseAdapter() {
             val item: Map<String, Any> = mDataList[position - 1]
             val viewHolder = holder as ViewHolder
             viewHolder.nameTv.text = item["name"].toString() + ""
-            viewHolder.priceTv.text = item["price"].toString() + ""
-            if (item["rise"].toString().contains("-")){
-                viewHolder.ratioTv.text =item["rise"].toString() + "%"
+            if (item["type"].toString() == "买入"){
+                viewHolder.priceTv.setTextColor(ContextCompat.getColor(mContext!!,R.color.colorPrimary))
             }else{
-                viewHolder.ratioTv.text ="+" +item["rise"].toString() + "%"
+                viewHolder.priceTv.setTextColor(ContextCompat.getColor(mContext!!,R.color.font_c))
             }
-            viewHolder.typeTv.text = (item["code"].toString().substring(0,2)).toUpperCase()
-            viewHolder.numberTv.text = item["code"].toString() + ""
+
+            viewHolder.priceTv.text = item["type"].toString()
+            viewHolder.priceCurTv.text = item["price"].toString()
+            viewHolder.ratioTv.text =item["number"].toString()
+            viewHolder.amountTv.text = item["time"].toString()
+
+            //viewHolder.typeTv.text = (item["short"].toString().substring(0,2)).toUpperCase()
+            viewHolder.typeTv.visibility = View.GONE
+            viewHolder.numberTv.text = item["code"].toString()
             viewHolder.lay!!.setOnClickListener {
                 val intent = Intent(mContext,CoinInfoActivity::class.java)
                 intent.putExtra("DATA", item as Serializable)
@@ -87,6 +94,9 @@ class HangqingListAdapter(context: Context) : ListBaseAdapter() {
         var typeTv: TextView = itemView!!.findViewById(R.id.typeTv)
 
         var numberTv: TextView = itemView!!.findViewById(R.id.numberTv)
+
+        var amountTv: TextView = itemView!!.findViewById(R.id.amountTv)
+        var priceCurTv: TextView = itemView!!.findViewById(R.id.priceCurTv)
 
         var lay: CardView? = null
 

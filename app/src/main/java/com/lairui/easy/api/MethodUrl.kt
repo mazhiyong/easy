@@ -198,7 +198,11 @@ object MethodUrl {
 
 
 
-    const val PEIZI_INFO = "trading_agreement" //配资协议
+    const val QUERY_CONCERN = "query_concern" //查询自选
+    const val CANCEL_CONCERN = "cancel_concern" //取消自选
+    const val ADD_CONCERN = "join_optional" //添加自选
+
+    const val PEIZI_INFO = "trading_agreement" //查询自选
     const val PEIZI_DAY_INFO = "capital_day" //按天配资
     const val PEIZI_DAY_APPLY = "apply_day" //申请按天配资
     const val PEIZI_LIST= "assets_info" //当前配资(操盘中)
@@ -208,9 +212,14 @@ object MethodUrl {
 
 
 
-
-
-
+    const val QUERY_STOCK = "query_stock" //查询股票是否支持交易
+    const val BUY_STOCK = "trade_buy" //购买股票
+    const val SELL_STOCK = "trade_sell" //出售股票
+    const val CHICANG_LIST = "depot_stock" //持仓记录
+    const val CHEDAN_LIST = "cancel_order" //撤单记录
+    const val WEITUO_LIST = "entrust_log" //委托记录
+    const val CHENGJIAO_LIST = "deal_log" //成交记录
+    const val CHEXIAO_ACTION = "cancel_entrust" //撤销订单
 
 
 

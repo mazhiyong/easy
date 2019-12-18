@@ -3,6 +3,7 @@ package com.lairui.easy.ui.module1.fragment
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Rect
+import android.text.TextUtils
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -88,6 +89,7 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
 
     override fun onResume() {
         super.onResume()
+        homeInfoAction()
 
     }
 
@@ -178,6 +180,15 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
         StatusBarUtil.setLightMode(activity!!)
     }
 
+    private fun homeInfoAction()  {
+        val map = HashMap<String, String>()
+        map["stock_index"] = ""
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.HOME_SERVER_URL, map)
+    }
+
+
+
     fun getNoticeListAction() {
         val map = java.util.HashMap<String, Any>()
         map["nozzle"] = MethodUrl.NOTICE_LIST
@@ -228,6 +239,21 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
 
                 }
             }
+
+            MbsConstans.HOME_SERVER_URL -> {
+                val result = tData["result"]!!.toString() + ""
+                if (!UtilTools.empty(result)) {
+                    handleData2(result)
+                    if (listUp.size > 0){
+                        coinInfoAdapter!!.setList(listUp)
+                    }
+                }
+            }
+
+
+
+
+
 
         }
     }
@@ -309,6 +335,27 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
     override fun reLoadingData() {
 
     }
+
+
+    fun handleData2(result: String) {
+        if (!TextUtils.isEmpty(result) && result.contains("~")) {
+            listUp.clear()
+            val stockArray: Array<String> = result.split(";\n").toTypedArray()
+            for (stockInfo in stockArray) {
+                val map = HashMap<String,Any>()
+                val split = stockInfo.split("~").toTypedArray()
+                map["name"] = split[1]
+                map["price"] = split[3]
+                map["amount"] = split[31]
+                map["ratio"] = split[32]
+                listUp.add(map)
+            }
+
+        }
+
+    }
+
+
 
 
 }

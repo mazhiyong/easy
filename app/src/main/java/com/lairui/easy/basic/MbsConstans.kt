@@ -41,6 +41,7 @@ object MbsConstans {
     val SERVER_URL = "http://fysp.bjfable.com"
     val HANGQING_SERVER_URL = "http://hq.sinajs.cn/"  //涨跌幅
     val HOME_SERVER_URL = "http://qt.gtimg.cn/q=sh000001,sz399001,sz399006" //三大板块
+    val QUERY_SERVER_URL = "http://smartbox.gtimg.cn/s3/" //检索
     val DETIAL_SERVER_URL = "http://qt.gtimg.cn/" //详情
 
     val TIME_MINUTE_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/minute/query?_var=min_data_sz000656 " //1分 分时
@@ -50,6 +51,9 @@ object MbsConstans {
     val KLINE_DAY_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_dayqfq&param=sz000656,day,,,320,qfq " //日 K线
     val KLINE_WEEK_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_weekqfq&param=sz000656,week,,,320,qfq " //周 K线
     val KLINE_MONTHS_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_monthqfq&param=sz000656,month,,,320,qfq" //月 K线
+
+
+
 
 
 

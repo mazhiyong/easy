@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -8,105 +8,109 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/white">
-
-    <com.google.android.material.appbar.CollapsingToolbarLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
-        <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_height="wrap_content">
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:id="@+id/title_bar_view"
-                style="@style/title_bar_style"
-                android:orientation="vertical">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:id="@+id/left_back_lay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_centerVertical="true"
-                        android:paddingLeft="@dimen/dp_10"
-                        android:paddingRight="@dimen/dp_10"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/back_img"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/back_arrow"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:contentDescription="@null"
-                            />
-
-                        <TextView
-                            android:id="@+id/back_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="@dimen/dp_8"
-                            android:gravity="center"
-                            android:textSize="@dimen/sp_15"
-                            android:textColor="@color/black" />
-                    </LinearLayout>
-
-                    <com.androidkun.xtablayout.XTabLayout
-                        android:id="@+id/mTabLayout"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:id="@+id/title_bar_view"
+                    style="@style/title_bar_style"
+                    android:orientation="vertical">
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_marginLeft="@dimen/dp_50"
-                        android:layout_marginRight="@dimen/dp_50"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:paddingLeft="@dimen/dp_10"
-                        android:paddingRight="@dimen/dp_10"
-                        app:xTabTextColor="@color/black99"
-                        app:xTabTextSize="@dimen/sp_14"
-                        app:xTabSelectedTextSize="@dimen/sp_16"
-                        app:xTabIndicatorColor="@color/font_c"
-                        app:xTabDividerWidth="@dimen/dp_0"
-                        app:xTabDividerColor="@color/white"
-                        app:xTabDividerWidthWidthText="true"
-                        app:xTabSelectedTextColor="@color/black33" />
+                        android:layout_height="match_parent">
 
-                    <LinearLayout
-                        android:id="@+id/right_lay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:id="@+id/left_back_lay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:paddingLeft="@dimen/dp_10"
+                            android:paddingRight="@dimen/dp_10"
+                            android:gravity="center"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/right_text_tv"
+                            <ImageView
+                                android:id="@+id/back_img"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/back_arrow"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:contentDescription="@null"
+                                />
+
+                            <TextView
+                                android:id="@+id/back_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/dp_8"
+                                android:gravity="center"
+                                android:textSize="@dimen/sp_15"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <com.androidkun.xtablayout.XTabLayout
+                            android:id="@+id/mTabLayout"
+                            android:layout_width="match_parent"
+                            android:layout_marginLeft="@dimen/dp_50"
+                            android:layout_marginRight="@dimen/dp_50"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:paddingLeft="@dimen/dp_10"
+                            android:paddingRight="@dimen/dp_10"
+                            app:xTabTextColor="@color/black99"
+                            app:xTabTextSize="@dimen/sp_14"
+                            app:xTabSelectedTextSize="@dimen/sp_16"
+                            app:xTabIndicatorColor="@color/font_c"
+                            app:xTabDividerWidth="@dimen/dp_0"
+                            app:xTabDividerColor="@color/white"
+                            app:xTabDividerWidthWidthText="true"
+                            app:xTabSelectedTextColor="@color/black33" />
+
+                        <LinearLayout
+                            android:id="@+id/right_lay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            android:textSize="@dimen/sp_15"
-                            android:layout_gravity="center"/>
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:orientation="horizontal">
 
-                        <ImageView
-                            android:id="@+id/right_img"
-                            android:src="@mipmap/ic_search1"
-                            android:visibility="gone"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:contentDescription="@null"
-                            android:layout_gravity="center"
-                            android:paddingLeft="@dimen/dp_5"
-                            android:paddingRight="@dimen/dp_10" />
-                    </LinearLayout>
+                            <TextView
+                                android:id="@+id/right_text_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                android:textSize="@dimen/sp_15"
+                                android:layout_gravity="center"/>
 
-                </RelativeLayout>
-            </LinearLayout>
+                            <ImageView
+                                android:id="@+id/right_img"
+                                android:src="@mipmap/ic_search1"
+                                android:visibility="gone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@null"
+                                android:layout_gravity="center"
+                                android:paddingLeft="@dimen/dp_5"
+                                android:paddingRight="@dimen/dp_10" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+                </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clLeft"
@@ -354,109 +358,134 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clRight"
-                android:background="@color/white"
-                android:layout_width="@dimen/dp_0"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/dp_5"
-                app:layout_constraintTop_toBottomOf="@+id/title_bar_view"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.4">
-
-                <include
-                    android:id="@+id/llPlace"
-                    layout="@layout/layout_place_view"
-                    android:visibility="invisible" />
-
-                <LinearLayout
-                    android:layout_width="@dimen/dp_0"
-                    android:layout_height="0dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clRight"
                     android:background="@color/white"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="@id/llPlace"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_5"
+                    app:layout_constraintTop_toBottomOf="@+id/title_bar_view"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/llPlace">
+                    app:layout_constraintWidth_percent="0.4">
+
+                    <include
+                        android:id="@+id/llPlace"
+                        layout="@layout/layout_place_view"
+                        android:visibility="invisible" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_height="0dp"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="@id/llPlace"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/llPlace">
 
-                        <TextView
-                            android:id="@+id/textView9"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="价格"
-                            android:layout_marginLeft="@dimen/dp_15"
-                            android:textColor="@color/gray8"
-                            android:textSize="@dimen/sp_13"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@+id/textView10"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            <TextView
+                                android:id="@+id/textView9"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="价格"
+                                android:layout_marginLeft="@dimen/dp_15"
+                                android:textColor="@color/gray8"
+                                android:textSize="@dimen/sp_13"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/textView10"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="end"
+                                android:text="数量"
+                                android:textColor="@color/gray8"
+                                android:textSize="@dimen/sp_13"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvSell"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:gravity="end"
-                            android:text="数量"
-                            android:textColor="@color/gray8"
-                            android:textSize="@dimen/sp_13"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:reverseLayout="true"
+                            tools:listitem="@layout/item_handicap" />
+
+
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvBuy"
+                            android:layout_marginTop="@dimen/dp_5"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/textView9"
+                            tools:listitem="@layout/item_handicap" />
                     </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvSell"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:reverseLayout="true"
-                        tools:listitem="@layout/item_handicap" />
-
-
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvBuy"
-                        android:layout_marginTop="@dimen/dp_5"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textView9"
-                        tools:listitem="@layout/item_handicap" />
-                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolBar"
+                android:background="@color/white"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="@dimen/dp_45"
+                android:theme="@style/ToolBarTheme"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolBar"
-            android:background="@color/white"
-            android:layout_width="@dimen/dp_0"
+                <TextView
+                    android:id="@+id/tvCoinName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black33"
+                    android:textSize="@dimen/sp_16" />
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+        <View
+            android:id="@+id/divide_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divide_hight"
+            android:layout_alignParentBottom="true"
+            android:background="@color/divide_line" />
+        <com.androidkun.xtablayout.XTabLayout
+            android:id="@+id/tlTradeTab"
+            android:background="@color/body_bg"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dp_45"
-            android:theme="@style/ToolBarTheme"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-
-            <TextView
-                android:id="@+id/tvCoinName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black33"
-                android:textSize="@dimen/sp_16" />
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.CollapsingToolbarLayout>
+            app:xTabIndicatorColor="@color/font_c"
+            app:xTabDividerWidth="@dimen/dp_0"
+            app:xTabDividerColor="@color/white"
+            app:xTabTextSize="@dimen/sp_14"
+            app:xTabSelectedTextSize="@dimen/sp_14"
+            app:xTabTextColor="@color/black"
+            app:xTabDividerWidthWidthText="true"
+            app:xTabSelectedTextColor="@color/font_c" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divide_hight"
+            android:layout_alignParentBottom="true"
+            android:background="@color/divide_line" />
+    </com.google.android.material.appbar.AppBarLayout>
     <com.lairui.easy.mywidget.view.PageView
         android:id="@+id/mPageView"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
@@ -491,9 +520,15 @@
                         android:layout_height="wrap_content"
                         app:srlClassicsSpinnerStyle="Translate"/>
                 </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+                <com.github.jdsjlzx.recyclerview.LRecyclerView
+                    android:id="@+id/refresh_list_view"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </com.github.jdsjlzx.recyclerview.LRecyclerView>
             </LinearLayout>
         </LinearLayout>
     </com.lairui.easy.mywidget.view.PageView>
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 

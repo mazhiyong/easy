@@ -73,6 +73,7 @@ class TradeListAdapter(context: Context) : ListBaseAdapter() {
         }
         viewHolder.mTradeIv.setOnClickListener {
             val intent = Intent(mContext,BuyAndSellActivity::class.java)
+            intent.putExtra("mark",item["mark"].toString())
             mContext!!.startActivity(intent)
         }
 
@@ -80,23 +81,13 @@ class TradeListAdapter(context: Context) : ListBaseAdapter() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        @BindView(R.id.timeTv)
-        lateinit var mTimeTv: TextView
-        @BindView(R.id.titleTv)
-        lateinit var mTitleTv: TextView
-        @BindView(R.id.typeTv)
-        lateinit var mStatusTv: TextView
-        @BindView(R.id.jingjieMoneyTv)
-        lateinit var mJingJieMoneyTv: TextView
-        @BindView(R.id.pingcangMoneyTv)
-        lateinit var mPingCangMoneyTv: TextView
-        @BindView(R.id.itemTv)
-        lateinit var mItemIv: TextView
-        @BindView(R.id.tradeTv)
-        lateinit var mTradeIv:TextView
 
-        init {
-            ButterKnife.bind(this, itemView)
-        }
+        var mTimeTv: TextView = itemView.findViewById(R.id.timeTv)
+        var mTitleTv: TextView =itemView.findViewById(R.id.titleTv)
+        var mStatusTv: TextView = itemView.findViewById(R.id.typeTv)
+        var mJingJieMoneyTv: TextView = itemView.findViewById(R.id.jingjieMoneyTv)
+        var mPingCangMoneyTv: TextView = itemView.findViewById(R.id.pingcangMoneyTv)
+        var mItemIv: TextView = itemView.findViewById(R.id.itemTv)
+        var mTradeIv:TextView = itemView.findViewById(R.id.tradeTv)
     }
 }

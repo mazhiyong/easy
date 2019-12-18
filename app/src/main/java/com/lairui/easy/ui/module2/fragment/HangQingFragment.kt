@@ -21,7 +21,6 @@ import com.lairui.easy.basic.BasicFragment
 import com.lairui.easy.basic.MbsConstans
 import com.lairui.easy.listener.ReLoadingData
 import com.lairui.easy.listener.SelectBackListener
-import com.lairui.easy.mvp.presenter.RequestPresenterImp
 import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.mywidget.view.LoadingWindow
 import com.lairui.easy.mywidget.view.PageView
@@ -138,7 +137,7 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
         mRefreshListView.setOnRefreshListener {
             mLoadingWindow.showView()
             if (!UtilTools.empty(mRequestTag)){
-                borrowListAction(mRequestTag)
+                listAction(mRequestTag)
             }
 
         }
@@ -178,7 +177,7 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
         setBarTextColor()
 
         //mLoadingWindow.showView()
-        borrowListAction("new_all_changepercent_up")
+        listAction("new_all_changepercent_up")
         homeInfoAction()
 
     }
@@ -187,8 +186,8 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
         StatusBarUtil.setLightMode(activity!!)
     }
 
-    private fun borrowListAction(params :String)  {
-        mRequestPresenterImp = RequestPresenterImp(this, activity!!)
+    private fun listAction(params :String)  {
+
         mRequestTag = params
         val map = HashMap<String, String>()
         map["list"] = params
@@ -198,7 +197,6 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
 
 
     private fun homeInfoAction()  {
-        mRequestPresenterImp = RequestPresenterImp(this, activity!!)
         val map = HashMap<String, String>()
         map["stock_index"] = ""
         val mHeaderMap = HashMap<String, String>()
@@ -213,13 +211,13 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
                 startActivity(intent)
             }
             R.id.zhenFuRb -> {
-                borrowListAction("new_all_changepercent_up")
+                listAction("new_all_changepercent_up")
             }
             R.id.dieFuRb -> {
-                borrowListAction("new_all_changepercent_down")
+                listAction("new_all_changepercent_down")
             }
             R.id.huanHandRb -> {
-                borrowListAction("new_all_turnoverrate")
+                listAction("new_all_turnoverrate")
             }
         }
     }
@@ -365,7 +363,7 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
                 }
                 mRefreshListView.refreshComplete(10)
                 mRefreshListView.setOnNetWorkErrorListener {  if (!UtilTools.empty(mRequestTag)){
-                    borrowListAction(mRequestTag)
+                    listAction(mRequestTag)
                 } }
             } else {
                 mPageView.showNetworkError()
@@ -378,7 +376,7 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
                 }
                 mRefreshListView.refreshComplete(10)
                 mRefreshListView.setOnNetWorkErrorListener {  if (!UtilTools.empty(mRequestTag)){
-                    borrowListAction(mRequestTag)
+                    listAction(mRequestTag)
                 } }
             } else {
                 mPageView.showNetworkError()
@@ -394,7 +392,7 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
     override fun reLoadingData() {
         mLoadingWindow.showView()
         if (!UtilTools.empty(mRequestTag)){
-            borrowListAction(mRequestTag)
+            listAction(mRequestTag)
         }
     }
 
