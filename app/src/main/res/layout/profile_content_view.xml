@@ -314,7 +314,7 @@
 
 
            <androidx.cardview.widget.CardView
-               android:id="@+id/help_Lay"
+               android:id="@+id/activity_Lay"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                app:cardCornerRadius="0dp"
@@ -337,7 +337,7 @@
                    <ImageView
                        android:layout_width="@dimen/dp_20"
                        android:layout_height="@dimen/dp_20"
-                       android:background="@drawable/person_help"
+                       android:background="@drawable/activity_icon"
                        android:scaleType="centerInside"
                        />
 
@@ -350,7 +350,7 @@
                        android:src="@drawable/android_list_idex"
                        android:textSize="@dimen/sp_15"
                        android:textColor="@color/black33"
-                       android:text="帮助中心" />
+                       android:text="活动专区" />
 
                    <ImageView
                        android:layout_width="wrap_content"
@@ -407,51 +407,6 @@
                </LinearLayout>
            </androidx.cardview.widget.CardView>
 
-           <androidx.cardview.widget.CardView
-               android:id="@+id/message_Lay"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               app:cardCornerRadius="0dp"
-               app:cardElevation="0dp"
-               android:clickable="true"
-               android:foreground="?android:attr/selectableItemBackground"
-               android:focusable="false">
-               <LinearLayout
-
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:paddingLeft="@dimen/dp_15"
-                   android:paddingRight="@dimen/dp_15"
-                   android:paddingTop="@dimen/item_padding"
-                   android:paddingBottom="@dimen/item_padding"
-                   android:gravity="center_vertical"
-                   android:orientation="horizontal">
-
-                   <ImageView
-                       android:layout_width="@dimen/dp_20"
-                       android:layout_height="@dimen/dp_20"
-                       android:background="@drawable/person_meeage"
-                       android:scaleType="centerInside"
-                       />
-
-                   <TextView
-                       android:layout_width="0dip"
-                       android:layout_height="wrap_content"
-                       android:layout_weight="1"
-                       android:layout_marginLeft="@dimen/dp_10"
-                       android:gravity="left|center_vertical"
-                       android:src="@drawable/android_list_idex"
-                       android:textSize="@dimen/sp_15"
-                       android:textColor="@color/black33"
-                       android:text="站内信息" />
-
-                   <ImageView
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:src="@drawable/android_list_idex"
-                       />
-               </LinearLayout>
-           </androidx.cardview.widget.CardView>
 
 
            <androidx.cardview.widget.CardView
@@ -500,6 +455,52 @@
                        />
                </LinearLayout>
            </androidx.cardview.widget.CardView>
+           <androidx.cardview.widget.CardView
+               android:id="@+id/free_Lay"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:cardCornerRadius="0dp"
+               app:cardElevation="0dp"
+               android:clickable="true"
+               android:foreground="?android:attr/selectableItemBackground"
+               android:focusable="false">
+               <LinearLayout
+
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:paddingLeft="@dimen/dp_15"
+                   android:paddingRight="@dimen/dp_15"
+                   android:paddingTop="@dimen/item_padding"
+                   android:paddingBottom="@dimen/item_padding"
+                   android:gravity="center_vertical"
+                   android:orientation="horizontal">
+
+                   <ImageView
+                       android:layout_width="@dimen/dp_20"
+                       android:layout_height="@dimen/dp_20"
+                       android:background="@drawable/person_free"
+                       android:scaleType="centerInside"
+                       />
+
+                   <TextView
+                       android:layout_width="0dip"
+                       android:layout_height="wrap_content"
+                       android:layout_weight="1"
+                       android:layout_marginLeft="@dimen/dp_10"
+                       android:gravity="left|center_vertical"
+                       android:src="@drawable/android_list_idex"
+                       android:textSize="@dimen/sp_15"
+                       android:textColor="@color/black33"
+                       android:text="免费体验" />
+
+                   <ImageView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/android_list_idex"
+                       />
+               </LinearLayout>
+           </androidx.cardview.widget.CardView>
+
 
 
        </LinearLayout>

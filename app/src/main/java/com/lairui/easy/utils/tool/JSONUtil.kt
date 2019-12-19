@@ -24,7 +24,7 @@ class JSONUtil {
         var retList: MutableList<MutableMap<String, Any>>? = null
         try {
             // json转为带泛型的list
-            retList = gson!!.fromJson<MutableList<MutableMap<String, Any>>>(json, object : TypeToken<MutableList<MutableMap<String, Any>>>() {
+            retList = gson.fromJson<MutableList<MutableMap<String, Any>>>(json, object : TypeToken<MutableList<MutableMap<String, Any>>>() {
 
             }.type)
         } catch (e: Exception) {
@@ -65,6 +65,19 @@ class JSONUtil {
         try {
             // json转为带泛型的list
             retList = gson.fromJson<List<List<String>>>(json, object : TypeToken<List<List<String>>>() {
+            }.type)
+        } catch (e: Exception) {
+            return retList
+        }
+
+        return retList
+    }
+
+    fun jsonToListStr(json: String): List<String>? {
+        var retList: List<String>? = null
+        try {
+            // json转为带泛型的list
+            retList = gson.fromJson<List<String>>(json, object : TypeToken<List<String>>() {
             }.type)
         } catch (e: Exception) {
             return retList

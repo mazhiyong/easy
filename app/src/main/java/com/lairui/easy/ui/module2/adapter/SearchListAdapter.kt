@@ -56,14 +56,14 @@ class SearchListAdapter(context: Context) : ListBaseAdapter() {
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.tvTitle)
-        lateinit var mTitle: TextView
-        @BindView(R.id.tvContent)
-        lateinit var mContent: TextView
-        @BindView(R.id.timeTv)
-        lateinit var mTimeTv: TextView
-        @BindView(R.id.content_lay)
-        lateinit var contentLay:LinearLayout
+
+        var mTitle: TextView = itemView.findViewById(R.id.tvTitle)
+
+        var mContent: TextView = itemView.findViewById(R.id.tvContent)
+
+        var mTimeTv: TextView = itemView.findViewById(R.id.timeTv)
+
+        var contentLay:LinearLayout = itemView.findViewById(R.id.content_lay)
 
         init {
             ButterKnife.bind(this, itemView)

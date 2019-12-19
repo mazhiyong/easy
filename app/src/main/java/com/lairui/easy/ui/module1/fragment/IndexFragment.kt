@@ -2,11 +2,10 @@ package com.lairui.easy.ui.module1.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Rect
 import android.text.TextUtils
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
@@ -31,6 +30,7 @@ import com.lairui.easy.ui.module1.activity.NoticeDetialActivity
 import com.lairui.easy.ui.module1.adapter.CoinInfoAdapter
 import com.lairui.easy.ui.module1.adapter.MainCoinAdapter
 import com.lairui.easy.ui.module1.adapter.NewsListAdapter
+import com.lairui.easy.ui.module5.activity.FreeActivity
 import com.lairui.easy.ui.temporary.activity.ApplyAmountActivity
 import com.lairui.easy.ui.temporary.activity.BankTiXianModifyActivity
 import com.lairui.easy.ui.temporary.activity.BorrowMoneyActivity
@@ -38,7 +38,6 @@ import com.lairui.easy.ui.temporary.activity.ChongZhiCardAddActivity
 import com.lairui.easy.utils.tool.LogUtil
 import com.lairui.easy.utils.tool.UtilTools
 import com.sunfusheng.marqueeview.MarqueeView
-import kotlinx.android.synthetic.main.fragment_circle_view2.*
 import java.io.Serializable
 import java.util.*
 import kotlin.collections.HashMap
@@ -60,6 +59,20 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
     lateinit var rvList: RecyclerView
     @BindView(R.id.marqueeView)
     lateinit var marqueeView: MarqueeView<Any>
+    @BindView(R.id.peiziLay)
+    lateinit var peiziLay: CardView
+    @BindView(R.id.dayLay)
+    lateinit var dayLay: LinearLayout
+    @BindView(R.id.monthLay)
+    lateinit var monthLay: LinearLayout
+    @BindView(R.id.lixiLay)
+    lateinit var lixiLay: LinearLayout
+    @BindView(R.id.freeLay)
+    lateinit var freeLay: LinearLayout
+
+
+
+
 
 
     private var noticeList: MutableList<MutableMap<String, Any>?>? = null
@@ -70,7 +83,7 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
 
 
     private var newsAdapter: NewsListAdapter? = null
-    private val listNews: MutableList<MutableMap<String, Any>> = ArrayList()
+    private var listNews: MutableList<MutableMap<String, Any>> = ArrayList()
 
 
     private lateinit var mZhengshuMap: MutableMap<String, Any>
@@ -120,21 +133,16 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
 
 
 
-        marqueeView.setOnItemClickListener { position, textView ->
-            val intent = Intent(activity, NoticeDetialActivity::class.java)
-            intent.putExtra("DATA", noticeList!![position] as Serializable)
-            startActivity(intent)
-        }
 
 
-        for (index in 1..5){
+      /*  for (index in 1..5){
             val map = HashMap<String,Any>()
             map["name"] = "上证指数"+index
             map["price"] = "18210.00"
             map["cny"] = "+22.22"
             map["ratio"] = "+11.09%"
             listUp.add(map)
-        }
+        }*/
         mainCoinAdapter = MainCoinAdapter(activity!!, listUp)
         vpQuotesInfo.adapter = mainCoinAdapter
         mainCoinAdapter!!.setData(listUp,vpQuotesInfo.currentItem)
@@ -144,14 +152,14 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
         //rvHoriList.addItemDecoration(SpaceItemDecoration(UtilTools.dip2px(activity!!,10),3))
         coinInfoAdapter!!.setList(listUp)
 
-
+/*
         for (index in 1..3){
             val map = HashMap<String,Any>()
             map["title"] = "外交部召见美驻华使馆负责人 就美国会众议院通过涉疆法案提出严正交涉和强烈抗议"
             map["content"] = "12月4日，中国外交部副部长秦刚召见美国驻华使馆负责人柯有为，就美国会众议院审议通过“2019年维吾尔人权政策法案”提出严正交涉和强烈抗议，敦促美方立即纠正错误，停止借涉疆问题干涉中国内政。"
             map["url"] = "https://pics7.baidu.com/feed/9345d688d43f8794bbb8b935c6d1d7f11ad53ab1.jpeg?token=8bb505873039703b2500e78125e257ed&s=569139C47448935D0A512F9503005084"
             listNews.add(map)
-        }
+        }*/
 
 
         //        Resources resources = getActivity().getResources();
@@ -165,15 +173,21 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
         manager.orientation = RecyclerView.VERTICAL
         rvList.layoutManager = manager
 
-        pageView.showContent()
-        newsAdapter = NewsListAdapter(activity!!)
-        newsAdapter!!.addAll(listNews)
-        rvList.adapter = newsAdapter
 
+
+
+        marqueeView.setOnItemClickListener { position, textView ->
+            if (noticeList!!.isNotEmpty()){
+                val intent = Intent(activity, NoticeDetialActivity::class.java)
+                intent.putExtra("DATA", noticeList!![position] as Serializable)
+                startActivity(intent)
+            }
+        }
 
 
 
         getNoticeListAction()
+        getNewsListAction()
 
     }
     fun setBarTextColor() {
@@ -189,6 +203,14 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
 
 
 
+
+    fun getNewsListAction() {
+        val map = java.util.HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.NEWS_LIST
+        val mHeaderMap = java.util.HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.NEWS_LIST, map)
+    }
+
     fun getNoticeListAction() {
         val map = java.util.HashMap<String, Any>()
         map["nozzle"] = MethodUrl.NOTICE_LIST
@@ -198,7 +220,7 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
 
 
 
-    @OnClick(  R.id.moreNewIv, R.id.moreNewsTv)
+    @OnClick(  R.id.moreNewIv, R.id.moreNewsTv,R.id.dayLay,R.id.monthLay,R.id.lixiLay,R.id.freeLay)
     fun onViewClicked(view: View) {
         var intent: Intent
         when (view.id) {
@@ -209,6 +231,19 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
             R.id.moreNewsTv -> {
                intent = Intent(activity,NewsListActivity::class.java)
                startActivity(intent)
+            }
+            R.id.dayLay -> {
+
+            }
+            R.id.monthLay -> {
+
+            }
+            R.id.lixiLay -> {
+
+            }
+            R.id.freeLay -> {
+                intent = Intent(activity,FreeActivity::class.java)
+                startActivity(intent)
             }
         }
     }
@@ -229,6 +264,17 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
         when (mType) {
             MethodUrl.NOTICE_LIST -> when (tData["code"].toString() + "") {
                 "1" -> {
+                    if (!UtilTools.empty(tData["data"].toString())){
+                        var noticeList = tData["data"] as MutableList<MutableMap<String, Any>>
+                        if (noticeList.isNotEmpty()){
+                            val list1: MutableList<String> = ArrayList()
+                            for (map in noticeList) {
+                                list1.add(map["name"].toString() + "")
+                            }
+                            marqueeView.startWithList(list1 as List<Any>?)
+                        }
+                    }
+
 
                 }
                 "0" -> showToastMsg(tData["msg"].toString() + "")
@@ -239,6 +285,49 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
 
                 }
             }
+
+            MethodUrl.NEWS_LIST -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    if (UtilTools.empty(tData["data"].toString())){
+                        pageView.showEmpty()
+                    }else{
+                        val mapData = tData["data"] as MutableMap<String,Any>
+                        if (UtilTools.empty(mapData["data"].toString())){
+                            pageView.showEmpty()
+                        }else{
+                            listNews = mapData["data"] as MutableList<MutableMap<String, Any>>
+                            var showList: MutableList<MutableMap<String, Any>> = ArrayList()
+                            if ( listNews.size > 0){
+                                showList.clear()
+                                if (listNews.size > 3){
+                                    showList.add(listNews[0])
+                                    showList.add(listNews[1])
+                                    showList.add(listNews[2])
+                                }else{
+                                    showList = listNews
+                                }
+                                pageView.showContent()
+                                newsAdapter = NewsListAdapter(activity!!)
+                                newsAdapter!!.clear()
+                                newsAdapter!!.addAll(showList)
+                                rvList.adapter = newsAdapter
+                            }else{
+                                pageView.showEmpty()
+                            }
+
+
+                        }
+                    }
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1"->{
+                    activity!!.finish()
+                    val intent = Intent(activity, LoginActivity::class.java)
+                    startActivity(intent)
+
+                }
+            }
+
 
             MbsConstans.HOME_SERVER_URL -> {
                 val result = tData["result"]!!.toString() + ""
@@ -318,19 +407,7 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
 
 
 
-    override fun onDestroy() {
-        super.onDestroy()
 
-    }
-
-    inner class SpaceItemDecoration(private val space: Int, private val column: Int) : RecyclerView.ItemDecoration() {
-
-        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-            val mod = parent.getChildAdapterPosition(view) % column
-            outRect.left = space * mod
-        }
-
-    }
 
     override fun reLoadingData() {
 

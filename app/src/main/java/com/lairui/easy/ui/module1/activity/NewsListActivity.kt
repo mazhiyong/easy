@@ -1,35 +1,38 @@
 package com.lairui.easy.ui.module1.activity
 
 import android.content.Intent
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-
-import com.github.jdsjlzx.recyclerview.LRecyclerView
-import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter
-import com.github.jdsjlzx.recyclerview.ProgressStyle
-import com.lairui.easy.R
-import com.lairui.easy.api.MethodUrl
-import com.lairui.easy.basic.BasicActivity
-import com.lairui.easy.listener.ReLoadingData
-import com.lairui.easy.mvp.view.RequestView
-import com.lairui.easy.mywidget.view.PageView
-import com.lairui.easy.utils.tool.JSONUtil
-import com.lairui.easy.basic.MbsConstans
-import com.lairui.easy.utils.tool.UtilTools
-import com.jaeger.library.StatusBarUtil
-
-import java.util.ArrayList
-import java.util.HashMap
-
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.OnClick
+import com.github.jdsjlzx.recyclerview.LRecyclerView
+import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter
+import com.github.jdsjlzx.recyclerview.ProgressStyle
+import com.jaeger.library.StatusBarUtil
+import com.lairui.easy.R
+import com.lairui.easy.api.MethodUrl
+import com.lairui.easy.basic.BasicActivity
+import com.lairui.easy.basic.MbsConstans
+import com.lairui.easy.bean.CustomViewsInfo
+import com.lairui.easy.listener.ReLoadingData
+import com.lairui.easy.mvp.view.RequestView
+import com.lairui.easy.mywidget.view.PageView
 import com.lairui.easy.ui.module1.adapter.NewsListAdapter
+import com.lairui.easy.utils.imageload.GlideUtils
+import com.lairui.easy.utils.tool.JSONUtil
+import com.lairui.easy.utils.tool.LogUtil
+import com.lairui.easy.utils.tool.UtilTools
+import com.stx.xhb.xbanner.XBanner
+import com.stx.xhb.xbanner.XBanner.XBannerAdapter
+import kotlinx.android.synthetic.main.activity_news_list.*
+import java.io.Serializable
+import java.util.*
 
 /**
  * 新闻列表 界面
@@ -63,6 +66,8 @@ class NewsListActivity : BasicActivity(), RequestView, ReLoadingData {
 
     private var mDataMap: MutableMap<String, Any>? = null
 
+    private val localImageInfos: MutableList<CustomViewsInfo> = ArrayList<CustomViewsInfo>()
+
     private var mNewsAdapter: NewsListAdapter? = null
     private var mLRecyclerViewAdapter: LRecyclerViewAdapter? = null
     private val mDataList = ArrayList<MutableMap<String, Any>>()
@@ -79,16 +84,16 @@ class NewsListActivity : BasicActivity(), RequestView, ReLoadingData {
         mTitleText.text = "新闻资讯"
         mRightLay.visibility = View.GONE
         initView()
-        for (index in 1..6){
+        /*for (index in 1..6){
             val map = HashMap<String,Any>()
             map["title"] = "外交部召见美驻华使馆负责人 就美国会众议院通过涉疆法案提出严正交涉和强烈抗议"
             map["content"] = "12月4日，中国外交部副部长秦刚召见美国驻华使馆负责人柯有为，就美国会众议院审议通过“2019年维吾尔人权政策法案”提出严正交涉和强烈抗议，敦促美方立即纠正错误，停止借涉疆问题干涉中国内政。"
             map["url"] = "https://pics7.baidu.com/feed/9345d688d43f8794bbb8b935c6d1d7f11ad53ab1.jpeg?token=8bb505873039703b2500e78125e257ed&s=569139C47448935D0A512F9503005084"
             mDataList.add(map)
         }
-        responseData()
+        responseData()*/
 
-        //heTongAction()
+       getNewsListAction()
     }
 
 
@@ -101,24 +106,22 @@ class NewsListActivity : BasicActivity(), RequestView, ReLoadingData {
         mRefreshListView.layoutManager = manager
 
         mRefreshListView.setOnRefreshListener {
-            mPage = 1
-            heTongAction()
+
+            getNewsListAction()
         }
 
         mRefreshListView.setOnLoadMoreListener {
-            mPage++
-            heTongAction()
+            mRefreshListView.setNoMore(true)
         }
     }
 
-    private fun heTongAction() {
-
-        mRequestTag = MethodUrl.hetongList
-        val map = HashMap<String, String>()
-        map["creditfile"] = mDataMap!!["creditfile"]!!.toString() + ""
-        val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestGetToRes(mHeaderMap, MethodUrl.hetongList, map)
+    fun getNewsListAction() {
+        val map = java.util.HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.NEWS_LIST
+        val mHeaderMap = java.util.HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.NEWS_LIST, map)
     }
+
 
 
     private fun responseData() {
@@ -185,7 +188,7 @@ class NewsListActivity : BasicActivity(), RequestView, ReLoadingData {
 
         mRefreshListView!!.refreshComplete(10)
         mNewsAdapter!!.notifyDataSetChanged()
-        if (mNewsAdapter!!.dataList.size <= 0) {
+        if (mNewsAdapter!!.dataList.isEmpty()) {
             mPageView!!.showEmpty()
         } else {
             mPageView!!.showContent()
@@ -198,6 +201,7 @@ class NewsListActivity : BasicActivity(), RequestView, ReLoadingData {
         when (view.id) {
 
             R.id.left_back_lay -> {
+                finish()
             }
         }
     }
@@ -214,32 +218,50 @@ class NewsListActivity : BasicActivity(), RequestView, ReLoadingData {
 
         val intent: Intent
         when (mType) {
-            MethodUrl.hetongList//
+            MethodUrl.NEWS_LIST
             -> {
-                val result = tData["result"]!!.toString() + ""
+                val result = tData["data"]!!.toString() + ""
                 if (UtilTools.empty(result)) {
-                    responseData()
+                    mPageView.showEmpty()
                 } else {
-                    val list = JSONUtil.instance.jsonToList(result)
-                    if (list != null) {
-                        mDataList.clear()
-                        mDataList.addAll(list)
-                        responseData()
-                    } else {
+                    val mapData = tData["data"] as MutableMap<String,Any>
+                    if (!UtilTools.empty(mapData["banner"].toString())){
+                        LogUtil.i("show","bannerInfo:"+mapData["banner"].toString())
+                        val bannerMapList = mapData["banner"] as List<Map<String, Any>>
+                        LogUtil.i("show","bannerList:"+bannerMapList.size)
+                        if (bannerMapList.isNotEmpty()){
+                            localImageInfos.clear()
+                            for (map in bannerMapList) {
+                                val customViewsInfo = CustomViewsInfo(map["image"].toString() + "")
+                                localImageInfos.add(customViewsInfo)
+                            }
+                            xBanner.setBannerData(localImageInfos)
+                            xBanner.setOnItemClickListener(XBanner.OnItemClickListener { banner, model, view, position ->
+                                //不跳转
+                               /* val intent = Intent(,NewsItemActivity::class.java)
+                                intent.putExtra("DATA",item as Serializable)
+                                startActivity(intent)*/
+
+                            })
+
+                            xBanner.loadImage(XBannerAdapter { banner, model, view, position -> GlideUtils.loadRoundCircleImage(this@NewsListActivity, (model as CustomViewsInfo).getXBannerUrl(), view as ImageView) })
+                        }
 
                     }
+
+
+                    val listNews = mapData["data"] as MutableList<MutableMap<String, Any>>
+                    if ( listNews.size > 0){
+                        mDataList.clear()
+                        mDataList.addAll(listNews)
+                        responseData()
+                        mRefreshListView.refreshComplete(10)
+                    }else{
+                        mPageView.showEmpty()
+                    }
+
                 }
-                mRefreshListView!!.refreshComplete(10)
-            }
-            MethodUrl.refreshToken//获取refreshToken返回结果
-            -> {
-                MbsConstans.REFRESH_TOKEN = tData["refresh_token"]!!.toString() + ""
-                mIsRefreshToken = false
-                mIsRefreshToken = false
-                mIsRefreshToken = false
-                when (mRequestTag) {
-                    MethodUrl.hetongList -> heTongAction()
-                }
+
             }
         }
     }
@@ -247,17 +269,17 @@ class NewsListActivity : BasicActivity(), RequestView, ReLoadingData {
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
 
         when (mType) {
-            MethodUrl.hetongList//
+            MethodUrl.NEWS_LIST
             -> if (mNewsAdapter != null) {
-                if (mNewsAdapter!!.dataList.size <= 0) {
-                    mPageView!!.showNetworkError()
+                if (this.mNewsAdapter!!.dataList.isEmpty()) {
+                    mPageView.showNetworkError()
                 } else {
-                    mPageView!!.showContent()
+                    mPageView.showContent()
                 }
-                mRefreshListView!!.refreshComplete(10)
-                mRefreshListView!!.setOnNetWorkErrorListener { heTongAction() }
+                mRefreshListView.refreshComplete(10)
+                mRefreshListView.setOnNetWorkErrorListener { getNewsListAction() }
             } else {
-                mPageView!!.showNetworkError()
+                mPageView.showNetworkError()
             }
         }
 
@@ -265,7 +287,7 @@ class NewsListActivity : BasicActivity(), RequestView, ReLoadingData {
     }
 
     override fun reLoadingData() {
-        heTongAction()
+       getNewsListAction()
     }
 
 

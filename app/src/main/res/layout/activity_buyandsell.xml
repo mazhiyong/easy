@@ -9,11 +9,6 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-    <com.google.android.material.appbar.CollapsingToolbarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -124,7 +119,14 @@
                     android:layout_marginLeft="@dimen/dp_5"
                     android:layout_marginRight="@dimen/dp_5"
                     android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/nameTv"
+                        android:textSize="@dimen/sp_14"
+                        android:textColor="@color/black33"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
                     <EditText
+                        android:layout_marginTop="@dimen/dp_5"
                         android:id="@+id/inputCode"
                         android:textSize="@dimen/sp_16"
                         android:hint="请输入股票代码"
@@ -192,7 +194,10 @@
                             android:id="@+id/duePriceIv"
                             android:src="@drawable/trade_price_reduce"
                             android:layout_gravity="center_vertical"
-                            android:padding="@dimen/dp_10"
+                            android:paddingLeft="@dimen/dp_10"
+                            android:paddingRight="@dimen/dp_10"
+                            android:paddingTop="@dimen/dp_8"
+                            android:paddingBottom="@dimen/dp_8"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <EditText
@@ -208,7 +213,10 @@
                             android:layout_height="wrap_content"/>
                         <ImageView
                             android:id="@+id/addPriceIv"
-                            android:padding="@dimen/dp_10"
+                            android:paddingLeft="@dimen/dp_10"
+                            android:paddingRight="@dimen/dp_10"
+                            android:paddingTop="@dimen/dp_8"
+                            android:paddingBottom="@dimen/dp_8"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/trade_price_add"
                             android:layout_width="wrap_content"
@@ -251,7 +259,10 @@
                             android:id="@+id/dueAmountIv"
                             android:src="@drawable/trade_price_reduce"
                             android:layout_gravity="center_vertical"
-                            android:padding="@dimen/dp_10"
+                            android:paddingLeft="@dimen/dp_10"
+                            android:paddingRight="@dimen/dp_10"
+                            android:paddingTop="@dimen/dp_8"
+                            android:paddingBottom="@dimen/dp_8"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <EditText
@@ -267,7 +278,10 @@
                             android:layout_height="wrap_content"/>
                         <ImageView
                             android:id="@+id/addAmountIv"
-                            android:padding="@dimen/dp_10"
+                            android:paddingLeft="@dimen/dp_10"
+                            android:paddingRight="@dimen/dp_10"
+                            android:paddingTop="@dimen/dp_8"
+                            android:paddingBottom="@dimen/dp_8"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/trade_price_add"
                             android:layout_width="wrap_content"
@@ -343,7 +357,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_marginRight="@dimen/dp_10"
-                        android:layout_marginBottom="@dimen/dp_20"
+                        android:layout_marginBottom="@dimen/dp_5"
                         android:background="@drawable/btn_next"
                         android:gravity="center"
                         android:padding="@dimen/dp_10"
@@ -358,38 +372,43 @@
                 android:id="@+id/clRight"
                 android:background="@color/white"
                 android:layout_width="@dimen/dp_0"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:padding="@dimen/dp_5"
                 app:layout_constraintTop_toBottomOf="@+id/title_bar_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintWidth_percent="0.4">
 
-                <include
-                    android:id="@+id/llPlace"
-                    layout="@layout/layout_place_view"
-                    android:visibility="invisible" />
 
                 <LinearLayout
                     android:layout_width="@dimen/dp_0"
-                    android:layout_height="0dp"
+                    android:layout_height="match_parent"
                     android:background="@color/white"
                     android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="@id/llPlace"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/llPlace">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-
+                        <TextView
+                            android:id="@+id/typeTv"
+                            android:textSize="@dimen/sp_12"
+                            android:text="买1"
+                            android:visibility="invisible"
+                            android:padding="@dimen/dp_5"
+                            android:textColor="@color/black33"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
                         <TextView
                             android:id="@+id/textView9"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="价格"
-                            android:layout_marginLeft="@dimen/dp_15"
+                            android:layout_marginLeft="@dimen/dp_5"
+                            android:padding="@dimen/dp_5"
                             android:textColor="@color/gray8"
                             android:textSize="@dimen/sp_13"
                             app:layout_constraintStart_toStartOf="parent"
@@ -413,11 +432,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:reverseLayout="true"
-                        tools:listitem="@layout/item_handicap" />
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
 
@@ -427,42 +442,37 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textView9"
-                        tools:listitem="@layout/item_handicap" />
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolBar"
-            android:background="@color/white"
-            android:layout_width="@dimen/dp_0"
-            android:layout_height="@dimen/dp_45"
-            android:theme="@style/ToolBarTheme"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <TextView
-                android:id="@+id/tvCoinName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black33"
-                android:textSize="@dimen/sp_16" />
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.CollapsingToolbarLayout>
+    <com.androidkun.xtablayout.XTabLayout
+        android:id="@+id/tlTradeTab"
+        android:background="@color/body_bg"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        app:xTabIndicatorColor="@color/font_c"
+        app:xTabDividerWidth="@dimen/dp_0"
+        app:xTabDividerColor="@color/white"
+        app:xTabTextSize="@dimen/sp_14"
+        app:xTabSelectedTextSize="@dimen/sp_14"
+        app:xTabTextColor="@color/black"
+        app:xTabDividerWidthWidthText="true"
+        app:xTabSelectedTextColor="@color/font_c" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divide_hight"
+        android:layout_alignParentBottom="true"
+        android:background="@color/divide_line" />
     <com.lairui.easy.mywidget.view.PageView
         android:id="@+id/mPageView"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_weight="1"
+        android:layout_height="0dp" >
         <LinearLayout
             android:id="@+id/content"
             android:layout_width="match_parent"

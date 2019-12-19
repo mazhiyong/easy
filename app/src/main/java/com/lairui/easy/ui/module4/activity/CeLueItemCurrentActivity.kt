@@ -70,15 +70,7 @@ class CeLueItemCurrentActivity : BasicActivity(), RequestView {
 
 
 
-
-
-
-
-
-
-
-
-    private var mOpType = 0
+    private var mark = ""
 
     override val contentView: Int
         get() = R.layout.activity_celue_item
@@ -87,6 +79,12 @@ class CeLueItemCurrentActivity : BasicActivity(), RequestView {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
         mTitleText.text = "策略详情"
+        val bundel = intent.extras
+        if (bundel == null){
+            finish()
+        }else{
+            mark = bundel.getString("mark")
+        }
 
         myDashBoard.cgangePer(0.5f)
 
@@ -107,16 +105,19 @@ class CeLueItemCurrentActivity : BasicActivity(), RequestView {
         var intent: Intent
         when (view.id) {
             R.id.left_back_lay, R.id.back_img -> finish()
-            R.id.addMoneyTv -> {
+            R.id.addMoneyTv -> { //追加保证金
                 intent = Intent(this@CeLueItemCurrentActivity,AddMoneyActivity::class.java)
+                intent.putExtra("mark",mark)
                 startActivity(intent)
             }
-            R.id.extendMoneyTv -> {
+            R.id.extendMoneyTv -> { //扩大配资
                 intent = Intent(this@CeLueItemCurrentActivity,ExtendMoneyActivity::class.java)
+                intent.putExtra("mark",mark)
                 startActivity(intent)
             }
             R.id.tiquBt -> {
                 intent = Intent(this@CeLueItemCurrentActivity,TixuMoneyActivity::class.java)
+                intent.putExtra("mark",mark)
                 startActivity(intent)
             }
             R.id.stopBt -> {
@@ -134,18 +135,26 @@ class CeLueItemCurrentActivity : BasicActivity(), RequestView {
             }
             R.id.addMoneyRecordLay-> {
                 intent = Intent(this@CeLueItemCurrentActivity,RecordListActivity::class.java)
+                intent.putExtra("TYPE","2")
+                intent.putExtra("mark",mark)
                 startActivity(intent)
             }
             R.id.extendRecordLay-> {
                 intent = Intent(this@CeLueItemCurrentActivity,RecordListActivity::class.java)
+                intent.putExtra("TYPE","3")
+                intent.putExtra("mark",mark)
                 startActivity(intent)
             }
             R.id.lixiRecordLay-> {
                 intent = Intent(this@CeLueItemCurrentActivity,RecordListActivity::class.java)
+                intent.putExtra("TYPE","5")
+                intent.putExtra("mark",mark)
                 startActivity(intent)
             }
             R.id.shouyiRecordLay-> {
                 intent = Intent(this@CeLueItemCurrentActivity,RecordListActivity::class.java)
+                intent.putExtra("TYPE","4")
+                intent.putExtra("mark",mark)
                 startActivity(intent)
             }
 

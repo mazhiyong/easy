@@ -54,9 +54,6 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
 
     private var mDataList = ArrayList<MutableMap<String, Any>>()
 
-    private var mStartTime = ""
-    private var mEndTime = ""
-    private var mJieKuanStatus = ""
 
     private lateinit var mAnimUtil: AnimUtil
 

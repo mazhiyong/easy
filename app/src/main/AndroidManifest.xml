@@ -418,6 +418,33 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:theme="@style/AppTheme.Transparent">
         </activity>
+        <!--活动 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.HuoDongActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+        <!-- 免费体验 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.FreeActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+
+        <!-- 联系客服 -->
+        <activity
+            android:name="com.lairui.easy.ui.module5.activity.ContacKefuActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|smallestScreenSize|screenLayout"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:theme="@style/AppTheme.Transparent">
+        </activity>
+
+
 
 
 

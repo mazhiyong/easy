@@ -34,7 +34,6 @@
     <string-array name="timeChoose">
         <item>1分钟</item>
         <item>5分钟</item>
-        <item>10分钟</item>
         <item>15分钟</item>
         <item>30分钟</item>
         <item>60分钟</item>

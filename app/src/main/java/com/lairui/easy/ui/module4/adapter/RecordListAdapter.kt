@@ -16,6 +16,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.lairui.easy.ui.temporary.adapter.ListBaseAdapter
 import com.lairui.easy.utils.imageload.GlideUtils
+import com.lairui.easy.utils.tool.UtilTools
 
 class RecordListAdapter(context: Context) : ListBaseAdapter() {
 
@@ -37,23 +38,19 @@ class RecordListAdapter(context: Context) : ListBaseAdapter() {
 
         val viewHolder = holder as ViewHolder
 
-        viewHolder.mTitle.text = item["title"]!!.toString() + ""
-        viewHolder.mContent.text = item["money"]!!.toString() + ""
+        viewHolder.mTitle.text = item["name"]!!.toString() + ""
+        viewHolder.mContent.text =UtilTools.getNormalMoney(item["number"]!!.toString()) + " 元"
         viewHolder.mTimeTv.text = item["time"]!!.toString() + ""
     }
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.tvTitle)
-        lateinit var mTitle: TextView
-        @BindView(R.id.tvContent)
-        lateinit var mContent: TextView
-        @BindView(R.id.timeTv)
-        lateinit var mTimeTv: TextView
 
-        init {
-            ButterKnife.bind(this, itemView)
-        }
+        var mTitle: TextView = itemView.findViewById(R.id.tvTitle)
+        var mContent: TextView = itemView.findViewById(R.id.tvContent)
+        var mTimeTv: TextView = itemView.findViewById(R.id.timeTv)
+
+
     }
 
 

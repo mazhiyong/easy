@@ -377,6 +377,7 @@
 
 
             <LinearLayout
+                android:id="@+id/dealLay"
                 android:orientation="horizontal"
                 android:layout_margin="@dimen/dp_10"
                 android:layout_width="match_parent"
@@ -405,6 +406,98 @@
                     android:textSize="@dimen/sp_17" />
 
             </LinearLayout>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/jiesuanLay"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_10"
+                android:focusable="false"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/dp_8"
+                app:cardElevation="@dimen/dp_0"
+                app:cardPreventCornerOverlap="false">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:text="保证金结算"
+                        android:paddingTop="@dimen/dp_5"
+                        android:paddingBottom="@dimen/dp_5"
+                        android:layout_margin="@dimen/dp_10"
+                        android:textColor="@color/black33"
+                        android:textSize="@dimen/sp_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="冻结"
+                            android:layout_width="wrap_content"
+                            android:textSize="@dimen/sp_15"
+                            android:textColor="@color/black33"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:text="0.00元"
+                            android:gravity="right"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="@dimen/sp_15"
+                            android:textColor="@color/black33"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="扣减"
+                            android:layout_width="wrap_content"
+                            android:textSize="@dimen/sp_15"
+                            android:textColor="@color/black33"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:text="0.00元"
+                            android:gravity="right"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="@dimen/sp_15"
+                            android:textColor="@color/black33"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_margin="@dimen/dp_10"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="结算"
+                            android:layout_width="wrap_content"
+                            android:textSize="@dimen/sp_15"
+                            android:textColor="@color/black33"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:text="0.00元"
+                            android:gravity="right"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="@dimen/sp_15"
+                            android:textColor="@color/black33"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -506,6 +599,33 @@
                         android:layout_height="wrap_content">
                         <TextView
                             android:text="提取收益记录"
+                            android:textColor="@color/black33"
+                            android:textSize="@dimen/sp_15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:text="1000.00"
+                            android:textColor="@color/black33"
+                            android:textSize="@dimen/sp_15"
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <ImageView
+                            android:layout_alignParentRight="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/android_list_idex"
+                            />
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/liushuiRecordLay"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_margin="@dimen/dp_10"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="交易流水"
                             android:textColor="@color/black33"
                             android:textSize="@dimen/sp_15"
                             android:layout_width="wrap_content"

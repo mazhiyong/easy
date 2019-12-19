@@ -57,11 +57,17 @@ class NoticeDetialActivity : BasicActivity(), RequestView {
             val bundle = intent.extras
             if (bundle != null) {
                 mapData = bundle.getSerializable("DATA") as Map<String, Any>
+                tvTitle.text = mapData!!["name"].toString()
+                tvTime.text = mapData!!["date"].toString()+mapData!!["time"].toString()
+                tvContent.movementMethod = LinkMovementMethod.getInstance()
+                tvContent.text = Html.fromHtml(mapData!!["content"].toString())
             }
+        }else{
+            finish()
         }
-        mTitleText!!.text = "公告详情"
-        mTitleText!!.setCompoundDrawables(null, null, null, null)
-        divideLine!!.visibility = View.GONE
+        mTitleText.text = "公告详情"
+        mTitleText.setCompoundDrawables(null, null, null, null)
+        divideLine.visibility = View.GONE
         traderListItemAction()
     }
 

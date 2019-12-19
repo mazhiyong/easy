@@ -35,6 +35,7 @@ import butterknife.BindView
 import butterknife.Unbinder
 import com.lairui.easy.mywidget.view.TipsToast.Companion.showToastMsg
 import com.lairui.easy.ui.module.activity.LoginActivity
+import com.lairui.easy.ui.module1.activity.NoticeListActivity
 import com.lairui.easy.ui.module4.activity.RecordListActivity
 import com.lairui.easy.ui.module5.activity.*
 import de.hdodenhof.circleimageview.CircleImageView
@@ -152,9 +153,9 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
         mTradeLay.setOnClickListener(this)
         mAccountLay = contentView.findViewById(R.id.account_Lay)
         mAccountLay.setOnClickListener(this)
-        mHelpLay = contentView.findViewById(R.id.help_Lay)
+        mHelpLay = contentView.findViewById(R.id.activity_Lay)
         mHelpLay.setOnClickListener(this)
-        mMessageLay = contentView.findViewById(R.id.message_Lay)
+        mMessageLay = contentView.findViewById(R.id.free_Lay)
         mMessageLay.setOnClickListener(this)
         mNoticeLay = contentView.findViewById(R.id.notice_Lay)
         mNoticeLay.setOnClickListener(this)
@@ -252,7 +253,7 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
         map["qry_type"] = "acct"
         map["accid"] = ""
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestGetToMap(mHeaderMap, MethodUrl.allZichan, map)
+        mRequestPresenterImp.requestGetToMap(mHeaderMap, MethodUrl.allZichan, map)
     }
 
     private fun initHeadPic() {
@@ -261,7 +262,7 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
         } else {
             headUrl = MbsConstans.PIC_URL + headUrl
         }
-        GlideUtils.loadImage2(activity!!, headUrl, mRoundImageView!!, R.drawable.head)
+        GlideUtils.loadImage2(activity!!, headUrl, mRoundImageView, R.drawable.head)
 
     }
 
@@ -271,7 +272,7 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
         when (view.id) {
             R.id.show_yue_lay -> mToggleButton.performClick()
             R.id.headKefuIv->{
-                intent = Intent(activity,KefuChatActivity::class.java)
+                intent = Intent(activity,ContacKefuActivity::class.java)
                 startActivity(intent)
             }
             R.id.chongzhiTv ->{
@@ -301,6 +302,21 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
             }
             R.id.account_Lay ->{
                 intent = Intent(activity,AccountActivity::class.java)
+                startActivity(intent)
+            }
+
+            R.id.notice_Lay ->{
+                intent = Intent(activity,NoticeListActivity::class.java)
+                startActivity(intent)
+            }
+
+            R.id.activity_Lay ->{
+                intent = Intent(activity,HuoDongActivity::class.java)
+                startActivity(intent)
+            }
+
+            R.id.free_Lay ->{
+                intent = Intent(activity,FreeActivity::class.java)
                 startActivity(intent)
             }
 
@@ -346,7 +362,7 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
             -> {
                 MbsConstans.USER_MAP = tData
                 SPUtils.put(activity!!, MbsConstans.SharedInfoConstans.LOGIN_INFO, JSONUtil.instance.objectToJson(MbsConstans.USER_MAP!!))
-                mUserName!!.text = MbsConstans.USER_MAP!!["name"]!!.toString() + ""
+                mUserName.text = MbsConstans.USER_MAP!!["name"]!!.toString() + ""
                 initHeadPic()
             }
             MethodUrl.bankCard -> {
@@ -391,4 +407,4 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
         super.onDestroy()
         activity!!.unregisterReceiver(mBroadcastReceiver)
     }
-}// Required empty public constructor
+}

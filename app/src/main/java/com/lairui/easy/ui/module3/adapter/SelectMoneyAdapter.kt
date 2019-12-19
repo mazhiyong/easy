@@ -54,8 +54,8 @@ class SelectMoneyAdapter(private val mContext: Context, var datas: MutableList<M
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.itemInfoTv)
-        lateinit var mItemInfoTv: TextView
+
+        var mItemInfoTv: TextView = itemView.findViewById(R.id.itemInfoTv)
         init {
             ButterKnife.bind(this, itemView)
         }

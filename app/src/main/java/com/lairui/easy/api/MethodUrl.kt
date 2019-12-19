@@ -206,7 +206,16 @@ object MethodUrl {
     const val PEIZI_DAY_INFO = "capital_day" //按天配资
     const val PEIZI_DAY_APPLY = "apply_day" //申请按天配资
     const val PEIZI_LIST= "assets_info" //当前配资(操盘中)
-
+    const val BOND_INFO = "bond_info" //追加保证金信息
+    const val BOND_ACTION = "bond_operate" //追加保证金操作
+    const val BOND_LIST = "increase_bond_log" //追加保证金记录
+    const val CAPITAL_INFO = "capital_info" //扩大配资信息
+    const val CAPITAL_ACTION = "capital_operate" //扩大配资操作
+    const val CAPITAL_LIST = "increase_capital_log" //扩大配资记录
+    const val PROFIT_INFO = "profit_out" //提取盈利信息
+    const val PROFIT_ACTION = "profit_operate" //提取盈利操作
+    const val PROFIT_LIST = "profit_operate_log" //提取盈利记录
+    const val LIXI_LIST = "interest_operate_log" //支付利息记录
 
 
 

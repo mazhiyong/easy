@@ -76,9 +76,9 @@ class WeituoListAdapter(context: Context) : ListBaseAdapter() {
             viewHolder.typeTv.text = (item["short"].toString().substring(0,2)).toUpperCase()
             viewHolder.numberTv.text = item["code"].toString()
             viewHolder.lay!!.setOnClickListener {
-                val intent = Intent(mContext,CoinInfoActivity::class.java)
+               /* val intent = Intent(mContext,CoinInfoActivity::class.java)
                 intent.putExtra("DATA", item as Serializable)
-                mContext!!.startActivity(intent)
+                mContext!!.startActivity(intent)*/
             }
         }
     }

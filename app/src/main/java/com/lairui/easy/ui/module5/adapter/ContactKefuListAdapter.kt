@@ -19,10 +19,10 @@ import com.lairui.easy.ui.module5.activity.WeiAndAliPayActivity
 import com.lairui.easy.ui.temporary.adapter.ListBaseAdapter
 import java.io.Serializable
 
-class PayWayListAdapter(context: Context) : ListBaseAdapter() {
+class ContactKefuListAdapter(context: Context) : ListBaseAdapter() {
     private val mLayoutInflater: LayoutInflater
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder(mLayoutInflater.inflate(R.layout.item_payway, parent, false))
+        return ViewHolder(mLayoutInflater.inflate(R.layout.item_contact_kefu, parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -34,30 +34,23 @@ class PayWayListAdapter(context: Context) : ListBaseAdapter() {
 //        }
         when(item["type"]){
             1 ->{
-                viewHolder.titleTv.text = "微信"
-                viewHolder.typeIv.setBackgroundResource(R.drawable.wei_pay)
+                viewHolder.titleTv.text = "平台QQ"
+                viewHolder.typeIv.setBackgroundResource(R.drawable.qq)
             }
             2 ->{
-                viewHolder.titleTv.text = "支付宝"
-                viewHolder.typeIv.setBackgroundResource(R.drawable.ali_pay)
+                viewHolder.titleTv.text = "平台微信"
+                viewHolder.typeIv.setBackgroundResource(R.drawable.weichat)
             }
             3 ->{
-                viewHolder.titleTv.text = "银行卡"
-                viewHolder.typeIv.setBackgroundResource(R.drawable.bank_pay)
+                viewHolder.titleTv.text = "平台电话"
+                viewHolder.typeIv.setBackgroundResource(R.drawable.phone)
             }
 
         }
+        viewHolder.numberTv.text = item["number"].toString()
 
         viewHolder.tradeLay.setOnClickListener {
-            if (item["type"] == 3){ //银行卡支付
-                 val intent = Intent(mContext, BankPayActivity::class.java)
-                 //intent.putExtra("DATA", mDataList[position] as Serializable)
-                 mContext!!.startActivity(intent)
-            }else{
-                val intent = Intent(mContext, WeiAndAliPayActivity::class.java)
-                intent.putExtra("TYPE", item["type"].toString())
-                mContext!!.startActivity(intent)
-            }
+
 
 
         }
@@ -65,6 +58,7 @@ class PayWayListAdapter(context: Context) : ListBaseAdapter() {
 
     inner class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
         var titleTv: TextView = itemView!!.findViewById(R.id.titleTv)
+        var numberTv: TextView = itemView!!.findViewById(R.id.numberTv)
         var typeIv: ImageView = itemView!!.findViewById(R.id.typeIv)
         var tradeLay: LinearLayout = itemView!!.findViewById(R.id.lay)
 

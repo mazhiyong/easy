@@ -1,4 +1,4 @@
-package com.lairui.easy.ui.module1.activity
+package com.lairui.easy.ui.module5.activity
 
 import android.content.Intent
 import android.view.View
@@ -22,9 +22,10 @@ import com.lairui.easy.listener.SelectBackListener
 import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.mywidget.dialog.DateSelectDialog
 import com.lairui.easy.mywidget.view.PageView
-import com.lairui.easy.mywidget.view.TipsToast
 import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module1.adapter.NoticeListAdapter
+import com.lairui.easy.ui.module5.adapter.ContactKefuListAdapter
+import com.lairui.easy.ui.module5.adapter.PayWayListAdapter
 import com.lairui.easy.ui.temporary.adapter.TradeDialogAdapter
 import com.lairui.easy.utils.tool.AnimUtil
 import com.lairui.easy.utils.tool.SPUtils.get
@@ -33,9 +34,9 @@ import com.lairui.easy.utils.tool.UtilTools.Companion.empty
 import java.util.*
 
 /**
- * 公告消息中心  界面
+ * 联系客服 界面
  */
-class NoticeListActivity : BasicActivity(), RequestView, ReLoadingData {
+class ContacKefuActivity : BasicActivity(), RequestView, ReLoadingData {
     @BindView(R.id.back_img)
     lateinit var mBackImg: ImageView
     @BindView(R.id.back_text)
@@ -58,55 +59,64 @@ class NoticeListActivity : BasicActivity(), RequestView, ReLoadingData {
     lateinit var mContent: LinearLayout
     @BindView(R.id.page_view)
     lateinit var mPageView: PageView
-
-    private var mListAdapter: NoticeListAdapter? = null
+    private var mListAdapter: ContactKefuListAdapter? = null
     private var mLRecyclerViewAdapter: LRecyclerViewAdapter? = null
-    private var mDataList: MutableList<MutableMap<String, Any>> = ArrayList()
+    private val mDataList: MutableList<MutableMap<String, Any>> = ArrayList()
     private var mPage = 1
     private var mAnimUtil: AnimUtil? = null
     override val contentView: Int
-        get() = R.layout.activity_notice_list
+        get() = R.layout.activity_payway_list
 
     override fun init() { //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
         mAnimUtil = AnimUtil()
-        mTitleText.text = "平台公告"
+        mTitleText.text = "联系客服"
         mTitleText.setCompoundDrawables(null, null, null, null)
         mRightImg.visibility = View.GONE
         mRightImg.setImageResource(R.drawable.shuaixuan)
         mRightTextTv.visibility = View.GONE
         mRightTextTv.setTextColor(ContextCompat.getColor(this, R.color.btn_login_normal))
         initView()
-        showProgressDialog()
-        getNoticeListAction()
+        //showProgressDialog()
+        //traderListAction()
+        for (index in 1..3){
+            val map = HashMap<String,Any>()
+            map["type"] = index
+            map["number"] = "10086"
+            mDataList.add(map)
+        }
+        responseData()
     }
 
     private fun initView() {
         mPageView.setContentView(mContent!!)
         mPageView.reLoadingData = this
         mPageView.showLoading()
-        val manager = LinearLayoutManager(this@NoticeListActivity)
+        val manager = LinearLayoutManager(this@ContacKefuActivity)
         manager.orientation = RecyclerView.VERTICAL
         mRefreshListView.layoutManager = manager
         mRefreshListView.setOnRefreshListener {
             //traderListAction();
             mRefreshListView.setNoMore(true)
         }
-        mRefreshListView.setOnLoadMoreListener { getNoticeListAction() }
+        mRefreshListView.setOnLoadMoreListener { traderListAction() }
     }
 
     //获取公告列表
-    fun getNoticeListAction() {
-        val map = java.util.HashMap<String, Any>()
-        map["nozzle"] = MethodUrl.NOTICE_LIST
-        val mHeaderMap = java.util.HashMap<String, String>()
-        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.NOTICE_LIST, map)
+    private fun traderListAction() {
+        /*mRequestTag = MethodUrl.NOTICE_LIST
+        val map: MutableMap<String, Any> = HashMap()
+        if (empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = get(this@NoticeListActivity, MbsConstans.ACCESS_TOKEN, "").toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        val mHeaderMap: Map<String, String> = HashMap()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.NOTICE_LIST, map)*/
     }
-
 
     private fun responseData() {
         if (mListAdapter == null) {
-            mListAdapter = NoticeListAdapter(this@NoticeListActivity)
+            mListAdapter = ContactKefuListAdapter(this@ContacKefuActivity)
             mListAdapter!!.addAll(mDataList)
             /*AnimationAdapter adapter = new ScaleInAnimationAdapter(mDataAdapter);
             adapter.setFirstOnly(false);
@@ -153,7 +163,7 @@ class NoticeListActivity : BasicActivity(), RequestView, ReLoadingData {
         }
         mRefreshListView.refreshComplete(10)
         mListAdapter!!.notifyDataSetChanged()
-        if (mListAdapter!!.dataList.isEmpty()) {
+        if (mListAdapter!!.dataList.size <= 0) {
             mPageView.showEmpty()
         } else {
             mPageView.showContent()
@@ -180,43 +190,44 @@ class NoticeListActivity : BasicActivity(), RequestView, ReLoadingData {
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
         val intent: Intent
         when (mType) {
+/*
             MethodUrl.NOTICE_LIST -> when (tData["code"].toString() + "") {
-                "1" -> {
-                    if (!UtilTools.empty(tData["data"].toString())){
-                        mDataList = tData["data"] as MutableList<MutableMap<String, Any>>
-                        if (mDataList.isNotEmpty()){
-                            responseData()
-                            mRefreshListView.refreshComplete(10)
-                        }
-                    }else{
-                        mPageView.showEmpty()
+                "0" -> {
+                    val list = tData["data"] as List<Map<String, Any>>?
+                    if (empty(list)) {
+                        mPageView!!.showEmpty()
+                    } else {
+                        mPageView!!.showContent()
+                        mDataList.clear()
+                        mDataList.addAll(list!!)
+                        responseData()
                     }
-
-
+                    mRefreshListView!!.refreshComplete(10)
                 }
-                "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
-                "-1"->{
+                "1" -> {
                     closeAllActivity()
-                    val intent = Intent(this@NoticeListActivity, LoginActivity::class.java)
+                    intent = Intent(this@NoticeListActivity, LoginActivity::class.java)
                     startActivity(intent)
-
+                }
+                "-1" -> {
+                    mPageView!!.showNetworkError()
+                    showToastMsg(tData["msg"].toString() + "")
                 }
             }
-
-
-
+*/
         }
     }
+
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
         when (mType) {
             MethodUrl.tradeList -> if (mListAdapter != null) {
                 if (mListAdapter!!.dataList.size <= 0) {
-                    mPageView.showNetworkError()
+                    mPageView!!.showNetworkError()
                 } else {
-                    mPageView.showContent()
+                    mPageView!!.showContent()
                 }
-                mRefreshListView.refreshComplete(10)
-                mRefreshListView.setOnNetWorkErrorListener { getNoticeListAction() }
+                mRefreshListView!!.refreshComplete(10)
+                mRefreshListView!!.setOnNetWorkErrorListener { traderListAction() }
             } else {
                 mPageView!!.showNetworkError()
             }
@@ -226,7 +237,7 @@ class NoticeListActivity : BasicActivity(), RequestView, ReLoadingData {
 
     override fun reLoadingData() {
         showProgressDialog()
-        getNoticeListAction()
+        traderListAction()
     }
 
 

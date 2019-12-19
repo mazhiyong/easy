@@ -210,7 +210,7 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
                 val  intent = Intent(activity,SearchListActivity::class.java)
                 startActivity(intent)
             }
-            R.id.zhenFuRb -> {
+            R.id.zhangFuRb -> {
                 listAction("new_all_changepercent_up")
             }
             R.id.dieFuRb -> {

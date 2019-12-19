@@ -48,7 +48,6 @@ import kotlinx.android.synthetic.main.activity_buyandsell.rvBuy
 import kotlinx.android.synthetic.main.activity_buyandsell.rvSell
 import kotlinx.android.synthetic.main.activity_buyandsell.title_bar_view
 import kotlinx.android.synthetic.main.activity_buyandsell.tvBuySell
-import kotlinx.android.synthetic.main.activity_buyandsell2.*
 import java.util.*
 
 
@@ -59,6 +58,8 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
 
 
     private var totalMony: Double = 0.00
+    private var surplusAmount = "0"
+
     private var mCode = ""
     private var mark = ""
     private var mRequestTag = ""
@@ -95,10 +96,10 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
         mPageView.showLoading()
         mPageView.reLoadingData = this
 
-        val layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, resources.getDimension(R.dimen.title_item_height).toInt() + UtilTools.getStatusHeight2(this))
+       /* val layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, resources.getDimension(R.dimen.title_item_height).toInt() + UtilTools.getStatusHeight2(this))
         title_bar_view.layoutParams = layoutParams
         title_bar_view.setPadding(0, UtilTools.getStatusHeight2(this), 0, 0)
-
+*/
         val bundel = intent.extras
         if (bundel == null){
             finish()
@@ -120,10 +121,12 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                     0 ->{ //买入
                         tvBuySell.setBackgroundResource(R.drawable.btn_next)
                         tvBuySell.text = "买入"
+                        guAmoutTv.text = "可买股数 0"
                     }
                     1 ->{ //卖出
                         tvBuySell.setBackgroundResource(R.drawable.btn_next_green)
                         tvBuySell.text = "卖出"
+                        guAmoutTv.text = "持仓数量 "+surplusAmount
                     }
                 }
             }
@@ -547,6 +550,14 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                         mDataList = tData["data"] as MutableList<MutableMap<String, Any>>
                         if (mDataList.size > 0){
                             mPageView.showContent()
+                            for (item in mDataList){
+                                if (item["short"].toString() == mCode ){
+                                    surplusAmount = item ["number"].toString()
+                                }
+
+                            }
+
+
                             if (mChicangListAdapter == null) {
                                 mChicangListAdapter = ChicangListAdapter(this@BuyAndSellActivity)
                             }
@@ -727,6 +738,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                     }else{
                         mCode = tData["data"].toString()
                         getDetialDataAction()
+                        chiCangLsitAction()
                     }
                 }
                 "0" -> showToastMsg(tData["msg"].toString() + "")
@@ -745,7 +757,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                 if(!UtilTools.empty(stockInfoBean)){
                     fallStopTv.text = "跌停  "+stockInfoBean!!.stockFallBottom
                     riseStopTv.text = "涨停  "+stockInfoBean!!.stockRiseTop
-                    inputCode.setText(stockInfoBean!!.stockName+" "+mCode)
+                    nameTv.text = stockInfoBean!!.stockName+"   "+mCode
                     priceEt.setText(stockInfoBean!!.stockCurrentPrice)
 
                 }

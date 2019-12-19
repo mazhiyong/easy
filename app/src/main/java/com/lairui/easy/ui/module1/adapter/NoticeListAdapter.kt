@@ -24,17 +24,10 @@ class NoticeListAdapter(context: Context) : ListBaseAdapter() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item: Map<String, Any> = mDataList[position]
         val viewHolder = holder as ViewHolder
-        //        String kind = item.get("kind")+"";
-//        if (kind.equals("0")){
-//            viewHolder.titleTv.setBackgroundResource(R.drawable.background_corners_gray_lightest);
-//        }
-        viewHolder.titleTv.text = item["title"].toString() + ""
-        //viewHolder.mStatusTv.setText(item.get("abstract")+"");
-/*if ((item.get("amt")+"").contains("-")){
-            viewHolder.mMoneyTv.setText(UtilTools.getMoney(item.get("amt")+""));
-        }else {
-            viewHolder.mMoneyTv.setText("+"+UtilTools.getMoney(item.get("amt")+""));
-        }*/viewHolder.tradeLay.setOnClickListener {
+
+        viewHolder.titleTv.text = item["name"].toString()
+        viewHolder.timeTv.text = item["date"].toString()+item["time"].toString()
+        viewHolder.tradeLay.setOnClickListener {
             val intent = Intent(mContext, NoticeDetialActivity::class.java)
             intent.putExtra("DATA", mDataList[position] as Serializable)
             mContext!!.startActivity(intent)
@@ -42,14 +35,11 @@ class NoticeListAdapter(context: Context) : ListBaseAdapter() {
     }
 
     inner class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
-        @BindView(R.id.title_tv)
-        lateinit var titleTv: TextView
-        @BindView(R.id.trade_lay)
-        lateinit var tradeLay: CardView
 
-        init {
-            ButterKnife.bind(this, itemView!!)
-        }
+        var titleTv: TextView = itemView!!.findViewById(R.id.title_tv)
+        var timeTv: TextView = itemView!!.findViewById(R.id.time_tv)
+        var tradeLay: CardView = itemView!!.findViewById(R.id.trade_lay)
+
     }
 
     init {

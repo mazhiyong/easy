@@ -46,14 +46,14 @@ class YaoqingListAdapter(context: Context) : ListBaseAdapter() {
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.nameTv)
-        lateinit var nameTv: TextView
-        @BindView(R.id.phoneTv)
-        lateinit var phoneTv: TextView
-        @BindView(R.id.timeTv)
-        lateinit var timeTv: TextView
-        @BindView(R.id.ipTv)
-        lateinit var ipTv: TextView
+
+        var nameTv: TextView = itemView.findViewById(R.id.nameTv)
+
+        var phoneTv: TextView = itemView.findViewById(R.id.phoneTv)
+
+        var timeTv: TextView = itemView.findViewById(R.id.timeTv)
+
+        var ipTv: TextView = itemView.findViewById(R.id.ipTv)
 
 
 

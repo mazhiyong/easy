@@ -32,6 +32,7 @@ import butterknife.OnClick
 import com.lairui.easy.mywidget.view.TipsToast
 import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module4.adapter.RecordListAdapter
+import com.lairui.easy.utils.tool.LogUtil
 import com.lairui.easy.utils.tool.SPUtils
 
 /**
@@ -85,6 +86,26 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
                     mTitleText.text = "交易记录"
                     tradeListAction()
                 }
+                "2"->{
+                    mTitleText.text = "追加保证金记录"
+                    val mark = bundle.getString("mark")
+                    bondMoneyListAction(mark)
+                }
+                "3"->{
+                    mTitleText.text = "扩大配资记录"
+                    val mark = bundle.getString("mark")
+                    extendMoneyListAction(mark)
+                }
+                "4"->{
+                    mTitleText.text = "提取收益记录"
+                    val mark = bundle.getString("mark")
+                    shouyiListAction(mark)
+                }
+                "5"->{
+                    mTitleText.text = "支付利息记录"
+                    val mark = bundle.getString("mark")
+                    lixiListAction(mark)
+                }
             }
         }else{
             finish()
@@ -113,14 +134,74 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
         mRefreshListView.layoutManager = manager
 
         mRefreshListView.setOnRefreshListener {
-            mPage = 1
+            //mPage = 1
             tradeListAction()
         }
 
         mRefreshListView.setOnLoadMoreListener {
-            mPage++
-            tradeListAction()
+          /*  mPage++
+            tradeListAction()*/
+            mRefreshListView.setNoMore(true)
         }
+    }
+
+    private fun lixiListAction(mark :String) {
+
+        mRequestTag = MethodUrl.LIXI_LIST
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.LIXI_LIST
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@RecordListActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["mark"] = mark
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.LIXI_LIST, map)
+    }
+
+
+    private fun shouyiListAction(mark :String) {
+
+        mRequestTag = MethodUrl.PROFIT_LIST
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.PROFIT_LIST
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@RecordListActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["mark"] = mark
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.PROFIT_LIST, map)
+    }
+
+
+    private fun extendMoneyListAction(mark :String) {
+
+        mRequestTag = MethodUrl.CAPITAL_LIST
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.CAPITAL_LIST
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@RecordListActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["mark"] = mark
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.CAPITAL_LIST, map)
+    }
+
+
+    private fun bondMoneyListAction(mark :String) {
+
+        mRequestTag = MethodUrl.BOND_LIST
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.BOND_LIST
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@RecordListActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["mark"] = mark
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.BOND_LIST, map)
     }
 
     private fun tradeListAction() {
@@ -198,10 +279,10 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
 
         mRefreshListView!!.refreshComplete(10)
         mRecordAdapter!!.notifyDataSetChanged()
-        if (mRecordAdapter!!.dataList.size <= 0) {
-            mPageView!!.showEmpty()
+        if (mRecordAdapter!!.dataList.isEmpty()) {
+            mPageView.showEmpty()
         } else {
-            mPageView!!.showContent()
+            mPageView.showContent()
         }
 
     }
@@ -209,8 +290,8 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
     @OnClick(R.id.left_back_lay)
     fun onViewClicked(view: View) {
         when (view.id) {
-
             R.id.left_back_lay -> {
+                finish()
             }
         }
     }
@@ -227,22 +308,25 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
 
         val intent: Intent
         when (mType) {
-            MethodUrl.TRADE_LIST -> {
+            MethodUrl.LIXI_LIST,MethodUrl.PROFIT_LIST,MethodUrl.BOND_LIST ,MethodUrl.CAPITAL_LIST,MethodUrl.TRADE_LIST ->{
                 when (tData["code"].toString() + "") {
                     "1" -> {
                         if (!UtilTools.empty(tData["data"])){
-                            val result = tData["data"]!!.toString() + ""
+                            val result = tData["data"]!!.toString()
                             if (UtilTools.empty(result)) {
-                                responseData()
+                                mPageView.showEmpty()
                             } else {
-                                val list = JSONUtil.instance.jsonToList(result)
-                                if (list != null) {
+                                val list = tData["data"] as  MutableList<MutableMap<String,Any>>
+                                if (list.isNotEmpty()) {
                                     mDataList.clear()
                                     mDataList.addAll(list)
                                     responseData()
+                                    mRefreshListView.refreshComplete(10)
+                                }else{
+                                    mPageView.showEmpty()
                                 }
                             }
-                            mRefreshListView!!.refreshComplete(10)
+
                         }
                     }
                     "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
@@ -254,17 +338,6 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
                 }
 
             }
-
-            MethodUrl.refreshToken//获取refreshToken返回结果
-            -> {
-                MbsConstans.REFRESH_TOKEN = tData["refresh_token"]!!.toString() + ""
-                mIsRefreshToken = false
-                mIsRefreshToken = false
-                mIsRefreshToken = false
-                when (mRequestTag) {
-                    MethodUrl.hetongList -> tradeListAction()
-                }
-            }
         }
     }
 
@@ -273,7 +346,7 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
         when (mType) {
             MethodUrl.hetongList//
             -> if (mRecordAdapter != null) {
-                if (mRecordAdapter!!.dataList.size <= 0) {
+                if (mRecordAdapter!!.dataList.isEmpty()) {
                     mPageView!!.showNetworkError()
                 } else {
                     mPageView!!.showContent()

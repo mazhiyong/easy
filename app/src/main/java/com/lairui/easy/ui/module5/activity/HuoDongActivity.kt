@@ -1,4 +1,4 @@
-package com.lairui.easy.ui.module1.activity
+package com.lairui.easy.ui.module5.activity
 
 import android.content.Intent
 import android.text.Html
@@ -21,9 +21,9 @@ import kotlinx.android.synthetic.main.activity_news_item.*
 import java.util.*
 
 /**
- * 新闻详情 界面
+ * 活动界面
  */
-class NewsItemActivity : BasicActivity(), RequestView {
+class HuoDongActivity : BasicActivity(), RequestView {
     @BindView(R.id.back_img)
     lateinit var mBackImg: ImageView
     @BindView(R.id.title_text)
@@ -42,7 +42,7 @@ class NewsItemActivity : BasicActivity(), RequestView {
     private var mMap: MutableMap<String, Any>? = null
 
     override val contentView: Int
-        get() = R.layout.activity_news_item
+        get() = R.layout.activity_huodong
 
 
     private var mUpdateDialog: UpdateDialog? = null
@@ -51,8 +51,8 @@ class NewsItemActivity : BasicActivity(), RequestView {
     override fun init() {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
-        mTitleText.text = "详情"
-        val bundel =intent.extras
+        mTitleText.text = "活动专区"
+       /* val bundel =intent.extras
         if (bundel == null){
             finish()
         }else{
@@ -62,7 +62,7 @@ class NewsItemActivity : BasicActivity(), RequestView {
             contentTv.movementMethod = LinkMovementMethod.getInstance()
             contentTv.text = Html.fromHtml(mMap!!["content"].toString())
         }
-
+*/
 
 
 

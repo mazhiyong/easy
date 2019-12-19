@@ -1,6 +1,7 @@
 package com.lairui.easy.ui.module1.adapter
 
 import android.content.Context
+import android.content.Intent
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -14,8 +15,10 @@ import com.lairui.easy.R
 
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.lairui.easy.ui.module1.activity.NewsItemActivity
 import com.lairui.easy.ui.temporary.adapter.ListBaseAdapter
 import com.lairui.easy.utils.imageload.GlideUtils
+import java.io.Serializable
 
 class NewsListAdapter(context: Context) : ListBaseAdapter() {
 
@@ -39,7 +42,14 @@ class NewsListAdapter(context: Context) : ListBaseAdapter() {
 
         viewHolder.mTitle.text = item["title"]!!.toString() + ""
         viewHolder.mContent.text = item["content"]!!.toString() + ""
-        GlideUtils.loadRoundCircleImage(mContext!!,item["url"]!!.toString() + "",viewHolder.mImage)
+        GlideUtils.loadRoundCircleImage(mContext!!,item["image"]!!.toString() + "",viewHolder.mImage)
+
+        viewHolder.mContentLay.setOnClickListener {
+            val intent = Intent(mContext,NewsItemActivity::class.java)
+            intent.putExtra("DATA",item as Serializable)
+            mContext!!.startActivity(intent)
+
+        }
     }
 
 

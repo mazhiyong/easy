@@ -69,6 +69,7 @@ class TradeListAdapter(context: Context) : ListBaseAdapter() {
 
         viewHolder.mItemIv.setOnClickListener {
             val intent = Intent(mContext,CeLueItemCurrentActivity::class.java)
+            intent.putExtra("mark",item["mark"].toString())
             mContext!!.startActivity(intent)
         }
         viewHolder.mTradeIv.setOnClickListener {

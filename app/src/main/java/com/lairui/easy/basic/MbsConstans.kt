@@ -48,7 +48,7 @@ object MbsConstans {
     val TIME_FDAY_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/day/query?_var=fdays_data_sz000656&code=sz000656" //5日 分时
 
     val KLINE_MINUTE_SERVER_URL = "http://ifzq.gtimg.cn/appstock/app/kline/mkline?" //分钟 K线
-    val KLINE_DAY_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_dayqfq&param=sz000656,day,,,320,qfq " //日 K线
+    val KLINE_DAY_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_dayqfq" //日 K线
     val KLINE_WEEK_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_weekqfq&param=sz000656,week,,,320,qfq " //周 K线
     val KLINE_MONTHS_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_monthqfq&param=sz000656,month,,,320,qfq" //月 K线
 

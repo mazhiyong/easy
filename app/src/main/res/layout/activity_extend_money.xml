@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_gravity="center_vertical"
-                    android:text="追加保证金金额"
+                    android:text="扩大配资金额"
                     android:textColor="@color/black33"
                     android:textSize="@dimen/sp_16"
                     android:layout_width="0dp"
@@ -36,11 +36,29 @@
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:layout_gravity="center_vertical"
-                    android:text="利息:0.00元(2天)"
+                    android:text="利息: "
                     android:textColor="@color/black33"
                     android:textSize="@dimen/sp_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/lixiTv"
+                    android:layout_gravity="center_vertical"
+                    android:text="0.00"
+                    android:textColor="@color/font_c"
+                    android:textSize="@dimen/sp_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:text=" 元"
+                    android:textColor="@color/black33"
+                    android:textSize="@dimen/sp_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
 
             </LinearLayout>
 
@@ -67,7 +85,7 @@
                     android:textSize="@dimen/sp_18" />
 
                 <EditText
-                    android:id="@+id/phone_edit"
+                    android:id="@+id/moneyEt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

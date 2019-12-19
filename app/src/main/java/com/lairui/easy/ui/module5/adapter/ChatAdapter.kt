@@ -130,18 +130,18 @@ class ChatAdapter(context: Context, msgs: MutableList<Map<String, Any>>?) : Recy
     }
 
     internal inner class SendTextHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
-        @BindView(R.id.iv_avatar)
-        lateinit var iv_avatar: CircleImageView
-        @BindView(R.id.iv_fail_resend)
-        lateinit var iv_fail_resend: ImageView
-        @BindView(R.id.tv_time)
-        lateinit var tv_time: TextView
-        @BindView(R.id.tv_message)
-        lateinit var tv_message: TextView
-        @BindView(R.id.tv_send_status)
-        lateinit var tv_send_status: TextView
-        @BindView(R.id.progress_load)
-        lateinit var progress_load: ProgressBar
+
+        var iv_avatar: CircleImageView = itemView!!.findViewById(R.id.iv_avatar)
+
+        var iv_fail_resend: ImageView = itemView!!.findViewById(R.id.iv_fail_resend)
+
+        var tv_time: TextView = itemView!!.findViewById(R.id.tv_time)
+
+        var tv_message: TextView = itemView!!.findViewById(R.id.tv_message)
+
+        var tv_send_status: TextView = itemView!!.findViewById(R.id.tv_send_status)
+
+        var progress_load: ProgressBar = itemView!!.findViewById(R.id.progress_load)
         private val mContext: Context? = null
 
         init {

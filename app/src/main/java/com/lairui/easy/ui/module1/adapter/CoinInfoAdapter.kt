@@ -80,17 +80,11 @@ class CoinInfoAdapter( mContext: Context) : BasicRecycleViewAdapter(mContext) {
     }
 
     internal class CoinInfoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvCoinName: TextView
-        val tvCoinPrice: TextView
-        val tvCoinRatio: TextView
-        val tvCoinConvert: TextView
+        val tvCoinName: TextView = itemView.findViewById(R.id.tvCoinName)
+        val tvCoinPrice: TextView = itemView.findViewById(R.id.tvCoinPrice)
+        val tvCoinRatio: TextView = itemView.findViewById(R.id.tvCoinRatio)
+        val tvCoinConvert: TextView = itemView.findViewById(R.id.tvCoinConvert)
 
-        init {
-            tvCoinName = itemView.findViewById(R.id.tvCoinName)
-            tvCoinPrice = itemView.findViewById(R.id.tvCoinPrice)
-            tvCoinRatio = itemView.findViewById(R.id.tvCoinRatio)
-            tvCoinConvert = itemView.findViewById(R.id.tvCoinConvert)
-        }
     }
 
 }

@@ -72,13 +72,19 @@ class ChengjiaoListAdapter(context: Context) : ListBaseAdapter() {
             viewHolder.ratioTv.text =item["number"].toString()
             viewHolder.amountTv.text = item["time"].toString()
 
-            //viewHolder.typeTv.text = (item["short"].toString().substring(0,2)).toUpperCase()
-            viewHolder.typeTv.visibility = View.GONE
+            if(item["code"].toString().first() == '3' || item["code"].toString().first() == '0'){
+                viewHolder.typeTv.text = "SZ"
+            }else if(item["code"].toString().first() == '6'){
+                viewHolder.typeTv.text = "SH"
+            }else{
+                viewHolder.typeTv.visibility = View.GONE
+            }
+
             viewHolder.numberTv.text = item["code"].toString()
             viewHolder.lay!!.setOnClickListener {
-                val intent = Intent(mContext,CoinInfoActivity::class.java)
+              /*  val intent = Intent(mContext,CoinInfoActivity::class.java)
                 intent.putExtra("DATA", item as Serializable)
-                mContext!!.startActivity(intent)
+                mContext!!.startActivity(intent)*/
             }
         }
     }

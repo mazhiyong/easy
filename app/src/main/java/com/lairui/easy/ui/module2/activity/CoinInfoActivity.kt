@@ -39,7 +39,6 @@ class CoinInfoActivity : BasicActivity(), RequestView {
     private var dataList = ArrayList<Quotes>()
     private var kLineData = ArrayList<List<String>>()
 
-    private var period:String = "60"
     private var mapData :MutableMap<String,Any> ? = null
     private var stockInfoBean :StockInfoBean? = null
     private var buyData: MutableList<MutableMap<String,Any>> =  java.util.ArrayList()
@@ -49,6 +48,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
     private var mBuyadapter: BuyAndSellAdapter? = null
 
     private var mRequestTag:Int = 0
+    private var mIsFirst:Boolean = true
 
     private var dateformat: SimpleDateFormat? = null
 
@@ -86,9 +86,6 @@ class CoinInfoActivity : BasicActivity(), RequestView {
         }
 
 
-        akv_kv_kview.isShowTimSharing = true
-
-
         val mKLineData = SelectDataUtil.kLineParams
         for (item in mKLineData){
             tabLayout.addTab(tabLayout.newTab().setText(item.get("name") as String))
@@ -100,8 +97,9 @@ class CoinInfoActivity : BasicActivity(), RequestView {
             override fun onTabUnselected(tab: TabLayout.Tab?) {
             }
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                when(tabLayout.selectedTabPosition){
+                when(tab!!.position){
                     0 -> {
+
                         mRequestTag = 0
                         //getTimeMinuteDataActin() //1分时图
                         getKLineMinuteDataActin("m1") //1分时图
@@ -109,27 +107,36 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                     }
                     1 -> {
                         mRequestTag = 1 //五日分时图
-
+                        getKLineWeekAction()
 
                     }
                     2 -> {
                         mRequestTag = 2 //日K
+                        getKLineDayAction()
+
                     }
                     3 -> {
                         mRequestTag = 3 //周K
+                        getKLineWeekAction()
                     }
                     4 -> {
                         mRequestTag = 4//月K
+                        getKLineMonthAction()
                     }
                 }
             }
 
         })
 
+
         spinner.onItemSelectedListener = object:AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 when(position){
                     0 ->{
+                        if (mIsFirst){
+                            mIsFirst = false
+                            return
+                        }
                         mRequestTag = 5 //1分钟 K
                         getKLineMinuteDataActin("m1")
                     }
@@ -138,21 +145,20 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                         getKLineMinuteDataActin("m5")
                     }
                     2 ->{
-                        mRequestTag = 7 //10分钟 K
-                        getKLineMinuteDataActin("m10")
-                    }
-                    3 ->{
+                        //mRequestTag = 7 //10分钟 K
+                        //getKLineMinuteDataActin("m10")
                         mRequestTag = 8 //15分钟 K
                         getKLineMinuteDataActin("m15")
                     }
-                    4 ->{
+                    3 ->{
                         mRequestTag = 9 //30分钟 K
                         getKLineMinuteDataActin("m30")
                     }
-                    5 ->{
+                    4 ->{
                         mRequestTag = 10 //60分钟 K
                         getKLineMinuteDataActin("m60")
                     }
+
                 }
             }
 
@@ -163,7 +169,8 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
 
 
-        LogUtil.i("show","mRequestTag:"+mRequestTag)
+
+
 
 
         /*tabLayout.addOnTabSelectedListener(object:TabLayout.OnTabSelectedListener{
@@ -320,6 +327,34 @@ class CoinInfoActivity : BasicActivity(), RequestView {
         mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.KLINE_MINUTE_SERVER_URL, map)
     }
 
+    //日K线图
+    private fun  getKLineDayAction() {
+        val map = HashMap<String, String>()
+        map["param"] = mapData!!["code"].toString()+",day,,,320,qfq"
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.KLINE_DAY_SERVER_URL, map)
+    }
+
+
+    //周K线图
+    private fun  getKLineWeekAction() {
+        val map = HashMap<String, String>()
+        map["param"] = mapData!!["code"].toString()+",week,,,320,qfq"
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.KLINE_WEEK_SERVER_URL, map)
+    }
+
+
+    //月K线图
+    private fun  getKLineMonthAction() {
+        val map = HashMap<String, String>()
+        map["param"] = mapData!!["code"].toString()+",month,,,320,qfq"
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.KLINE_MONTHS_SERVER_URL, map)
+    }
+
+
+
 
 
 
@@ -427,9 +462,6 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
                 }
 
-
-
-
             }
 
 
@@ -460,13 +492,14 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                 result = result.substring(result.indexOf("=")+1)
                 val mapInfo = JSONUtil.instance.jsonMap(result)
                 if (mapInfo != null){
-                    if (UtilTools.empty(mapInfo["data"])){
+                    if (UtilTools.empty(mapInfo["data"].toString())){
                         akv_kv_kview.loadMoreNoData()
                         return
                     }
                     val dataMap = mapInfo["data"] as MutableMap<String,Any>
                     val  dataMap1 = dataMap[mapData!!["code"].toString()] as MutableMap<String,Any>
                     var resultStr:String? = null
+                    LogUtil.i("show","mRequestTag:"+mRequestTag)
                     when(mRequestTag){
                         0 ->  {
                             resultStr = dataMap1["m1"] .toString().replace("{","").replace("},","")
@@ -474,25 +507,25 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                         }
                         5 ->  {
                             resultStr = dataMap1["m1"] .toString().replace("{","").replace("},","")
-                            akv_kv_kview.isShowTimSharing = true
+                            akv_kv_kview.isShowTimSharing = false
                         }
                         6 ->  {
                             resultStr = dataMap1["m5"] .toString().replace("{","").replace("},","")
-                            akv_kv_kview.isShowTimSharing = true
+                            akv_kv_kview.isShowTimSharing = false
                         }
                         7 ->  {
-                            resultStr = dataMap1["m10"] .toString().replace("{","").replace("},","")
-                            akv_kv_kview.isShowTimSharing = true
+                            //resultStr = dataMap1["m10"] .toString().replace("{","").replace("},","")
+                            //akv_kv_kview.isShowTimSharing = false
                         }
                         8 ->  {
                             resultStr = dataMap1["m15"] .toString().replace("{","").replace("},","")
-                            akv_kv_kview.isShowTimSharing = true
+                            akv_kv_kview.isShowTimSharing = false
                         }
                         9 ->  {
                             resultStr = dataMap1["m30"] .toString().replace("{","").replace("},","")
                             akv_kv_kview.isShowTimSharing = false
                         }
-                        9 ->  {
+                        10 ->  {
                             resultStr = dataMap1["m60"] .toString().replace("{","").replace("},","")
                             akv_kv_kview.isShowTimSharing = false
                         }
@@ -519,6 +552,119 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
                 }
             }
+
+            MbsConstans.KLINE_DAY_SERVER_URL ->{
+                var  result = tData["result"]!!.toString() + ""
+                result = result.substring(result.indexOf("=")+1)
+                val mapInfo = JSONUtil.instance.jsonMap(result)
+                if (mapInfo != null){
+                    if (UtilTools.empty(mapInfo["data"])){
+                        akv_kv_kview.loadMoreNoData()
+                        return
+                    }
+                    val dataMap = mapInfo["data"] as MutableMap<String,Any>
+                    val  dataMap1 = dataMap[mapData!!["code"].toString()] as MutableMap<String,Any>
+                    akv_kv_kview.isShowTimSharing = false
+                    if (UtilTools.empty(dataMap1["qfqday"].toString())){
+                        return
+                    }
+                    val data = JSONUtil.instance.jsonToListStr2(dataMap1["qfqday"].toString())
+                    if (data != null) {
+                        dataList.clear()
+                        for (item in data){
+                            val timeStr =item[0]
+                            val time = dateformat!!.parse(timeStr+"00").time
+                            //开收高低
+                            val quotes = Quotes(item[1].toDouble(), item[3].toDouble(), item[4].toDouble(), item[2].toDouble(), time,item[5].toDouble())
+                            dataList.add(quotes)
+                        }
+                        //设置数据
+                        LogUtil.i("show","$$$$:"+dataList.size)
+                        updateDataAndUI(dataList)
+                    }
+                }
+
+
+            }
+
+            MbsConstans.KLINE_WEEK_SERVER_URL ->{
+                var  result = tData["result"]!!.toString() + ""
+                result = result.substring(result.indexOf("=")+1)
+                val mapInfo = JSONUtil.instance.jsonMap(result)
+                if (mapInfo != null){
+                    if (UtilTools.empty(mapInfo["data"])){
+                        akv_kv_kview.loadMoreNoData()
+                        return
+                    }
+                    val dataMap = mapInfo["data"] as MutableMap<String,Any>
+                    val  dataMap1 = dataMap[mapData!!["code"].toString()] as MutableMap<String,Any>
+                    when(mRequestTag){
+                        1->{ //分时图
+                            akv_kv_kview.isShowTimSharing = true
+                        }
+                        3->{ //K线图
+                            akv_kv_kview.isShowTimSharing = false
+                        }
+                    }
+                    if (UtilTools.empty(dataMap1["qfqweek"].toString())){
+                        return
+                    }
+                    val data = JSONUtil.instance.jsonToListStr2(dataMap1["qfqweek"].toString())
+                    if (data != null) {
+                        dataList.clear()
+                        for (item in data){
+                            val timeStr =item[0]
+                            val time = dateformat!!.parse(timeStr+"00").time
+                            //开收高低
+                            val quotes = Quotes(item[1].toDouble(), item[3].toDouble(), item[4].toDouble(), item[2].toDouble(), time,item[5].toDouble())
+                            dataList.add(quotes)
+                        }
+                        //设置数据
+                        LogUtil.i("show","$$$$:"+dataList.size)
+                        updateDataAndUI(dataList)
+                    }
+
+                }
+
+
+            }
+
+            MbsConstans.KLINE_MONTHS_SERVER_URL ->{
+                var  result = tData["result"]!!.toString() + ""
+                result = result.substring(result.indexOf("=")+1)
+                val mapInfo = JSONUtil.instance.jsonMap(result)
+                if (mapInfo != null){
+                    if (UtilTools.empty(mapInfo["data"])){
+                        akv_kv_kview.loadMoreNoData()
+                        return
+                    }
+                    val dataMap = mapInfo["data"] as MutableMap<String,Any>
+                    val  dataMap1 = dataMap[mapData!!["code"].toString()] as MutableMap<String,Any>
+                    akv_kv_kview.isShowTimSharing = false
+                    if (UtilTools.empty(dataMap1["qfqmonth"].toString())){
+                        return
+                    }
+                    val data = JSONUtil.instance.jsonToListStr2(dataMap1["qfqmonth"].toString())
+                    if (data != null) {
+                        dataList.clear()
+                        for (item in data){
+                            val timeStr =item[0]
+                            val time = dateformat!!.parse(timeStr+"00").time
+                            //开收高低
+                            val quotes = Quotes(item[1].toDouble(), item[3].toDouble(), item[4].toDouble(), item[2].toDouble(), time,item[5].toDouble())
+                            dataList.add(quotes)
+                        }
+                        //设置数据
+                        LogUtil.i("show","$$$$:"+dataList.size)
+                        updateDataAndUI(dataList)
+                    }
+
+
+                }
+
+
+            }
+
 
 
             MbsConstans.TIME_MINUTE_SERVER_URL ->{

@@ -10,6 +10,11 @@
         android:id="@+id/top_layout"
         layout="@layout/title_leftbut_bar"/>
 
+    <ImageView
+        android:background="@drawable/activity_bac"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_200"/>
+
     <TextView
         android:id="@+id/titleTv"
         android:layout_marginTop="@dimen/dp_10"
