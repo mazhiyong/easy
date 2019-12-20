@@ -28,7 +28,6 @@ import com.lairui.easy.mywidget.view.LoadingWindow
 import com.lairui.easy.mywidget.view.TipsToast.Companion.showToastMsg
 import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module.activity.XieYiDetialActivity
-import com.lairui.easy.ui.module2.adapter.HangqingListAdapter
 import com.lairui.easy.ui.module3.activity.PayActivity
 import com.lairui.easy.ui.module3.adapter.SelectMoneyAdapter
 import com.lairui.easy.utils.tool.*
@@ -103,6 +102,7 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
     var totalMoney = 0
     var lixiMoney = 0.0f
 
+    var TYPE = 0
 
     private lateinit var popView: View
     private lateinit var mConditionDialog: PopupWindow
@@ -256,8 +256,11 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
         mDialog2!!.selectBackListener*/
 
         setBarTextColor()
-
         getDayInfoAction()
+
+        Objects.requireNonNull(mTabLayout.getTabAt(TYPE))!!.select()
+
+
     }
 
     fun setBarTextColor() {
@@ -391,5 +394,18 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
         }
 
 
+    }
+
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            userVisibleHint = false
+        } else {
+            userVisibleHint = true
+            Objects.requireNonNull(mTabLayout.getTabAt(TYPE))!!.select()
+
+
+        }
     }
 }

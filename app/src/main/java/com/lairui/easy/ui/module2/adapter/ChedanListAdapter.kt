@@ -12,11 +12,15 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.lairui.easy.R
+import com.lairui.easy.listener.OnItemClickListener
 import com.lairui.easy.ui.module2.activity.CoinInfoActivity
 import com.lairui.easy.ui.temporary.adapter.ListBaseAdapter
 import java.io.Serializable
 
 class ChedanListAdapter(context: Context) : ListBaseAdapter() {
+
+    lateinit var onItemClickListener: OnItemClickListener
+
     private var mHeaderView: View? = null
     private val mLayoutInflater: LayoutInflater
     private val ITEM_TYPE_NORMAL = 0
@@ -58,7 +62,7 @@ class ChedanListAdapter(context: Context) : ListBaseAdapter() {
         val type = getItemViewType(position)
         if (type == ITEM_TYPE_HEADER) {
         } else {
-            val item: Map<String, Any> = mDataList[position - 1]
+            val item: MutableMap<String, Any> = mDataList[position - 1]
             val viewHolder = holder as ViewHolder
             viewHolder.nameTv.text = item["name"].toString() + ""
             if (item["type"].toString() == "买入"){
@@ -75,9 +79,7 @@ class ChedanListAdapter(context: Context) : ListBaseAdapter() {
             viewHolder.typeTv.text = (item["short"].toString().substring(0,2)).toUpperCase()
             viewHolder.numberTv.text = item["code"].toString()
             viewHolder.lay!!.setOnClickListener {
-              /*  val intent = Intent(mContext,CoinInfoActivity::class.java)
-                intent.putExtra("DATA", item as Serializable)
-                mContext!!.startActivity(intent)*/
+                onItemClickListener.onItemClickListener(viewHolder.lay!!, position, item)
             }
         }
     }

@@ -41,6 +41,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="AAA"
+                    android:textSize="@dimen/sp_14" />
+                <TextView
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:lineSpacingExtra="@dimen/dp_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="元"
+                    android:layout_marginLeft="@dimen/dp_5"
                     android:textColor="@color/black99"
                     android:textSize="@dimen/sp_14" />
             </LinearLayout>

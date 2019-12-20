@@ -168,6 +168,9 @@ class AddMoneyActivity : BasicActivity(), RequestView {
                 "1" -> {
                     mButNext.isEnabled = true
                     showToastMsg(tData["msg"].toString() + "")
+                    intent = Intent()
+                    intent.action = MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE
+                    sendBroadcast(intent)
                 }
                 "0" -> {
                     mButNext.isEnabled = true

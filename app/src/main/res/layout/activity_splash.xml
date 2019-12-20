@@ -55,15 +55,15 @@
 
     <com.lairui.easy.mywidget.view.CountDownProgressView
         android:id="@+id/countdownProgressView"
-        android:layout_width="@dimen/dp_40"
-        android:layout_height="@dimen/dp_40"
-        android:textSize="@dimen/sp_12"
+        android:layout_width="@dimen/dp_35"
+        android:layout_height="@dimen/dp_35"
+        android:textSize="@dimen/sp_11"
         app:circSolidColor="@color/divide_line"
         app:circFrameColor="@color/divide_line"
         app:progressColor="@color/font_c"
         app:textColor1="@color/font_c"
         android:layout_marginRight="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_25"
+        android:layout_marginTop="@dimen/dp_45"
         android:layout_marginBottom="@dimen/dp_10"
         android:layout_alignParentRight="true"
 

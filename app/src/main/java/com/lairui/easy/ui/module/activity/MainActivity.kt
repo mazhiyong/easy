@@ -25,6 +25,7 @@ import com.lairui.easy.bean.MessageEvent
 import com.lairui.easy.db.IndexData
 import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.mywidget.dialog.UpdateDialog
+import com.lairui.easy.mywidget.view.TipsToast
 import com.lairui.easy.service.DownloadService
 import com.lairui.easy.ui.module1.fragment.IndexFragment
 import com.lairui.easy.ui.module2.fragment.HangQingFragment
@@ -36,6 +37,7 @@ import com.lairui.easy.utils.permission.RePermissionResultBack
 import com.lairui.easy.utils.tool.JSONUtil
 import com.lairui.easy.utils.tool.SPUtils
 import com.lairui.easy.utils.tool.UtilTools
+import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -237,11 +239,15 @@ class MainActivity : BasicActivity(), RequestView {
      * 获取用户基本信息
      */
     fun getUserInfoAction() {
-        mRequestTag = MethodUrl.HOME_INFO
+        mRequestTag = MethodUrl.ACCOUNT_INFO
         val map = HashMap<String, Any>()
-        map["nozzle"] = MethodUrl.HOME_INFO
+        map["nozzle"] = MethodUrl.ACCOUNT_INFO
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@MainActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.HOME_INFO, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.ACCOUNT_INFO, map)
     }
 
     /**
@@ -263,7 +269,7 @@ class MainActivity : BasicActivity(), RequestView {
         map["appCode"] = MbsConstans.UPDATE_CODE
         map["osType"] = "android"
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestGetToMap(mHeaderMap, MethodUrl.appVersion, map)
+        mRequestPresenterImp.requestGetToMap(mHeaderMap, MethodUrl.appVersion, map)
     }
 
     /**
@@ -339,6 +345,12 @@ class MainActivity : BasicActivity(), RequestView {
         } else super.onKeyDown(keyCode, event)
     }
 
+     fun toCeLueFragment(position : Int) {
+         btn_container_get.performClick()
+         mCeLueFragment!!.TYPE = position
+    }
+
+
     override fun showProgress() {
         showProgressDialog()
     }
@@ -349,7 +361,20 @@ class MainActivity : BasicActivity(), RequestView {
 
      override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
         when (mType) {
-            MethodUrl.HOME_INFO -> when (tData["code"].toString() + "") {
+            MethodUrl.ACCOUNT_INFO -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    MbsConstans.USER_MAP = tData["data"] as MutableMap<String, Any>?
+                    SPUtils.put(this@MainActivity, MbsConstans.SharedInfoConstans.LOGIN_INFO, JSONUtil.instance.objectToJson(MbsConstans.USER_MAP!!))
+                }
+                "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+        /*    MethodUrl.HOME_INFO -> when (tData["code"].toString() + "") {
                 "1" -> {
 
                 }
@@ -360,7 +385,7 @@ class MainActivity : BasicActivity(), RequestView {
                     startActivity(intent)
 
                 }
-            }
+            }*/
 
             MethodUrl.appVersion -> if (tData != null && !tData.isEmpty()) {
                 //网络版本号

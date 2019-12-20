@@ -50,6 +50,12 @@ android {
             storePassword "123456"
             keyAlias "lrkj"
             keyPassword "123456"
+            android.applicationVariants.all {
+                variant ->
+                    variant.outputs.all {
+                        outputFileName = "名字待定" + versionName + "_" + versionCode + ".apk"
+                    }
+            }
         }
         debug {
             storeFile file("../lrkj.jks")
@@ -265,12 +271,14 @@ dependencies {
     //刷新
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 
-
     // 跑马灯
     implementation 'com.sunfusheng:MarqueeView:1.4.1'
 
     //轮播图
     implementation 'com.github.xiaohaibin:XBanner:1.6.4'
+
+
+
 
     //Kotlin
     /*  implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"

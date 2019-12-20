@@ -29,8 +29,6 @@ import com.lairui.easy.utils.tool.SPUtils
 import com.lairui.easy.utils.tool.UtilTools
 import com.jaeger.library.StatusBarUtil
 
-import java.util.HashMap
-
 import butterknife.BindView
 import butterknife.Unbinder
 import com.lairui.easy.mywidget.view.TipsToast.Companion.showToastMsg
@@ -39,6 +37,7 @@ import com.lairui.easy.ui.module1.activity.NoticeListActivity
 import com.lairui.easy.ui.module4.activity.RecordListActivity
 import com.lairui.easy.ui.module5.activity.*
 import de.hdodenhof.circleimageview.CircleImageView
+import java.util.*
 
 class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
 
@@ -105,6 +104,7 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
             if (action == MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE) {
                 getUserInfoAction()
             } else if (action == MbsConstans.BroadcastReceiverAction.MONEY_UPDATE) {
+                //
             }
         }
     }
@@ -206,6 +206,12 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
 
     fun setBarTextColor() {
         StatusBarUtil.setLightMode(activity!!)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        getUserInfoAction()
     }
 
     /**
@@ -402,6 +408,18 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
         dealFailInfo(map, mType)
     }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            userVisibleHint = false
+        } else {
+            userVisibleHint = true
+
+
+        }
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()

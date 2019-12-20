@@ -48,7 +48,7 @@
     <!-- 适用于欢迎界面避免第一次进来白屏或黑屏 -->
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_bg</item>
-        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowFullscreen">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 
 import com.lairui.easy.R
 
@@ -39,7 +40,14 @@ class RecordListAdapter(context: Context) : ListBaseAdapter() {
         val viewHolder = holder as ViewHolder
 
         viewHolder.mTitle.text = item["name"]!!.toString() + ""
-        viewHolder.mContent.text =UtilTools.getNormalMoney(item["number"]!!.toString()) + " 元"
+        if (item["number"].toString().contains("-")){
+            viewHolder.mContent.setTextColor(ContextCompat.getColor(mContext!!,R.color.colorPrimary))
+            viewHolder.mContent.text =UtilTools.getNormalMoney(item["number"]!!.toString())
+        }else{
+            viewHolder.mContent.setTextColor(ContextCompat.getColor(mContext!!,R.color.font_c))
+            viewHolder.mContent.text ="+"+UtilTools.getNormalMoney(item["number"]!!.toString())
+        }
+
         viewHolder.mTimeTv.text = item["time"]!!.toString() + ""
     }
 

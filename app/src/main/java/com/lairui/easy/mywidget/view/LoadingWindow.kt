@@ -27,6 +27,7 @@ import com.lairui.easy.api.RxApiManager
 import com.lairui.easy.utils.tool.UtilTools
 
 
+
 /**
  *
  *
@@ -37,6 +38,7 @@ class LoadingWindow(private val mContext: Context, style: Int) : Dialog(mContext
 
     private var mImageView: ImageView? = null
     private var mTextView: TextView? = null
+
     private val mRotateAnimation: Animation? = null
 
 
@@ -69,6 +71,7 @@ class LoadingWindow(private val mContext: Context, style: Int) : Dialog(mContext
         val view = layoutInflater.inflate(R.layout.loading_view, null)
         mImageView = view.findViewById<View>(R.id.load_imageview) as ImageView
         mTextView = view.findViewById<View>(R.id.loading_text_tv) as TextView
+
 
         mTextView!!.text = "加载中，请稍后..."
 

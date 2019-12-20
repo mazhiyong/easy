@@ -20,9 +20,10 @@
             android:id="@+id/load_imageview"
             android:layout_width="@dimen/dp_60"
             android:layout_height="@dimen/dp_60"
-
             android:layout_gravity="center"
             android:textColor="@color/white" />
+
+
         <TextView
             android:id="@+id/loading_text_tv"
             android:layout_width="wrap_content"

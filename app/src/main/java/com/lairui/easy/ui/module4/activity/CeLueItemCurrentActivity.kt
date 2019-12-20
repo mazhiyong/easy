@@ -13,6 +13,10 @@ import com.lairui.easy.basic.BasicActivity
 import com.lairui.easy.basic.MbsConstans
 import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.mywidget.dialog.AppDialog
+import com.lairui.easy.ui.module.activity.LoginActivity
+import com.lairui.easy.utils.tool.SPUtils
+import com.lairui.easy.utils.tool.TextViewUtils
+import com.lairui.easy.utils.tool.UtilTools
 import kotlinx.android.synthetic.main.activity_celue_item.*
 import java.util.*
 
@@ -90,14 +94,18 @@ class CeLueItemCurrentActivity : BasicActivity(), RequestView {
 
     }
 
-    /**
-     * 网络连接请求
-     */
-    private fun submitInstall() {
+
+    private fun stopAction() {
 
         val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.PEIZI_JIESUAN
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@CeLueItemCurrentActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["mark"] = mark
         val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp!!.requestPostToMap(mHeaderMap, MethodUrl.installCerSubmit, map)
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.PEIZI_JIESUAN, map)
     }
 
     @OnClick(R.id.back_img, R.id.left_back_lay,R.id.addMoneyTv,R.id.extendMoneyTv,R.id.tiquBt,R.id.stopBt,R.id.addMoneyRecordLay,R.id.extendRecordLay,R.id.lixiRecordLay,R.id.shouyiRecordLay)
@@ -127,6 +135,8 @@ class CeLueItemCurrentActivity : BasicActivity(), RequestView {
                     when (v.id) {
                         R.id.cancel -> dialog.dismiss()
                         R.id.confirm -> {
+                            stopAction()
+                            dialog.dismiss()
                         }
                     }
                 })
@@ -171,6 +181,49 @@ class CeLueItemCurrentActivity : BasicActivity(), RequestView {
     }
 
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
+        when (mType) {
+           /* MethodUrl.BOND_INFO -> when (tData["code"].toString()) {
+                "1" -> {
+                    if (tData["data"].toString().isNotEmpty()){
+                        val mapData = tData["data"] as MutableMap<String,Any>
+                        val textViewUtils = TextViewUtils()
+                        val s = "温馨提示:"+mapData["tips"]
+                        mTipTv.text = s
+                        textViewUtils.init(s, mTipTv)
+                        textViewUtils.setTextColor(0, s.indexOf(":"), ContextCompat.getColor(this, R.color.font_c))
+
+                        textViewUtils.build()
+                    }
+
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@AddMoneyActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+*/
+            MethodUrl.PEIZI_JIESUAN -> when (tData["code"].toString()) {
+                "1" -> {
+                    showToastMsg(tData["msg"].toString() + "")
+                    intent = Intent()
+                    intent.action = MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE
+                    sendBroadcast(intent)
+                }
+                "0" -> {
+                    showToastMsg(tData["msg"].toString() + "")
+                }
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@CeLueItemCurrentActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+
+            }
+
+
+        }
 
     }
 
@@ -178,7 +231,5 @@ class CeLueItemCurrentActivity : BasicActivity(), RequestView {
         dealFailInfo(map, mType)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
+
 }

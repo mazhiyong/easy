@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.lairui.easy.R
 import com.lairui.easy.ui.module2.activity.CoinInfoActivity
 import com.lairui.easy.ui.temporary.adapter.ListBaseAdapter
+import com.lairui.easy.utils.tool.UtilTools
 import java.io.Serializable
 
 class ChicangListAdapter(context: Context) : ListBaseAdapter() {
@@ -62,11 +64,19 @@ class ChicangListAdapter(context: Context) : ListBaseAdapter() {
             viewHolder.nameTv.text = item["name"].toString() + ""
             viewHolder.priceTv.text = item["price"].toString() + ""
             viewHolder.priceCurTv.text = item["current"].toString() + ""
-           /* if (item["rise"].toString().contains("-")){
-                viewHolder.ratioTv.text =item["rise"].toString() + "%"
-            }else{
-                viewHolder.ratioTv.text ="+" +item["rise"].toString() + "%"
-            }*/
+            if (item["ratio"].toString().isNotEmpty()){
+                if (item["ratio"].toString().contains("-")){
+                    viewHolder.ratioTv.text =item["ratio"].toString() + "%"
+                    viewHolder.ratioTv.setTextColor(ContextCompat.getColor(mContext!!,R.color.colorPrimary))
+                }else{
+                    viewHolder.ratioTv.text ="+" +item["ratio"].toString() + "%"
+                    viewHolder.ratioTv.setTextColor(ContextCompat.getColor(mContext!!,R.color.font_c))
+                }
+            }
+            val markMonty = item["current"].toString().toDouble()*item["number"].toString().toDouble()
+            viewHolder.amountTv.text = UtilTools.getNormalMoney(markMonty.toString())
+
+
             viewHolder.typeTv.text = (item["short"].toString().substring(0,2)).toUpperCase()
             viewHolder.numberTv.text = item["code"].toString() + ""
             viewHolder.lay!!.setOnClickListener {

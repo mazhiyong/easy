@@ -212,7 +212,9 @@ class BankPayActivity : BasicActivity(), RequestView {
                 MethodUrl.CHONGZHI_ACTION -> mButNext.isEnabled = true
                 "1" -> {
                     showToastMsg(tData["msg"].toString() + "")
-
+                    intent = Intent()
+                    intent.action = MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE
+                    sendBroadcast(intent)
                 }
                 "0" -> showToastMsg(tData["msg"].toString() + "")
                 "-1" -> {

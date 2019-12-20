@@ -27,7 +27,7 @@ class SelectMoneyAdapter(private val mContext: Context, var datas: MutableList<M
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val item = datas!![position]
-        holder.mItemInfoTv.text = item["multiple"]!!.toString() + "倍\n"+item["money"]!!.toString()+"元"
+        holder.mItemInfoTv.text = item["multiple"].toString() + "倍\n"+item["money"].toString()+"元"
 
         /*   GlideApp.with(mContext)
                 .load(logopath)

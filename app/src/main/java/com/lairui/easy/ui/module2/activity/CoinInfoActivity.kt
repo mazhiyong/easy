@@ -427,45 +427,46 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                 return
             }
             getDetialDataAction()
+
             when(mRequestTag){
                 0 ->{
-
+                    getKLineMinuteDataActin("m1") //1分时图
                 }
                 1 ->{
-
+                    getKLineWeekAction()
                 }
                 2 ->{
-
+                    getKLineDayAction()
                 }
                 3 ->{
-
+                    getKLineWeekAction()
                 }
                 4 ->{
-
+                    getKLineMonthAction()
                 }
                 5 ->{
-
+                getKLineMinuteDataActin("m1")
                 }
                 6 ->{
-
+                getKLineMinuteDataActin("m5")
                 }
                 7 ->{
 
                 }
                 8 ->{
-
+                getKLineMinuteDataActin("m15")
                 }
                 9 ->{
-
+                getKLineMinuteDataActin("m30")
                 }
                 10 ->{
-
+                getKLineMinuteDataActin("m60")
                 }
 
             }
 
 
-            handler.postDelayed(this, 10 * 1000)
+            handler.postDelayed(this, 5 * 1000)
 
 
         }
@@ -620,7 +621,6 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                             dataList.add(quotes)
                         }
                         //设置数据
-                        LogUtil.i("show","$$$$:"+dataList.size)
                         updateDataAndUI(dataList)
                     }
 
@@ -844,6 +844,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
     private fun updateDataAndUI(dataList: ArrayList<Quotes>) {
         if (dataList.size > 0) {
+
             akv_kv_kview.setKViewData(dataList, object : KViewListener.MasterTouchListener {
                 override fun onLongTouch(preQuotes: Quotes, currentQuotes: Quotes) {
                     //长按

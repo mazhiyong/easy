@@ -25,8 +25,10 @@ import com.lairui.easy.mywidget.view.PageView
 import com.lairui.easy.mywidget.view.PullScrollView
 import com.lairui.easy.mywidget.view.TipsToast.Companion.showToastMsg
 import com.lairui.easy.ui.module.activity.LoginActivity
+import com.lairui.easy.ui.module.activity.MainActivity
 import com.lairui.easy.ui.module1.activity.NewsListActivity
 import com.lairui.easy.ui.module1.activity.NoticeDetialActivity
+import com.lairui.easy.ui.module1.activity.NoticeListActivity
 import com.lairui.easy.ui.module1.adapter.CoinInfoAdapter
 import com.lairui.easy.ui.module1.adapter.MainCoinAdapter
 import com.lairui.easy.ui.module1.adapter.NewsListAdapter
@@ -220,9 +222,10 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
 
 
 
-    @OnClick(  R.id.moreNewIv, R.id.moreNewsTv,R.id.dayLay,R.id.monthLay,R.id.lixiLay,R.id.freeLay)
+    @OnClick(  R.id.moreNewIv, R.id.moreNewsTv,R.id.dayLay,R.id.monthLay,R.id.lixiLay,R.id.freeLay,R.id.moreNoticeIv)
     fun onViewClicked(view: View) {
         var intent: Intent
+        val activity: MainActivity? = activity as MainActivity?
         when (view.id) {
             R.id.moreNewIv ->{
                 intent = Intent(activity,NewsListActivity::class.java)
@@ -233,16 +236,20 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
                startActivity(intent)
             }
             R.id.dayLay -> {
-
+                activity?.toCeLueFragment(0)
             }
             R.id.monthLay -> {
-
+                activity?.toCeLueFragment(1)
             }
             R.id.lixiLay -> {
-
+                activity?.toCeLueFragment(2)
             }
             R.id.freeLay -> {
                 intent = Intent(activity,FreeActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.moreNoticeIv ->{
+                intent = Intent(activity,NoticeListActivity::class.java)
                 startActivity(intent)
             }
         }

@@ -158,7 +158,13 @@ class PayActivity : BasicActivity(), RequestView {
             MethodUrl.PEIZI_DAY_APPLY -> when (tData["code"].toString() + "") {
                 "1" -> {
                     TipsToast.showToastMsg(tData["msg"].toString() + "")
+
+                    intent = Intent()
+                    intent.action = MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE
+                    sendBroadcast(intent)
+
                     finish()
+
                 }
                 "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
                 "-1" -> {

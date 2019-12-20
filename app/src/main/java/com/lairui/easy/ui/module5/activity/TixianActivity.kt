@@ -290,6 +290,9 @@ class TixianActivity : BasicActivity(), RequestView , SelectBackListener {
                 "1" -> {
                     mButNext.isEnabled = true
                     showToastMsg(tData["msg"].toString() + "")
+                    intent = Intent()
+                    intent.action = MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE
+                    sendBroadcast(intent)
                 }
                 "0" -> showToastMsg(tData["msg"].toString() + "")
                 "-1" -> {

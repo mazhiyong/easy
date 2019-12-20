@@ -216,6 +216,7 @@ object MethodUrl {
     const val PROFIT_ACTION = "profit_operate" //提取盈利操作
     const val PROFIT_LIST = "profit_operate_log" //提取盈利记录
     const val LIXI_LIST = "interest_operate_log" //支付利息记录
+    const val PEIZI_JIESUAN = "settlement" //配资结算
 
 
 
