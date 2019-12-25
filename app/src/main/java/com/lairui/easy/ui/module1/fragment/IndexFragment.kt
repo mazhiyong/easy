@@ -272,11 +272,11 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
             MethodUrl.NOTICE_LIST -> when (tData["code"].toString() + "") {
                 "1" -> {
                     if (!UtilTools.empty(tData["data"].toString())){
-                        var noticeList = tData["data"] as MutableList<MutableMap<String, Any>>
-                        if (noticeList.isNotEmpty()){
+                        noticeList = tData["data"] as MutableList<MutableMap<String, Any>?>?
+                        if (noticeList!!.isNotEmpty()){
                             val list1: MutableList<String> = ArrayList()
-                            for (map in noticeList) {
-                                list1.add(map["name"].toString() + "")
+                            for (map in noticeList!!) {
+                                list1.add(map?.get("name").toString() + "")
                             }
                             marqueeView.startWithList(list1 as List<Any>?)
                         }

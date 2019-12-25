@@ -97,9 +97,9 @@ class NoticeListActivity : BasicActivity(), RequestView, ReLoadingData {
 
     //获取公告列表
     fun getNoticeListAction() {
-        val map = java.util.HashMap<String, Any>()
+        val map = HashMap<String, Any>()
         map["nozzle"] = MethodUrl.NOTICE_LIST
-        val mHeaderMap = java.util.HashMap<String, String>()
+        val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.NOTICE_LIST, map)
     }
 
@@ -194,8 +194,8 @@ class NoticeListActivity : BasicActivity(), RequestView, ReLoadingData {
 
 
                 }
-                "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
-                "-1"->{
+                "-1" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
+                "0"->{
                     closeAllActivity()
                     val intent = Intent(this@NoticeListActivity, LoginActivity::class.java)
                     startActivity(intent)

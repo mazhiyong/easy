@@ -40,24 +40,25 @@ class TradeListAdapter(context: Context) : ListBaseAdapter() {
         val viewHolder = holder as ViewHolder
 
         //状态（1：操盘中 2：已结清 ）
-       /* var ss = item["status"]!!.toString() + ""
-        if (UtilTools.empty(ss)) {
-            ss = "1"
-        }*/
-        val status = Integer.valueOf("1")
+        var ss = item["status"]!!.toString() + ""
+        val status = Integer.valueOf(ss)
         when (status) {
             1 -> {
                 viewHolder.mStatusTv.text = "操盘中"
                 viewHolder.mStatusTv.setTextColor(ContextCompat.getColor(mContext!!, R.color.font_c))
                 viewHolder.mTradeIv.visibility = View.VISIBLE
+                viewHolder.mChangetIv.text = "当前额度"
+                viewHolder.mMoneyIv.text = item["use"]!!.toString() + "元("+item["proportion"]+"%)"
             }
             2 -> {
                 viewHolder.mStatusTv.text = "已结清"
                 viewHolder.mStatusTv.setTextColor(ContextCompat.getColor(mContext!!, R.color.black99))
                 viewHolder.mTradeIv.visibility = View.GONE
+                viewHolder.mChangetIv.text = "累计盈亏"
+                viewHolder.mMoneyIv.text = item["profit_loss"]!!.toString() + "元"
             }
         }
-        viewHolder.mTitleTv.text = item["name"]!!.toString() + "元"
+        viewHolder.mTitleTv.text = item["name"]!!.toString() + "("+item["order"]!!.toString()+")"
         viewHolder.mTimeTv.text = item["time"]!!.toString() + "元"
 
         //val dateTime = UtilTools.getStringFromSting2(item["flowdate"]!!.toString() + "", "yyyyMMdd", "yyyy-MM-dd")
@@ -69,7 +70,12 @@ class TradeListAdapter(context: Context) : ListBaseAdapter() {
 
         viewHolder.mItemIv.setOnClickListener {
             val intent = Intent(mContext,CeLueItemCurrentActivity::class.java)
-            intent.putExtra("mark",item["mark"].toString())
+            if (ss == "1"){
+                intent.putExtra("mark",item["mark"].toString())
+            }else{
+                intent.putExtra("mark",item["id"].toString())
+            }
+            intent.putExtra("status",ss)
             mContext!!.startActivity(intent)
         }
         viewHolder.mTradeIv.setOnClickListener {
@@ -90,5 +96,7 @@ class TradeListAdapter(context: Context) : ListBaseAdapter() {
         var mPingCangMoneyTv: TextView = itemView.findViewById(R.id.pingcangMoneyTv)
         var mItemIv: TextView = itemView.findViewById(R.id.itemTv)
         var mTradeIv:TextView = itemView.findViewById(R.id.tradeTv)
+        var mChangetIv:TextView = itemView.findViewById(R.id.changeTv)
+        var mMoneyIv:TextView = itemView.findViewById(R.id.eduMoneyTv)
     }
 }

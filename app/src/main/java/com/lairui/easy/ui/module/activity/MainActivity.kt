@@ -351,6 +351,11 @@ class MainActivity : BasicActivity(), RequestView {
     }
 
 
+    fun toTradeFragment() {
+        btn_container_return.performClick()
+    }
+
+
     override fun showProgress() {
         showProgressDialog()
     }

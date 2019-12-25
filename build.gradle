@@ -23,6 +23,9 @@ buildscript {
 
         //Kotlin
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61"
+
+        //K线
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
 }
 

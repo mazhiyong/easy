@@ -154,7 +154,7 @@ public class DashBoard  extends View {
         canvas.restore();
         canvas.save();
         canvas.translate(canvas.getWidth()/2  , r + length / 3 /2 );
-        canvas.drawText("完成率" , 0, 0, textPaint);
+        canvas.drawText("比率" , 0, 0, textPaint);
 
 
 

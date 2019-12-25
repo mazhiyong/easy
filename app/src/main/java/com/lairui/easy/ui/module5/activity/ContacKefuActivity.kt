@@ -77,15 +77,9 @@ class ContacKefuActivity : BasicActivity(), RequestView, ReLoadingData {
         mRightTextTv.visibility = View.GONE
         mRightTextTv.setTextColor(ContextCompat.getColor(this, R.color.btn_login_normal))
         initView()
-        //showProgressDialog()
-        //traderListAction()
-        for (index in 1..3){
-            val map = HashMap<String,Any>()
-            map["type"] = index
-            map["number"] = "10086"
-            mDataList.add(map)
-        }
-        responseData()
+        showProgressDialog()
+        traderListAction()
+
     }
 
     private fun initView() {
@@ -96,22 +90,21 @@ class ContacKefuActivity : BasicActivity(), RequestView, ReLoadingData {
         manager.orientation = RecyclerView.VERTICAL
         mRefreshListView.layoutManager = manager
         mRefreshListView.setOnRefreshListener {
-            //traderListAction();
-            mRefreshListView.setNoMore(true)
+            showProgressDialog()
+            traderListAction()
         }
-        mRefreshListView.setOnLoadMoreListener { traderListAction() }
     }
 
     //获取公告列表
     private fun traderListAction() {
-        /*mRequestTag = MethodUrl.NOTICE_LIST
         val map: MutableMap<String, Any> = HashMap()
+        map["nozzle"] = MethodUrl.CONTACT_INFO
         if (empty(MbsConstans.ACCESS_TOKEN)) {
-            MbsConstans.ACCESS_TOKEN = get(this@NoticeListActivity, MbsConstans.ACCESS_TOKEN, "").toString()
+            MbsConstans.ACCESS_TOKEN = get(this@ContacKefuActivity, MbsConstans.ACCESS_TOKEN, "").toString()
         }
         map["token"] = MbsConstans.ACCESS_TOKEN
-        val mHeaderMap: Map<String, String> = HashMap()
-        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.NOTICE_LIST, map)*/
+        val mHeaderMap:MutableMap<String, String> = HashMap()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.CONTACT_INFO, map)
     }
 
     private fun responseData() {
@@ -190,44 +183,41 @@ class ContacKefuActivity : BasicActivity(), RequestView, ReLoadingData {
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
         val intent: Intent
         when (mType) {
-/*
-            MethodUrl.NOTICE_LIST -> when (tData["code"].toString() + "") {
-                "0" -> {
-                    val list = tData["data"] as List<Map<String, Any>>?
+            MethodUrl.CONTACT_INFO -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    val list = tData["data"] as MutableList<MutableMap<String, Any>>?
                     if (empty(list)) {
-                        mPageView!!.showEmpty()
+                        mPageView.showEmpty()
                     } else {
-                        mPageView!!.showContent()
                         mDataList.clear()
                         mDataList.addAll(list!!)
                         responseData()
                     }
-                    mRefreshListView!!.refreshComplete(10)
+
                 }
-                "1" -> {
+                "0" -> {
                     closeAllActivity()
-                    intent = Intent(this@NoticeListActivity, LoginActivity::class.java)
+                    intent = Intent(this@ContacKefuActivity, LoginActivity::class.java)
                     startActivity(intent)
                 }
                 "-1" -> {
-                    mPageView!!.showNetworkError()
+                    mPageView.showNetworkError()
                     showToastMsg(tData["msg"].toString() + "")
                 }
             }
-*/
         }
     }
 
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
         when (mType) {
             MethodUrl.tradeList -> if (mListAdapter != null) {
-                if (mListAdapter!!.dataList.size <= 0) {
-                    mPageView!!.showNetworkError()
+                if (mListAdapter!!.dataList.isEmpty()) {
+                    mPageView.showNetworkError()
                 } else {
-                    mPageView!!.showContent()
+                    mPageView.showContent()
                 }
-                mRefreshListView!!.refreshComplete(10)
-                mRefreshListView!!.setOnNetWorkErrorListener { traderListAction() }
+                mRefreshListView.refreshComplete(10)
+                mRefreshListView.setOnNetWorkErrorListener { traderListAction() }
             } else {
                 mPageView!!.showNetworkError()
             }

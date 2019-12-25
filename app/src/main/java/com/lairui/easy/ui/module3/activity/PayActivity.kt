@@ -19,8 +19,10 @@ import java.util.HashMap
 
 import butterknife.BindView
 import butterknife.OnClick
+import com.lairui.easy.manage.ActivityManager
 import com.lairui.easy.mywidget.view.TipsToast
 import com.lairui.easy.ui.module.activity.LoginActivity
+import com.lairui.easy.ui.module.activity.MainActivity
 import com.lairui.easy.ui.module.activity.XieYiDetialActivity
 import com.lairui.easy.ui.module5.activity.PayWayActivity
 import com.lairui.easy.utils.tool.JSONUtil
@@ -54,6 +56,7 @@ class PayActivity : BasicActivity(), RequestView {
     private var mOpType = 0
     private var total = 0.0
 
+    var type =""
     var bound =""
     var multiple = ""
     override val contentView: Int
@@ -65,11 +68,24 @@ class PayActivity : BasicActivity(), RequestView {
         val  bundle = intent.extras
         if (bundle != null){
             bound = bundle["bound"].toString()
+            type = bundle["type"].toString()
             multiple = bundle["multiple"].toString()
             boundTv.text ="¥ "+UtilTools.getNormalMoney(bundle["bound"].toString())
             lixiTv.text ="¥ "+UtilTools.getNormalMoney(bundle["lixi"].toString())
             total = (bundle["bound"].toString().toInt()+bundle["lixi"].toString().toFloat()).toDouble()
             payTv.text = "¥ "+UtilTools.getNormalMoney(total.toString())
+
+            when(type){
+                "0" ->{
+                    timeTv.text = "1天"
+                }
+                "1" ->{
+                    timeTv.text = "1月"
+                }
+                "2" ->{
+                    timeTv.text = "20天"
+                }
+            }
         }else{
             finish()
         }
@@ -98,15 +114,6 @@ class PayActivity : BasicActivity(), RequestView {
         }
 
 
-
-
-
-
-
-
-
-
-
         mTitleText.text = "确认支付"
     }
 
@@ -126,7 +133,18 @@ class PayActivity : BasicActivity(), RequestView {
         when (view.id) {
             R.id.left_back_lay, R.id.back_img -> finish()
             R.id.but_back ->  {
-                payAction()
+                when(type){
+                    "0" ->{
+                        payAction()
+                    }
+                    "1" ->{
+                        payAction2()
+                    }
+                    "2" ->{
+                        payAction3()
+                    }
+                }
+
                 }
             }
         }
@@ -144,6 +162,34 @@ class PayActivity : BasicActivity(), RequestView {
         mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.PEIZI_DAY_APPLY, map)
     }
 
+    private fun payAction2() {
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.PEIZI_MONTH_APPLY
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@PayActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["bond"] = bound
+        map["multiple"] = multiple
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.PEIZI_MONTH_APPLY, map)
+    }
+
+    private fun payAction3() {
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.PEIZI_FREE_APPLY
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@PayActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["bond"] = bound
+        map["multiple"] = multiple
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.PEIZI_FREE_APPLY, map)
+    }
+
+
+
 
     override fun showProgress() {
         showProgressDialog()
@@ -158,12 +204,13 @@ class PayActivity : BasicActivity(), RequestView {
             MethodUrl.PEIZI_DAY_APPLY -> when (tData["code"].toString() + "") {
                 "1" -> {
                     TipsToast.showToastMsg(tData["msg"].toString() + "")
-
                     intent = Intent()
                     intent.action = MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE
                     sendBroadcast(intent)
-
                     finish()
+
+                  /*  val  activity = ActivityManager.instance.currentActivity() as MainActivity
+                    activity.toTradeFragment()*/
 
                 }
                 "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
@@ -173,6 +220,46 @@ class PayActivity : BasicActivity(), RequestView {
                     startActivity(intent)
                 }
             }
+            MethodUrl.PEIZI_MONTH_APPLY -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    TipsToast.showToastMsg(tData["msg"].toString() + "")
+                    intent = Intent()
+                    intent.action = MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE
+                    sendBroadcast(intent)
+
+                    finish()
+                   /* val  activity = ActivityManager.instance.currentActivity() as MainActivity
+                    activity.toTradeFragment()*/
+
+                }
+                "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@PayActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            MethodUrl.PEIZI_FREE_APPLY -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    TipsToast.showToastMsg(tData["msg"].toString() + "")
+                    intent = Intent()
+                    intent.action = MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE
+                    sendBroadcast(intent)
+
+                    finish()
+                   /* val  activity = ActivityManager.instance.currentActivity() as MainActivity
+                    activity.toTradeFragment()*/
+
+                }
+                "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@PayActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
 
         }
     }

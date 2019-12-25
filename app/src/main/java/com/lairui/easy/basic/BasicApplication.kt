@@ -68,8 +68,8 @@ class BasicApplication : MultiDexApplication() {
         //PushService.init(this, BuildConfig.APPLICATION_ID);
         //注册位置信息
         //注册推送服务
-//PushService.init(this, BuildConfig.APPLICATION_ID);
-//注册位置信息
+        //PushService.init(this, BuildConfig.APPLICATION_ID);
+        //注册位置信息
         MessageViewHolderManager.getInstance().registerMessageViewHolder(LocationMessageContentViewHolder::class.java)
         setupWFCDirs()
         Stetho.initializeWithDefaults(this)
@@ -99,7 +99,7 @@ class BasicApplication : MultiDexApplication() {
          */
         BGASwipeBackHelper.init(this, null)
 
-        Bugly.init(this, "484b6f7ca3", false)
+        Bugly.init(this, "7d8ffe2c51", false)
         Handler().post {
             /*CrashHandler mUncaughtHandler= CrashHandler.getmContext();
 				mUncaughtHandler.init(getApplicationContext());*/

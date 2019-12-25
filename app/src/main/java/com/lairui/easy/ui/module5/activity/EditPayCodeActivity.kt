@@ -164,7 +164,10 @@ class EditPayCodeActivity : BasicActivity(), RequestView {
                     showToastMsg(tData["msg"].toString() + "")
                     finish()
                 }
-                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "0" -> {
+                    showToastMsg(tData["msg"].toString() + "")
+                    mButNext.isEnabled = true
+                }
                 "-1" -> {
                     closeAllActivity()
                     val intent = Intent(this@EditPayCodeActivity, LoginActivity::class.java)

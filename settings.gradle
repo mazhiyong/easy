@@ -1,1 +1,1 @@
-include ':app', ':mars-core-release', ':client', ':avenginekit', ':emojilibrary', ':imagepicker'
+include ':app', ':mars-core-release', ':client', ':avenginekit', ':emojilibrary', ':imagepicker', ':MPChartLib'

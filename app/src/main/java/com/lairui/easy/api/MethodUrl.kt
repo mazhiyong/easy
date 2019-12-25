@@ -195,16 +195,24 @@ object MethodUrl {
     const val TIXIN_ACTION = "withdraw" //提现操作
     const val TIXIN_CODE = "withdraw_code" //提现验证码
     const val TIXIN_INFO = "withdraw_info" //提现信息获取
+    const val CONTACT_INFO = "customer_service" //联系客服
+
 
 
 
     const val QUERY_CONCERN = "query_concern" //查询自选
     const val CANCEL_CONCERN = "cancel_concern" //取消自选
     const val ADD_CONCERN = "join_optional" //添加自选
+    const val CONCERN_LIST = "concern_list" //自选列表
+
 
     const val PEIZI_INFO = "trading_agreement" //查询自选
     const val PEIZI_DAY_INFO = "capital_day" //按天配资
     const val PEIZI_DAY_APPLY = "apply_day" //申请按天配资
+    const val PEIZI_MONTH_INFO = "capital_month" //按月配资
+    const val PEIZI_MONTH_APPLY = "apply_month" //申请按月配资
+    const val PEIZI_FREE_INFO = "capital_mutual" //免息配资
+    const val PEIZI_FREE_APPLY = "apply_mutual" //申请免息配资
     const val PEIZI_LIST= "assets_info" //当前配资(操盘中)
     const val BOND_INFO = "bond_info" //追加保证金信息
     const val BOND_ACTION = "bond_operate" //追加保证金操作
@@ -217,6 +225,16 @@ object MethodUrl {
     const val PROFIT_LIST = "profit_operate_log" //提取盈利记录
     const val LIXI_LIST = "interest_operate_log" //支付利息记录
     const val PEIZI_JIESUAN = "settlement" //配资结算
+    const val DETAILED_IFFO = "assets_detailed" //配资详情
+    const val TRADEFLOW_LIST = "trade_flow" //资金流水
+    const val HISTORY_LIST = "history_operate" //历史配资
+    const val HISTORY_DETAILED_IFFO = "history_detailed" //历史配资详情
+
+
+
+
+
+
 
 
 

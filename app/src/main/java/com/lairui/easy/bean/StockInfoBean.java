@@ -93,6 +93,9 @@ public class StockInfoBean {
     public String stockEntrustRatio;
     //平均价
     public String stockAveragePrice;
+    //
+    public String stockLiangbi;
+
 
 
     public static StockInfoBean clearData() {
@@ -143,6 +146,7 @@ public class StockInfoBean {
         stockInfoBean.stockEntrustDifference = "0";
         stockInfoBean.stockEntrustRatio = "0.00";
         stockInfoBean.stockAveragePrice = "0.00";
+        stockInfoBean.stockLiangbi = "0.00";
         return stockInfoBean;
     }
 }

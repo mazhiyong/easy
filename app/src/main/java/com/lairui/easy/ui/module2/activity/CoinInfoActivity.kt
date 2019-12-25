@@ -2,13 +2,17 @@ package com.lairui.easy.ui.module2.activity
 
 import android.content.Intent
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import butterknife.OnClick
+import com.github.mikephil.charting.stockChart.charts.CoupleChartGestureListener.CoupleClick
+import com.github.mikephil.charting.stockChart.dataManage.KLineDataManage
+import com.github.mikephil.charting.stockChart.dataManage.TimeDataManage
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.jaeger.library.StatusBarUtil
 import com.lairui.easy.R
 import com.lairui.easy.api.MethodUrl
@@ -22,14 +26,10 @@ import com.lairui.easy.mywidget.view.TipsToast
 import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module2.adapter.BuyAndSellAdapter
 import com.lairui.easy.utils.tool.*
-import com.zhangke.websocket.SocketListener
-import com.zhangke.websocket.WebSocketHandler.getDefault
-import com.zhangke.websocket.response.ErrorResponse
 import kotlinx.android.synthetic.main.activity_coin_info.*
 import kotlinx.android.synthetic.main.title_leftbut_bar.*
-import org.java_websocket.framing.Framedata
+import org.json.JSONObject
 import java.lang.reflect.Type
-import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 
 
@@ -52,6 +52,12 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
     private var dateformat: SimpleDateFormat? = null
 
+    private val kTimeData = TimeDataManage()
+    private var kLineDatas : KLineDataManage? = null
+
+
+    private var indexType = 1
+
     //不支持滑动返回
     override fun isSupportSwipeBack(): Boolean {
         return false
@@ -64,6 +70,15 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
     override fun init() {
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
+
+        kLineDatas = KLineDataManage(this)
+        timeChart.initChart(true)
+        kLineChart.initChart(true)
+        kLineChart.getGestureListenerBar().setCoupleClick(CoupleClick {
+            loadIndexData(if (indexType < 5) ++indexType else 1)
+        })
+
+
 
         divide_line.visibility = View.GONE
         right_img.visibility = View.VISIBLE
@@ -79,11 +94,13 @@ class CoinInfoActivity : BasicActivity(), RequestView {
             mapData = bundle.getSerializable("DATA") as MutableMap<String,Any> ?
             title_text.text = mapData!!["name"].toString()
             mRequestTag = 0
-            //getTimeMinuteDataActin()
-            getKLineMinuteDataActin("m1")
+            getTimeMinuteDataActin()
+            //getKLineMinuteDataActin("m1")
             getDetialDataAction()
             queryConcernAction()
         }
+
+
 
 
         val mKLineData = SelectDataUtil.kLineParams
@@ -99,29 +116,34 @@ class CoinInfoActivity : BasicActivity(), RequestView {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when(tab!!.position){
                     0 -> {
-
                         mRequestTag = 0
-                        //getTimeMinuteDataActin() //1分时图
-                        getKLineMinuteDataActin("m1") //1分时图
+                        getTimeMinuteDataActin() //1分时图
+                        timeChart.visibility = View.VISIBLE
+                        kLineChart.visibility =View.GONE
 
                     }
-                    1 -> {
+                    /*1 -> {
                         mRequestTag = 1 //五日分时图
                         getKLineWeekAction()
 
-                    }
-                    2 -> {
+                    }*/
+                    1 -> {
                         mRequestTag = 2 //日K
                         getKLineDayAction()
-
+                        timeChart.visibility = View.GONE
+                        kLineChart.visibility =View.VISIBLE
                     }
-                    3 -> {
+                    2 -> {
                         mRequestTag = 3 //周K
                         getKLineWeekAction()
+                        timeChart.visibility = View.GONE
+                        kLineChart.visibility =View.VISIBLE
                     }
-                    4 -> {
+                    3 -> {
                         mRequestTag = 4//月K
                         getKLineMonthAction()
+                        timeChart.visibility = View.GONE
+                        kLineChart.visibility =View.VISIBLE
                     }
                 }
             }
@@ -139,24 +161,34 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                         }
                         mRequestTag = 5 //1分钟 K
                         getKLineMinuteDataActin("m1")
+                        timeChart.visibility = View.GONE
+                        kLineChart.visibility =View.VISIBLE
                     }
                     1 ->{
                         mRequestTag = 6 //5分钟 K
                         getKLineMinuteDataActin("m5")
+                        timeChart.visibility = View.GONE
+                        kLineChart.visibility =View.VISIBLE
                     }
                     2 ->{
                         //mRequestTag = 7 //10分钟 K
                         //getKLineMinuteDataActin("m10")
                         mRequestTag = 8 //15分钟 K
                         getKLineMinuteDataActin("m15")
+                        timeChart.visibility = View.GONE
+                        kLineChart.visibility =View.VISIBLE
                     }
                     3 ->{
                         mRequestTag = 9 //30分钟 K
                         getKLineMinuteDataActin("m30")
+                        timeChart.visibility = View.GONE
+                        kLineChart.visibility =View.VISIBLE
                     }
                     4 ->{
                         mRequestTag = 10 //60分钟 K
                         getKLineMinuteDataActin("m60")
+                        timeChart.visibility = View.GONE
+                        kLineChart.visibility =View.VISIBLE
                     }
 
                 }
@@ -330,7 +362,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
     //日K线图
     private fun  getKLineDayAction() {
         val map = HashMap<String, String>()
-        map["param"] = mapData!!["code"].toString()+",day,,,320,qfq"
+        map["param"] = mapData!!["code"].toString()+",day,,,320,"
         val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.KLINE_DAY_SERVER_URL, map)
     }
@@ -339,7 +371,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
     //周K线图
     private fun  getKLineWeekAction() {
         val map = HashMap<String, String>()
-        map["param"] = mapData!!["code"].toString()+",week,,,320,qfq"
+        map["param"] = mapData!!["code"].toString()+",week,,,320,"
         val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.KLINE_WEEK_SERVER_URL, map)
     }
@@ -348,7 +380,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
     //月K线图
     private fun  getKLineMonthAction() {
         val map = HashMap<String, String>()
-        map["param"] = mapData!!["code"].toString()+",month,,,320,qfq"
+        map["param"] = mapData!!["code"].toString()+",month,,,320,"
         val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.KLINE_MONTHS_SERVER_URL, map)
     }
@@ -428,9 +460,10 @@ class CoinInfoActivity : BasicActivity(), RequestView {
             }
             getDetialDataAction()
 
+/*
             when(mRequestTag){
                 0 ->{
-                    getKLineMinuteDataActin("m1") //1分时图
+                    getTimeMinuteDataActin() //1分时图
                 }
                 1 ->{
                     getKLineWeekAction()
@@ -464,6 +497,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                 }
 
             }
+*/
 
 
             handler.postDelayed(this, 5 * 1000)
@@ -494,13 +528,16 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                 val mapInfo = JSONUtil.instance.jsonMap(result)
                 if (mapInfo != null){
                     if (UtilTools.empty(mapInfo["data"].toString())){
-                        akv_kv_kview.loadMoreNoData()
+                        //akv_kv_kview.loadMoreNoData()
                         return
                     }
                     val dataMap = mapInfo["data"] as MutableMap<String,Any>
                     val  dataMap1 = dataMap[mapData!!["code"].toString()] as MutableMap<String,Any>
+                    var prec :Double = 0.0
+                    if (!UtilTools.empty(dataMap1["prec"].toString())){
+                        prec = dataMap1["prec"].toString().replace("\"","").toDouble()
+                    }
                     var resultStr:String? = null
-                    LogUtil.i("show","mRequestTag:"+mRequestTag)
                     when(mRequestTag){
                         0 ->  {
                             resultStr = dataMap1["m1"] .toString().replace("{","").replace("},","")
@@ -537,17 +574,32 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                     }
                     val data = JSONUtil.instance.jsonToListStr2(resultStr!!)
                     if (data != null) {
-                        dataList.clear()
+                       /* dataList.clear()
                         for (item in data){
                             val timeStr =item[0]
                             val time = dateformat!!.parse(timeStr+"00").time
                             //开收高低
+
+
                             val quotes = Quotes(item[1].toDouble(), item[3].toDouble(), item[4].toDouble(), item[2].toDouble(), time,item[5].toDouble())
                             dataList.add(quotes)
                         }
-                        //设置数据
+
+                          //设置数据
                         LogUtil.i("show","$$$$:"+dataList.size)
                         updateDataAndUI(dataList)
+*/
+                        LogUtil.i("show","K线格式化后数据:"+data )
+                        //上证指数代码000001.IDX.SH
+                        val listDataMap = HashMap<String,Any>()
+                        listDataMap["data"] = data
+                        val obc = JSONObject(JSONUtil.instance.toJson(listDataMap))
+
+                        //上证指数代码000001.IDX.SH
+                        kLineDatas!!.parseKlineData(obc, "000001.IDX.SH", true,prec)
+                        kLineChart.setDataToChart(kLineDatas)
+
+
                     }
 
 
@@ -556,22 +608,31 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
             MbsConstans.KLINE_DAY_SERVER_URL ->{
                 var  result = tData["result"]!!.toString() + ""
+                LogUtil.i("show","日K线原始数据:"+result)
                 result = result.substring(result.indexOf("=")+1)
-                val mapInfo = JSONUtil.instance.jsonMap(result)
-                if (mapInfo != null){
-                    if (UtilTools.empty(mapInfo["data"])){
+
+                val jsonObjet = JsonParser().parse(result).asJsonObject
+
+
+                //val mapInfo = JSONUtil.instance.jsonMap(result)
+                if (jsonObjet != null){
+                    if (UtilTools.empty(jsonObjet["data"])){
                         akv_kv_kview.loadMoreNoData()
                         return
                     }
-                    val dataMap = mapInfo["data"] as MutableMap<String,Any>
-                    val  dataMap1 = dataMap[mapData!!["code"].toString()] as MutableMap<String,Any>
+                    val dataMap = jsonObjet["data"] as JsonObject
+                    val  dataMap1 = dataMap[mapData!!["code"].toString()] as JsonObject
                     akv_kv_kview.isShowTimSharing = false
-                    if (UtilTools.empty(dataMap1["qfqday"].toString())){
+                    var prec :Double = 0.0
+                    if (!UtilTools.empty(dataMap1["prec"].toString())){
+                        prec = dataMap1["prec"].toString().replace("\"","").toDouble()
+                    }
+                    if (UtilTools.empty(dataMap1["day"])){
                         return
                     }
-                    val data = JSONUtil.instance.jsonToListStr2(dataMap1["qfqday"].toString())
+                    val data = JSONUtil.instance.jsonToListStr2(dataMap1["day"].toString())
                     if (data != null) {
-                        dataList.clear()
+                      /*  dataList.clear()
                         for (item in data){
                             val timeStr =item[0]
                             val time = dateformat!!.parse(timeStr+"00").time
@@ -582,6 +643,16 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                         //设置数据
                         LogUtil.i("show","$$$$:"+dataList.size)
                         updateDataAndUI(dataList)
+*/
+                        LogUtil.i("show","日K线格式化后数据:"+data )
+                        //上证指数代码000001.IDX.SH
+                        val listDataMap = HashMap<String,Any>()
+                        listDataMap["data"] = data
+                        val obc = JSONObject(JSONUtil.instance.toJson(listDataMap))
+
+                        //上证指数代码000001.IDX.SH
+                        kLineDatas!!.parseKlineData(obc, "000001.IDX.SH", true,prec)
+                        kLineChart.setDataToChart(kLineDatas)
                     }
                 }
 
@@ -590,6 +661,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
             MbsConstans.KLINE_WEEK_SERVER_URL ->{
                 var  result = tData["result"]!!.toString() + ""
+                LogUtil.i("show","周K线原始数据:"+result)
                 result = result.substring(result.indexOf("=")+1)
                 val mapInfo = JSONUtil.instance.jsonMap(result)
                 if (mapInfo != null){
@@ -599,20 +671,24 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                     }
                     val dataMap = mapInfo["data"] as MutableMap<String,Any>
                     val  dataMap1 = dataMap[mapData!!["code"].toString()] as MutableMap<String,Any>
-                    when(mRequestTag){
+                   /* when(mRequestTag){
                         1->{ //分时图
                             akv_kv_kview.isShowTimSharing = true
                         }
                         3->{ //K线图
                             akv_kv_kview.isShowTimSharing = false
                         }
+                    }*/
+                    var prec :Double = 0.0
+                    if (!UtilTools.empty(dataMap1["prec"].toString())){
+                        prec = dataMap1["prec"].toString().replace("\"","").toDouble()
                     }
-                    if (UtilTools.empty(dataMap1["qfqweek"].toString())){
+                    if (UtilTools.empty(dataMap1["week"].toString())){
                         return
                     }
-                    val data = JSONUtil.instance.jsonToListStr2(dataMap1["qfqweek"].toString())
+                    val data = JSONUtil.instance.jsonToListStr2(dataMap1["week"].toString())
                     if (data != null) {
-                        dataList.clear()
+                    /*    dataList.clear()
                         for (item in data){
                             val timeStr =item[0]
                             val time = dateformat!!.parse(timeStr+"00").time
@@ -621,7 +697,18 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                             dataList.add(quotes)
                         }
                         //设置数据
-                        updateDataAndUI(dataList)
+                        updateDataAndUI(dataList)*/
+
+
+                        LogUtil.i("show","周K线格式化后数据:"+data )
+                        //上证指数代码000001.IDX.SH
+                        val listDataMap = HashMap<String,Any>()
+                        listDataMap["data"] = data
+                        val obc = JSONObject(JSONUtil.instance.toJson(listDataMap))
+
+                        //上证指数代码000001.IDX.SH
+                        kLineDatas!!.parseKlineData(obc, "000001.IDX.SH", true,prec)
+                        kLineChart.setDataToChart(kLineDatas)
                     }
 
                 }
@@ -631,6 +718,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
             MbsConstans.KLINE_MONTHS_SERVER_URL ->{
                 var  result = tData["result"]!!.toString() + ""
+                LogUtil.i("show","月K线原始数据:"+result)
                 result = result.substring(result.indexOf("=")+1)
                 val mapInfo = JSONUtil.instance.jsonMap(result)
                 if (mapInfo != null){
@@ -641,12 +729,17 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                     val dataMap = mapInfo["data"] as MutableMap<String,Any>
                     val  dataMap1 = dataMap[mapData!!["code"].toString()] as MutableMap<String,Any>
                     akv_kv_kview.isShowTimSharing = false
-                    if (UtilTools.empty(dataMap1["qfqmonth"].toString())){
+                    var prec :Double = 0.0
+                    if (!UtilTools.empty(dataMap1["prec"].toString())){
+                        prec = dataMap1["prec"].toString().replace("\"","").toDouble()
+                    }
+
+                    if (UtilTools.empty(dataMap1["month"].toString())){
                         return
                     }
-                    val data = JSONUtil.instance.jsonToListStr2(dataMap1["qfqmonth"].toString())
+                    val data = JSONUtil.instance.jsonToListStr2(dataMap1["month"].toString())
                     if (data != null) {
-                        dataList.clear()
+                       /* dataList.clear()
                         for (item in data){
                             val timeStr =item[0]
                             val time = dateformat!!.parse(timeStr+"00").time
@@ -656,7 +749,17 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                         }
                         //设置数据
                         LogUtil.i("show","$$$$:"+dataList.size)
-                        updateDataAndUI(dataList)
+                        updateDataAndUI(dataList)*/
+
+                        LogUtil.i("show","月线格式化后数据:"+data )
+                        //上证指数代码000001.IDX.SH
+                        val listDataMap = HashMap<String,Any>()
+                        listDataMap["data"] = data
+                        val obc = JSONObject(JSONUtil.instance.toJson(listDataMap))
+
+                        //上证指数代码000001.IDX.SH
+                        kLineDatas!!.parseKlineData(obc, "000001.IDX.SH", true,prec)
+                        kLineChart.setDataToChart(kLineDatas)
                     }
 
 
@@ -670,19 +773,58 @@ class CoinInfoActivity : BasicActivity(), RequestView {
             MbsConstans.TIME_MINUTE_SERVER_URL ->{
                 var  result = tData["result"]!!.toString() + ""
                 result = result.substring(result.indexOf("=")+1)
-                val mapInfo = JSONUtil.instance.jsonMap(result)
-                if (mapInfo != null){
-                    val dataMap = mapInfo["data"] as MutableMap<String,Any>
-                    val  dataMap1 = dataMap[mapData!!["code"].toString()] as MutableMap<String,Any>
-                    val  dataMap2 = dataMap1["data"] as MutableMap<String,Any>
-                    val  date = dataMap2["date"].toString()
-                    val data = JSONUtil.instance.jsonToListStr2(dataMap2["data"].toString())
+                //val mapInfo = JSONUtil.instance.jsonMap(result)
+                val jsonObjet = JsonParser().parse(result).asJsonObject
+
+                if (jsonObjet != null){
+                    val dataMap = jsonObjet["data"] as JsonObject
+                    val  dataMap1 = dataMap[mapData!!["code"].toString()] as JsonObject
+                    val  dataMap2 = dataMap1["data"] as JsonObject
+                    val  qtMap = dataMap1["qt"] as JsonObject
+
+                    val dataCode = JSONUtil.instance.jsonToListStr(qtMap[mapData!!["code"].toString()].toString())
+                    val  date = JSONUtil.instance.jsonMap(dataMap2.toString())!!["date"].toString()
+
+                    val data = JSONUtil.instance.jsonToListStr(dataMap2["data"].toString())
+
+                    LogUtil.i("show","分时图原始数据数量:"+data!!.size )
+
                     if (data != null) {
-                        for (item in data){
-                            val timeStr = date+item[0]
-                            val quotes = Quotes(item[1].toDouble(), item[2].toDouble(), item[3].toDouble(), item[4].toDouble(), item[0].toLong() * 1000)
-                            dataList.add(quotes)
+
+                        val listData = ArrayList<List<Any>>()
+                        var sumPrice = 0.0
+                        for (i in data.indices){
+                           val array = data[i].split(" ").toTypedArray()
+                            val listChild = ArrayList<Any>()
+                            val timeStr = date+array[0].replace("\"","")
+                            val time = dateformat!!.parse(timeStr+"00").time
+                            sumPrice += array[1].toDouble()
+                            listChild.add(time.toString())  //时间
+                            listChild.add(array[1]) //当前价
+                            listChild.add((sumPrice/(i+1)).toString())//平均价
+                            if (i == 0){
+                                 //成交量
+                                listChild.add(array[2])
+                            }else{
+                                val array2 = data[i-1].split(" ").toTypedArray()
+                                //成交量
+                                listChild.add((array[2].toDouble() - array2[2].toDouble()).toString())
+                            }
+                            listChild.add(dataCode!![4]) //左收
+                            listData.add(listChild)
+
                         }
+
+                        LogUtil.i("show","格式化后数据:"+JSONUtil.instance.toJson(listData)   )
+                        //上证指数代码000001.IDX.SH
+                        val listDataMap = HashMap<String,Any>()
+                        listDataMap["data"] = JSONUtil.instance.toJson(listData)
+
+                        val obc = JSONObject(JSONUtil.instance.toJson(listDataMap))
+
+                        kTimeData.parseTimeData(obc, "000001.IDX.SH", 0.0)
+                        timeChart.setDataToChart(kTimeData)
+
 
                     }
 
@@ -712,15 +854,15 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                     tv5.text = stockInfoBean!!.stockLowestPrice
                     tv6.text = stockInfoBean!!.stockYesterdayPrice
                     tv7.text = stockInfoBean!!.stockRiseTop
-                    tv8.text = stockInfoBean!!.stockAmplitude
-                    tv9.text = "--"
+                    tv8.text = stockInfoBean!!.stockAmplitude+"%"
+                    tv9.text = stockInfoBean!!.stockLiangbi
                     tv10.text = stockInfoBean!!.stockPriceEarningsRatio
-                    tv11.text = stockInfoBean!!.stockTransactionVolume
-                    tv12.text = stockInfoBean!!.stockTotalMarketValue
+                    tv11.text = stockInfoBean!!.stockTransactionVolume+"手"
+                    tv12.text = stockInfoBean!!.stockTotalMarketValue+"亿"
                     tv13.text = stockInfoBean!!.stockEntrustRatio+"%"
-                    tv14.text = stockInfoBean!!.stockTurnoverRate
-                    tv15.text = stockInfoBean!!.stockTransactionAccount
-                    tv16.text = stockInfoBean!!.stockCirculationMarketValue
+                    tv14.text = stockInfoBean!!.stockTurnoverRate+"%"
+                    tv15.text = stockInfoBean!!.stockTransactionAccount+"万"
+                    tv16.text = stockInfoBean!!.stockCirculationMarketValue+"亿"
 
                 }
 
@@ -926,6 +1068,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                 stockInfoBean!!.stockPBRatio = split[46]
                 stockInfoBean!!.stockRiseTop = split[47]
                 stockInfoBean!!.stockFallBottom = split[48]
+                stockInfoBean!!.stockLiangbi = split[49]
                 stockInfoBean!!.stockEntrustDifference = split[50]
                 stockInfoBean!!.stockAveragePrice = split[51]
                 val totalBuyAccount: Int = Integer.valueOf(stockInfoBean!!.stockBuy1Amount) +
@@ -978,31 +1121,39 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                 buyData.add(map5)
 
 
-                val  map6 = HashMap<String,Any>()
-                map6["price"] = stockInfoBean!!.stockSell1Price
-                map6["amount"] = stockInfoBean!!.stockSell1Amount
-                map6["type"] = "卖1"
-                sellData.add(map6)
-                val  map7 = HashMap<String,Any>()
-                map7["price"] = stockInfoBean!!.stockSell2Price
-                map7["amount"] = stockInfoBean!!.stockSell1Amount
-                map7["type"] = "卖2"
-                sellData.add(map7)
-                val  map8 = HashMap<String,Any>()
-                map8["price"] = stockInfoBean!!.stockSell3Price
-                map8["amount"] = stockInfoBean!!.stockSell3Amount
-                map8["type"] = "卖3"
-                sellData.add(map8)
-                val  map9 = HashMap<String,Any>()
-                map9["price"] = stockInfoBean!!.stockSell4Price
-                map9["amount"] = stockInfoBean!!.stockSell4Amount
-                map9["type"] = "卖4"
-                sellData.add(map9)
                 val  map10 = HashMap<String,Any>()
                 map10["price"] = stockInfoBean!!.stockSell5Price
                 map10["amount"] = stockInfoBean!!.stockSell5Amount
                 map10["type"] = "卖5"
                 sellData.add(map10)
+
+                val  map9 = HashMap<String,Any>()
+                map9["price"] = stockInfoBean!!.stockSell4Price
+                map9["amount"] = stockInfoBean!!.stockSell4Amount
+                map9["type"] = "卖4"
+                sellData.add(map9)
+
+                val  map8 = HashMap<String,Any>()
+                map8["price"] = stockInfoBean!!.stockSell3Price
+                map8["amount"] = stockInfoBean!!.stockSell3Amount
+                map8["type"] = "卖3"
+                sellData.add(map8)
+
+                val  map7 = HashMap<String,Any>()
+                map7["price"] = stockInfoBean!!.stockSell2Price
+                map7["amount"] = stockInfoBean!!.stockSell1Amount
+                map7["type"] = "卖2"
+                sellData.add(map7)
+
+                val  map6 = HashMap<String,Any>()
+                map6["price"] = stockInfoBean!!.stockSell1Price
+                map6["amount"] = stockInfoBean!!.stockSell1Amount
+                map6["type"] = "卖1"
+                sellData.add(map6)
+
+
+
+
 
 
 
@@ -1011,6 +1162,32 @@ class CoinInfoActivity : BasicActivity(), RequestView {
         }
 
 
+    }
+
+
+    private fun loadIndexData(type: Int) {
+        indexType = type
+        when (indexType) {
+            1 -> kLineChart.doBarChartSwitch(indexType)
+            2 -> {
+                kLineDatas!!.initMACD()
+                kLineChart.doBarChartSwitch(indexType)
+            }
+            3 -> {
+                kLineDatas!!.initKDJ()
+                kLineChart.doBarChartSwitch(indexType)
+            }
+            4 -> {
+                kLineDatas!!.initBOLL()
+                kLineChart.doBarChartSwitch(indexType)
+            }
+            5 -> {
+                kLineDatas!!.initRSI()
+                kLineChart.doBarChartSwitch(indexType)
+            }
+            else -> {
+            }
+        }
     }
 
 

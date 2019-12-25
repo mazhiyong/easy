@@ -17,6 +17,7 @@ import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter
 import com.github.jdsjlzx.recyclerview.ProgressStyle
 import com.jaeger.library.StatusBarUtil
 import com.lairui.easy.R
+import com.lairui.easy.api.MethodUrl
 import com.lairui.easy.basic.BasicFragment
 import com.lairui.easy.basic.MbsConstans
 import com.lairui.easy.listener.ReLoadingData
@@ -24,13 +25,15 @@ import com.lairui.easy.listener.SelectBackListener
 import com.lairui.easy.mvp.view.RequestView
 import com.lairui.easy.mywidget.view.LoadingWindow
 import com.lairui.easy.mywidget.view.PageView
+import com.lairui.easy.mywidget.view.TipsToast
+import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module1.adapter.CoinInfoAdapter
 import com.lairui.easy.ui.module2.activity.SearchListActivity
+import com.lairui.easy.ui.module2.adapter.BuyAndSellAdapter
+import com.lairui.easy.ui.module2.adapter.ChicangListAdapter
 import com.lairui.easy.ui.module2.adapter.HangqingListAdapter
-import com.lairui.easy.utils.tool.AnimUtil
-import com.lairui.easy.utils.tool.JSONUtil
-import com.lairui.easy.utils.tool.LogUtil
-import com.lairui.easy.utils.tool.UtilTools
+import com.lairui.easy.utils.tool.*
+import kotlinx.android.synthetic.main.activity_buyandsell.*
 import kotlinx.android.synthetic.main.fragment_hangqing.*
 import java.util.*
 import kotlin.collections.HashMap
@@ -42,6 +45,8 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
     lateinit var mSeacherIv: ImageView
     @BindView(R.id.rvHoriList)
     lateinit var mRvHoriList: RecyclerView
+    @BindView(R.id.rg)
+    lateinit var mRg: RadioGroup
     @BindView(R.id.zhangFuRb)
     lateinit var mZhangFuRb: RadioButton
     @BindView(R.id.dieFuRb)
@@ -86,6 +91,7 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
     private lateinit var popView: View
     private lateinit var mConditionDialog: PopupWindow
     private var bright = false
+    private var postion  = 0
 
     override val layoutId: Int
         get() = R.layout.fragment_hangqing
@@ -110,11 +116,23 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
                     0 ->{
                         rvHoriList.visibility = View.VISIBLE
                         hScrollView.visibility = View.VISIBLE
+
+                        homeInfoAction()
+                        when(postion){
+                            0 -> listAction("new_all_changepercent_up")
+                            1 -> listAction("new_all_changepercent_down")
+                            2 -> listAction("new_all_turnoverrate")
+                            3 -> zhenfuInfoAction()
+                            4 -> liangbiInfoAction()
+                        }
+
                     }
 
                     1 ->{
                         rvHoriList.visibility = View.GONE
                         hScrollView.visibility = View.GONE
+
+                        getMyselfList()
                     }
                 }
             }
@@ -136,9 +154,22 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
 
         mRefreshListView.setOnRefreshListener {
             mLoadingWindow.showView()
-            if (!UtilTools.empty(mRequestTag)){
-                listAction(mRequestTag)
+            when(mTabLayout.selectedTabPosition){
+                0 ->{
+                    when(postion){
+                        0 -> listAction("new_all_changepercent_up")
+                        1 -> listAction("new_all_changepercent_down")
+                        2 -> listAction("new_all_turnoverrate")
+                        3 -> zhenfuInfoAction()
+                        4 -> liangbiInfoAction()
+                    }
+                }
+                1 ->{
+                    getMyselfList()
+                }
+
             }
+
 
         }
         mRefreshListView.setOnLoadMoreListener{
@@ -182,6 +213,18 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
 
     }
 
+    //我的自选列表
+    private fun getMyselfList() {
+        val map = java.util.HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.CONCERN_LIST
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[activity!!, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        val mHeaderMap = java.util.HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.CONCERN_LIST, map)
+    }
+
     fun setBarTextColor() {
         StatusBarUtil.setLightMode(activity!!)
     }
@@ -195,6 +238,14 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
         mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.HANGQING_SERVER_URL, map)
     }
 
+    //获取详情
+    private fun getDetialDataAction(code:String) {
+        val map = HashMap<String, String>()
+        map["q"] = code
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.DETIAL_SERVER_URL, map)
+    }
+
 
     private fun homeInfoAction()  {
         val map = HashMap<String, String>()
@@ -203,7 +254,21 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
         mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.HOME_SERVER_URL, map)
     }
 
-    @OnClick(R.id.right_img,R.id.zhangFuRb,R.id.dieFuRb,R.id.huanHandRb)
+    private fun zhenfuInfoAction()  {
+        val map = HashMap<String, String>()
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.ZHENFU_SERVER_URL, map)
+    }
+
+
+    private fun liangbiInfoAction()  {
+        val map = HashMap<String, String>()
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestGetToRes(mHeaderMap, MbsConstans.LIANGBI_SERVER_URL, map)
+    }
+
+
+    @OnClick(R.id.right_img,R.id.zhangFuRb,R.id.dieFuRb,R.id.huanHandRb,R.id.zhenFuRb,R.id.liangBiRb)
     fun onViewClicked(view: View) {
         when (view.id) {
             R.id.right_img -> {
@@ -211,14 +276,26 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
                 startActivity(intent)
             }
             R.id.zhangFuRb -> {
+                postion = 0
                 listAction("new_all_changepercent_up")
             }
             R.id.dieFuRb -> {
+                postion = 1
                 listAction("new_all_changepercent_down")
             }
             R.id.huanHandRb -> {
+                postion = 2
                 listAction("new_all_turnoverrate")
             }
+            R.id.zhenFuRb -> {
+                postion = 3
+                zhenfuInfoAction()
+            }
+            R.id.liangBiRb -> {
+                postion = 4
+                liangbiInfoAction()
+            }
+
         }
     }
 
@@ -326,6 +403,51 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
         mLoadingWindow.cancleView()
         when (mType) {
+            MethodUrl.CONCERN_LIST -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    if (!UtilTools.empty(tData["data"].toString())){
+                        val listStr =JSONUtil.instance.jsonToListStr(tData["data"].toString())
+                        if (listStr!!.isNotEmpty()){
+                            var paramCode = ""
+                            for (item in listStr){
+                                paramCode = paramCode+item+","
+                            }
+                            getDetialDataAction(paramCode)
+
+                        }else{
+                            mPageView.showEmpty()
+                        }
+                    }else{
+                        mPageView.showEmpty()
+                    }
+
+
+                }
+                "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    activity!!.finish()
+                    val intent = Intent(activity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+            MbsConstans.DETIAL_SERVER_URL-> {
+               //列表数据
+                    val result = tData["result"]!!.toString() + ""
+                if (UtilTools.empty(result)) {
+                    mPageView.showEmpty()
+                } else {
+                    handInfoDataList(result)
+                    if (mDataList.size> 0){
+                        responseData()
+                        mRefreshListView.refreshComplete(10)
+                    }else{
+                        mPageView.showEmpty()
+                    }
+                }
+            }
+
+
+
             MbsConstans.HANGQING_SERVER_URL -> {
                 val result = tData["result"]!!.toString() + ""
                 if (UtilTools.empty(result)) {
@@ -350,11 +472,66 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
                 }
             }
 
+            MbsConstans.ZHENFU_SERVER_URL -> {
+                val result = tData["result"]!!.toString() + ""
+                if (!UtilTools.empty(result)) {
+                    handleData3(result)
+                    if (mDataList.size> 0){
+                        responseData()
+                        mRefreshListView.refreshComplete(10)
+                    }else{
+                        mPageView.showEmpty()
+                    }
+                }
+            }
+
+            MbsConstans.LIANGBI_SERVER_URL -> {
+                val result = tData["result"]!!.toString() + ""
+                if (!UtilTools.empty(result)) {
+                    handleData3(result)
+                    if (mDataList.size> 0){
+                        responseData()
+                        mRefreshListView.refreshComplete(10)
+                    }else{
+                        mPageView.showEmpty()
+                    }
+                }
+            }
+
+
         }
     }
 
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
         when (mType) {
+            MbsConstans.ZHENFU_SERVER_URL -> if (mHangqingAdapter != null) {
+                if (mHangqingAdapter!!.dataList.isEmpty()) {
+                    mPageView.showNetworkError()
+                } else {
+                    mPageView.showContent()
+                }
+                mRefreshListView.refreshComplete(10)
+                mRefreshListView.setOnNetWorkErrorListener {
+                    zhenfuInfoAction()
+                }
+            } else {
+                mPageView.showNetworkError()
+            }
+
+            MbsConstans.LIANGBI_SERVER_URL -> if (mHangqingAdapter != null) {
+                if (mHangqingAdapter!!.dataList.isEmpty()) {
+                    mPageView.showNetworkError()
+                } else {
+                    mPageView.showContent()
+                }
+                mRefreshListView.refreshComplete(10)
+                mRefreshListView.setOnNetWorkErrorListener {
+                    liangbiInfoAction()
+                }
+            } else {
+                mPageView.showNetworkError()
+            }
+
             MbsConstans.HANGQING_SERVER_URL -> if (mHangqingAdapter != null) {
                 if (mHangqingAdapter!!.dataList.isEmpty()) {
                     mPageView.showNetworkError()
@@ -368,6 +545,8 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
             } else {
                 mPageView.showNetworkError()
             }
+
+
             MbsConstans.HOME_SERVER_URL -> if (mHangqingAdapter != null) {
                 if (mHangqingAdapter!!.dataList.isEmpty()) {
                     mPageView.showNetworkError()
@@ -399,9 +578,7 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
 
         fun handleDate(body: String) {
         val substring = body.substring(body.indexOf("=\"")+2, body.indexOf("]\"")+1)
-        LogUtil.i("show","subStringg:"+substring)
         val split = substring.replace("'","\"")
-        LogUtil.i("show","split:"+split)
         val  jsonStr = JSONUtil.instance.jsonToListStr2(split)
             if (jsonStr != null) {
                 mDataList.clear()
@@ -415,6 +592,27 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
                 }
             }
     }
+
+
+    private fun handInfoDataList(result: String){
+        val infoDataList : MutableList<MutableMap<String,Any?>> = ArrayList()
+        if (!TextUtils.isEmpty(result) && result.contains("~")) {
+            val stockArray = result.split(";\n").toTypedArray()
+            mDataList.clear()
+            for (stockInfo in stockArray) {
+                val split = stockInfo.split("~").toTypedArray()
+                val map = HashMap<String,Any>()
+                map["code"] = split[0].substring(2,10)
+                map["name"] = split[1]
+                map["price"] =split[3]
+                map["rise"] = split[32]
+                mDataList.add(map)
+            }
+
+        }
+
+    }
+
 
 
 
@@ -437,6 +635,25 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
 
     }
 
+    fun handleData3(result: String) {
+        if (!TextUtils.isEmpty(result)) {
+            mDataList.clear()
+            val resultStr = result.substring(result.indexOf("HqData:")+7,result.length-2)
+            LogUtil.i("show","resultStr:"+resultStr)
+            val stockArray = JSONUtil.instance.jsonToListStr2(resultStr)
+            for (item in stockArray!!) {
+                    val map = HashMap<String,Any>()
+                    map["code"] = item[0]
+                    map["name"] = item[2]
+                    map["price"] = item[3]
+                    map["rise"] = item[7]
+                    mDataList.add(map)
+
+            }
+
+        }
+
+    }
 
 
 

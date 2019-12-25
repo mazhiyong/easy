@@ -89,10 +89,26 @@
             android:layout_height="@dimen/dp_0">
             <com.lairui.easy.mywidget.kview.KView
                 android:id="@+id/akv_kv_kview"
+                android:visibility="gone"
                 android:background="@color/body_bg"
                 android:layout_width="0dp"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:layout_height="match_parent"/>
+
+            <com.github.mikephil.charting.stockChart.OneDayChart
+                android:id="@+id/timeChart"
+                android:background="@color/body_bg"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="match_parent"/>
+            <com.github.mikephil.charting.stockChart.KLineChart
+                android:id="@+id/kLineChart"
+                android:visibility="gone"
+                android:background="@color/body_bg"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="match_parent"/>
+
             <LinearLayout
                 android:background="@color/white"
                 android:layout_width="0dp"
@@ -145,7 +161,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp_5"
-            android:layout_marginBottom="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_5"
             android:orientation="vertical">
 
             <LinearLayout
@@ -160,21 +176,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
                     android:gravity="left">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="最高:"
+                        android:text="最高"
+                        android:layout_gravity="center_horizontal"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:id="@+id/tv1"
                         android:text="--"
-                        android:gravity="right"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/sp_12"/>
@@ -184,23 +201,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
                     android:gravity="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="今开:"
+                        android:text="今开"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:id="@+id/tv2"
                         android:text="--"
-                        android:gravity="right"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/sp_12"/>
@@ -210,22 +226,21 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
                     android:gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="涨停:"
+                        android:text="涨停"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
                     <TextView
                         android:id="@+id/tv3"
-                        android:gravity="right"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:text="--"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="--"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/sp_12"/>
                 </LinearLayout>
@@ -233,21 +248,21 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
                     android:gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="均价:"
+                        android:text="均价"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
                     <TextView
                         android:id="@+id/tv4"
                         android:text="--"
                         android:gravity="right"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/sp_12"/>
@@ -267,22 +282,23 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
                     android:gravity="left">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="最低:"
+                        android:text="最低"
+                        android:layout_gravity="center_horizontal"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:id="@+id/tv5"
                         android:text="--"
-                        android:gravity="right"
-                        android:layout_width="@dimen/dp_0"
-                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/sp_12"/>
@@ -293,22 +309,21 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:orientation="vertical"
                     android:gravity="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="昨收:"
+                        android:text="昨收"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:id="@+id/tv6"
-                        android:gravity="right"
-                        android:layout_width="0dp"
                         android:text="--"
-                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/sp_12"/>
@@ -318,23 +333,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
                     android:gravity="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="跌停:"
+                        android:text="跌停"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:id="@+id/tv7"
                         android:text="--"
-                        android:gravity="right"
-                        android:layout_weight="1"
-                        android:layout_width="@dimen/dp_0"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/sp_12"/>
@@ -346,22 +360,21 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:orientation="vertical"
                     android:gravity="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="振幅:"
+                        android:text="振幅"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:text="--"
                         android:id="@+id/tv8"
-                        android:gravity="right"
-                        android:layout_width="@dimen/dp_0"
-                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/dp_12"/>
@@ -380,22 +393,23 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
                     android:gravity="left">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="量比:"
+                        android:text="量比"
+                        android:layout_gravity="center_horizontal"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:id="@+id/tv9"
                         android:text="--"
-                        android:gravity="right"
-                        android:layout_width="@dimen/dp_0"
-                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/sp_12"/>
@@ -405,23 +419,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
                     android:gravity="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="市盈率:"
+                        android:text="市盈率"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:id="@+id/tv10"
-                        android:gravity="right"
-                        android:layout_width="0dp"
                         android:text="--"
-                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/sp_12"/>
@@ -431,23 +444,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
                     android:gravity="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="成交量:"
+                        android:text="成交量"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:id="@+id/tv11"
                         android:text="--"
-                        android:gravity="right"
-                        android:layout_weight="1"
-                        android:layout_width="@dimen/dp_0"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/sp_12"/>
@@ -459,22 +471,21 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:orientation="vertical"
                     android:gravity="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="总市值:"
+                        android:text="总市值"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:id="@+id/tv12"
                         android:text="--"
-                        android:gravity="right"
-                        android:layout_width="@dimen/dp_0"
-                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/dp_12"/>
@@ -494,22 +505,23 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
                     android:gravity="left">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="委比:"
+                        android:text="委比"
+                        android:layout_gravity="center_horizontal"
                         android:textColor="@color/black99"
-                        android:textSize="@dimen/sp_12"/>
+                        android:textSize="@dimen/sp_12" />
 
                     <TextView
                         android:id="@+id/tv13"
                         android:text="--"
-                        android:gravity="right"
-                        android:layout_width="@dimen/dp_0"
-                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/sp_12"/>
@@ -519,23 +531,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
                     android:gravity="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="换手率:"
+                        android:text="换手率"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:id="@+id/tv14"
-                        android:gravity="right"
-                        android:layout_width="0dp"
                         android:text="--"
-                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/sp_12"/>
@@ -545,23 +556,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
                     android:gravity="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="成交额:"
+                        android:text="成交额"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:id="@+id/tv15"
                         android:text="--"
-                        android:gravity="right"
-                        android:layout_weight="1"
-                        android:layout_width="@dimen/dp_0"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/sp_12"/>
@@ -572,23 +582,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
                     android:gravity="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="流通值:"
+                        android:text="流通值"
                         android:textColor="@color/black99"
                         android:textSize="@dimen/sp_12"/>
 
                     <TextView
                         android:id="@+id/tv16"
                         android:text="--"
-                        android:gravity="right"
-                        android:layout_width="@dimen/dp_0"
-                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black33"
                         android:textSize="@dimen/dp_12"/>

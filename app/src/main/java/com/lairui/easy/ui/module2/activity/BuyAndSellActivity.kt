@@ -1,20 +1,19 @@
 package com.lairui.easy.ui.module2.activity
 
-import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.InputMethodManager
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.RadioGroup
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import butterknife.OnClick
 import com.androidkun.xtablayout.XTabLayout
-import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter
 import com.jaeger.library.StatusBarUtil
 import com.lairui.easy.R
 import com.lairui.easy.api.MethodUrl
@@ -27,35 +26,11 @@ import com.lairui.easy.mywidget.dialog.AppDialog
 import com.lairui.easy.mywidget.view.TipsToast
 import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module2.adapter.*
-import com.lairui.easy.ui.module5.adapter.BankCardListAdapter
-import com.lairui.easy.ui.temporary.activity.BorrowMoneyActivity
 import com.lairui.easy.utils.tool.JSONUtil
 import com.lairui.easy.utils.tool.LogUtil
 import com.lairui.easy.utils.tool.SPUtils
 import com.lairui.easy.utils.tool.UtilTools
 import kotlinx.android.synthetic.main.activity_buyandsell.*
-import kotlinx.android.synthetic.main.activity_buyandsell.amountEt
-import kotlinx.android.synthetic.main.activity_buyandsell.content
-import kotlinx.android.synthetic.main.activity_buyandsell.fallStopTv
-import kotlinx.android.synthetic.main.activity_buyandsell.guAmoutTv
-import kotlinx.android.synthetic.main.activity_buyandsell.inputCode
-import kotlinx.android.synthetic.main.activity_buyandsell.limitCb
-import kotlinx.android.synthetic.main.activity_buyandsell.mPageView
-import kotlinx.android.synthetic.main.activity_buyandsell.mTabLayout
-import kotlinx.android.synthetic.main.activity_buyandsell.marktCb
-import kotlinx.android.synthetic.main.activity_buyandsell.priceEt
-import kotlinx.android.synthetic.main.activity_buyandsell.rcv
-import kotlinx.android.synthetic.main.activity_buyandsell.refreshLayout
-import kotlinx.android.synthetic.main.activity_buyandsell.rg
-import kotlinx.android.synthetic.main.activity_buyandsell.riseStopTv
-import kotlinx.android.synthetic.main.activity_buyandsell.rvBuy
-import kotlinx.android.synthetic.main.activity_buyandsell.rvSell
-import kotlinx.android.synthetic.main.activity_buyandsell.title_bar_view
-import kotlinx.android.synthetic.main.activity_buyandsell.tvBuySell
-import java.io.Serializable
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 /**
@@ -90,6 +65,8 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
     private var mDataList: MutableList<MutableMap<String, Any>> = ArrayList()
     private var mItemDataList: MutableList<MutableMap<String, Any>> = ArrayList()
 
+
+    private var mIsShow = false
 
 
     override val contentView: Int
@@ -210,7 +187,12 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!TextUtils.isEmpty(amountEt.text) && s.toString().isNotEmpty()){
-                    guAmoutTv.text = "可买股数 "+ (totalMony/((s.toString().toDouble())*amountEt.text.toString().toDouble())).toInt()
+                    if (s.toString() == "0"){
+                        guAmoutTv.text = "可买股数 0"
+                    }else{
+                        guAmoutTv.text = "可买股数 "+ (totalMony/((s.toString().toDouble())*amountEt.text.toString().toDouble())).toInt()
+                    }
+
                 }else{
                     guAmoutTv.text = "可买股数 0"
                 }
@@ -229,7 +211,12 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                 }
 
                 if (!TextUtils.isEmpty(priceEt.text) && s.toString().isNotEmpty()){
-                    guAmoutTv.text = "可买股数 "+ (totalMony/((s.toString().toDouble())*priceEt.text.toString().toDouble())).toInt()
+                    if (s.toString() == "0"){
+                        guAmoutTv.text = "可买股数 0"
+                    }else{
+                        guAmoutTv.text = "可买股数 "+ (totalMony/((s.toString().toDouble())*priceEt.text.toString().toDouble())).toInt()
+                    }
+
                 }else{
                     guAmoutTv.text = "可买股数 0"
                 }
@@ -240,14 +227,29 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
         })
 
 
+        //键盘显示监听
 
-      /*  val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (!imm.isActive()) { //键盘弹起
-            if (!TextUtils.isEmpty(inputCode.text)){
-                getMsgAction(inputCode.text.toString())
+        amountEt.viewTreeObserver.addOnGlobalLayoutListener(object :OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val rect = Rect()
+                this@BuyAndSellActivity.window.decorView.getWindowVisibleDisplayFrame(rect)
+                val screenHeight: Int = this@BuyAndSellActivity.window.decorView.rootView.height
+                Log.e("TAG", rect.bottom.toString() + "#" + screenHeight)
+                val heightDifference = screenHeight - rect.bottom
+                val visible = heightDifference > screenHeight / 3
+                if (visible) {
+                    allRb.isChecked = false
+                    halfRb.isChecked = false
+                    thirdRb.isChecked = false
+                    mIsShow = true
+                } else {
+                    if (mIsShow) {
+
+                    }
+                    mIsShow = false
+                }
             }
-        }*/
-
+        })
 
 
         rg.setOnCheckedChangeListener(object: RadioGroup.OnCheckedChangeListener {

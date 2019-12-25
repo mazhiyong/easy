@@ -66,7 +66,8 @@
                     </RelativeLayout>
                     <TextView
                         android:id="@+id/timeTv"
-                        android:layout_width="wrap_content"
+                        android:gravity="left"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/dp_5"
                         android:text="@string/tv_loading_value"
@@ -363,10 +364,38 @@
                     </LinearLayout>
                     <com.lairui.easy.mywidget.view.DashBoard
                         android:id="@+id/myDashBoard"
+                        android:visibility="gone"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/dp_15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
+                    <ImageView
+                        android:src="@drawable/kedupan"
+                        android:layout_margin="@dimen/dp_10"
+                        android:layout_width="@dimen/dp_180"
+                        android:layout_height="@dimen/dp_90"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/kuisunRedTv"
+                            android:layout_width="0dp"
+                            android:textColor="@color/font_c"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:textSize="@dimen/sp_14"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/pingcangTvGreendTv"
+                            android:layout_width="0dp"
+                            android:textColor="@color/colorPrimary"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:textSize="@dimen/sp_14"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
@@ -408,7 +437,7 @@
             </LinearLayout>
             <androidx.cardview.widget.CardView
                 android:id="@+id/jiesuanLay"
-                android:visibility="gone"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_10"
@@ -423,6 +452,7 @@
                     android:orientation="vertical"
                     android:layout_height="match_parent">
                     <TextView
+
                         android:text="保证金结算"
                         android:paddingTop="@dimen/dp_5"
                         android:paddingBottom="@dimen/dp_5"
@@ -444,6 +474,7 @@
                             android:textColor="@color/black33"
                             android:layout_height="wrap_content"/>
                         <TextView
+                            android:id="@+id/dongjieMoneyTv"
                             android:text="0.00元"
                             android:gravity="right"
                             android:layout_width="0dp"
@@ -466,6 +497,7 @@
                             android:textColor="@color/black33"
                             android:layout_height="wrap_content"/>
                         <TextView
+                            android:id="@+id/koujianMoneyTv"
                             android:text="0.00元"
                             android:gravity="right"
                             android:layout_width="0dp"
@@ -486,6 +518,7 @@
                             android:textColor="@color/black33"
                             android:layout_height="wrap_content"/>
                         <TextView
+                            android:id="@+id/jiesuanMoneyTv"
                             android:text="0.00元"
                             android:gravity="right"
                             android:layout_width="0dp"
@@ -614,8 +647,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/android_list_idex"
-                            />
+                            android:src="@drawable/android_list_idex"/>
 
                     </RelativeLayout>
                     <RelativeLayout

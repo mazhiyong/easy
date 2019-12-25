@@ -33,6 +33,7 @@ import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module2.adapter.SearchListAdapter
 import com.lairui.easy.ui.module4.adapter.RecordListAdapter
 import com.lairui.easy.utils.tool.*
+import java.util.regex.Pattern
 
 /**
  * 搜索 界面
@@ -176,7 +177,15 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
                     showToastMsg("请输入检索关键字")
                     return
                 }
-                searchListAction(inputEt.text.toString())
+                val regEx = "[^0-9]"
+                val p = Pattern.compile(regEx)
+                val m = p.matcher(inputEt.text.toString())
+                if (m.replaceAll("").trim().isEmpty()){
+                    searchListAction(inputEt.text.toString())
+                }else{
+                    searchListAction(m.replaceAll("").trim())
+                }
+
 
             }
 
@@ -199,6 +208,12 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
                 var result = tData["result"]!!.toString() + ""
                 result = result.substring(result.indexOf("=")+1).replace("\"","")
                 LogUtil.i("show","搜索结果"+result)
+
+                if (result == "N;"){
+                    showToastMsg("未检索到相关数据")
+                    mPageView.showEmpty()
+                    return
+                }
 
                 val array = result.split("^")
                 if (array.isNotEmpty()){ //多条数据

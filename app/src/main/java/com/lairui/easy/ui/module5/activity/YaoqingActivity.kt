@@ -3,6 +3,9 @@ package com.lairui.easy.ui.module5.activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -11,7 +14,11 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import butterknife.BindView
 import butterknife.OnClick
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomViewTarget
+import com.bumptech.glide.request.transition.Transition
 import com.jaeger.library.StatusBarUtil
+import com.king.zxing.util.CodeUtils
 import com.lairui.easy.R
 import com.lairui.easy.api.MethodUrl
 import com.lairui.easy.basic.BasicActivity
@@ -129,7 +136,7 @@ class YaoqingActivity : BasicActivity(), RequestView {
                         linkTv.text = mapData["link_url"].toString()
                         yaoqingMountTv.text = mapData["push_team"].toString()
                         jiangliMountTv.text = mapData["push_total"].toString()
-
+                        genQRCode(mapData["link_url"].toString())
                     }
                 }
                 "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
@@ -146,4 +153,28 @@ class YaoqingActivity : BasicActivity(), RequestView {
     override fun loadDataError(map: MutableMap<String, Any>, mType: String) {
         dealFailInfo(map, mType)
     }
+
+    private fun genQRCode(qrCodeValue:String) {
+        Glide.with(this)
+                .asBitmap()
+                .load(R.drawable.logo)
+                .placeholder(R.drawable.default_pic)
+                .into(object : CustomViewTarget<ImageView?, Bitmap?>(erWeiCodeIv) {
+                    override fun onLoadFailed(errorDrawable: Drawable?) { // the errorDrawable will always be bitmapDrawable here
+                        if (errorDrawable is BitmapDrawable) {
+                            val bitmap = errorDrawable.bitmap
+                            val qrBitmap = CodeUtils.createQRCode(qrCodeValue, 400, bitmap)
+                            erWeiCodeIv.setImageBitmap(qrBitmap)
+                        }
+                    }
+
+                    override fun onResourceCleared(placeholder: Drawable?) {}
+                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap?>?) {
+                        val bitmap = CodeUtils.createQRCode(qrCodeValue, 400, resource)
+                        erWeiCodeIv.setImageBitmap(bitmap)
+                    }
+                })
+    }
+
+
 }

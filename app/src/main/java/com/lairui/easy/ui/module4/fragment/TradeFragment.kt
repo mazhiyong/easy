@@ -79,15 +79,21 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
         mTabLayout.addTab(mTabLayout.newTab().setText("已结算"))
         mTabLayout.addOnTabSelectedListener(object :XTabLayout.OnTabSelectedListener{
             override fun onTabReselected(tab: XTabLayout.Tab?) {
-
             }
-
             override fun onTabUnselected(tab: XTabLayout.Tab?) {
-
             }
-
             override fun onTabSelected(tab: XTabLayout.Tab?) {
+                when(mTabLayout.selectedTabPosition){
+                    0 ->{
+                        mLoadingWindow.showView()
+                        borrowListAction()
+                    }
 
+                    1 ->{
+                        mLoadingWindow.showView()
+                        historyListAction()
+                    }
+                }
             }
 
         })
@@ -104,7 +110,15 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
 
         mRefreshListView.setOnRefreshListener {
             mLoadingWindow.showView()
-            borrowListAction()
+            when(mTabLayout.selectedTabPosition){
+                0 ->{
+                    borrowListAction()
+                }
+
+                1 ->{
+                    historyListAction()
+                }
+            }
         }
 
         mLoadingWindow.showView()
@@ -148,6 +162,19 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
         val mHeaderMap = HashMap<String, String>()
         mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.PEIZI_LIST, map)
     }
+
+    private fun historyListAction() {
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.HISTORY_LIST
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[activity!!, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.HISTORY_LIST, map)
+    }
+
 
 
     private fun responseData() {
@@ -224,6 +251,7 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
             mLRecyclerViewAdapter!!.notifyDataSetChanged()//必须调用此方法
         }
 
+        mRefreshListView.refreshComplete(10)
         mRefreshListView.setFooterViewHint("拼命加载中", "已经全部为你呈现了", "网络不给力啊，点击再试一次吧")
         if (mDataList.size < 10) {
             mRefreshListView.setNoMore(true)
@@ -232,9 +260,9 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
         }
 
         if (mTradeListAdapter!!.dataList.isEmpty()) {
-            mPageView!!.showEmpty()
+            mPageView.showEmpty()
         } else {
-            mPageView!!.showContent()
+            mPageView.showContent()
         }
     }
 
@@ -258,9 +286,35 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
                     }else{
                         mDataList = tData["data"] as ArrayList<MutableMap<String, Any>>
                         if(!UtilTools.empty(mDataList) && mDataList.size>0){
-                            mPageView.showContent()
+                            for (item in mDataList){
+                                item["status"] = "1"
+                            }
                             responseData()
-                            mRefreshListView.refreshComplete(10)
+                        }else{
+                            mPageView.showEmpty()
+                        }
+                    }
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    activity!!.finish()
+                    val intent = Intent(activity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+
+            MethodUrl.HISTORY_LIST -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    if (UtilTools.empty(tData["data"])){
+                        mPageView.showEmpty()
+                    }else{
+                        mDataList = tData["data"] as ArrayList<MutableMap<String, Any>>
+                        if(!UtilTools.empty(mDataList) && mDataList.size>0){
+                            for (item in mDataList){
+                                item["status"] = "2"
+                            }
+                            responseData()
                         }else{
                             mPageView.showEmpty()
                         }
@@ -300,8 +354,17 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
     }
 
     override fun reLoadingData() {
-        mLoadingWindow.showView()
-        borrowListAction()
+        when(mTabLayout.selectedTabPosition){
+            0 ->{
+                mLoadingWindow.showView()
+                borrowListAction()
+            }
+
+            1 ->{
+                mLoadingWindow.showView()
+                historyListAction()
+            }
+        }
     }
 
 

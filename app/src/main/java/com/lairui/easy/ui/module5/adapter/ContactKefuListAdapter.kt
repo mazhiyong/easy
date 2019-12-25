@@ -32,17 +32,16 @@ class ContactKefuListAdapter(context: Context) : ListBaseAdapter() {
 //        if (kind.equals("0")){
 //            viewHolder.titleTv.setBackgroundResource(R.drawable.background_corners_gray_lightest);
 //        }
-        when(item["type"]){
-            1 ->{
-                viewHolder.titleTv.text = "平台QQ"
+        viewHolder.titleTv.text = item["type_name"].toString()
+        when(item["type"].toString()){
+            "1" ->{
+
                 viewHolder.typeIv.setBackgroundResource(R.drawable.qq)
             }
-            2 ->{
-                viewHolder.titleTv.text = "平台微信"
+            "2" ->{
                 viewHolder.typeIv.setBackgroundResource(R.drawable.weichat)
             }
-            3 ->{
-                viewHolder.titleTv.text = "平台电话"
+            "3" ->{
                 viewHolder.typeIv.setBackgroundResource(R.drawable.phone)
             }
 

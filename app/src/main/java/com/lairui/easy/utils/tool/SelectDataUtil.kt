@@ -110,10 +110,10 @@ object SelectDataUtil {
             map["code"] = "1"
             list.add(map)
 
-            map = HashMap()
+          /*  map = HashMap()
             map["name"] = "5日"
             map["code"] = "2"
-            list.add(map)
+            list.add(map)*/
 
             map = HashMap()
             map["name"] = "日K"

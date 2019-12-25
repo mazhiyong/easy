@@ -3,39 +3,31 @@ package com.lairui.easy.ui.module5.fragment
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.cardview.widget.CardView
-
 import android.content.IntentFilter
-import android.text.Html
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.ToggleButton
-
+import android.widget.*
+import androidx.cardview.widget.CardView
+import butterknife.BindView
+import butterknife.Unbinder
+import com.jaeger.library.StatusBarUtil
 import com.lairui.easy.R
 import com.lairui.easy.api.MethodUrl
 import com.lairui.easy.basic.BasicFragment
-import com.lairui.easy.mvp.view.RequestView
-import com.lairui.easy.mywidget.view.LoadingWindow
-import com.lairui.easy.mywidget.pulltozoomview.PullToZoomScrollViewEx
-import com.lairui.easy.utils.imageload.GlideUtils
-import com.lairui.easy.utils.tool.JSONUtil
 import com.lairui.easy.basic.MbsConstans
-import com.lairui.easy.utils.tool.SPUtils
-import com.lairui.easy.utils.tool.UtilTools
-import com.jaeger.library.StatusBarUtil
-
-import butterknife.BindView
-import butterknife.Unbinder
+import com.lairui.easy.mvp.view.RequestView
+import com.lairui.easy.mywidget.dialog.SureOrNoDialog
+import com.lairui.easy.mywidget.pulltozoomview.PullToZoomScrollViewEx
+import com.lairui.easy.mywidget.view.LoadingWindow
 import com.lairui.easy.mywidget.view.TipsToast.Companion.showToastMsg
 import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module1.activity.NoticeListActivity
 import com.lairui.easy.ui.module4.activity.RecordListActivity
 import com.lairui.easy.ui.module5.activity.*
+import com.lairui.easy.utils.imageload.GlideUtils
+import com.lairui.easy.utils.tool.JSONUtil
+import com.lairui.easy.utils.tool.SPUtils
+import com.lairui.easy.utils.tool.UtilTools
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
 
@@ -84,6 +76,7 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
     private lateinit var mChongZhiTv: TextView
     private lateinit var mTixianTv: TextView
     private lateinit var mKefuIv: ImageView
+    private lateinit var mExitTv: TextView
 
 
     private var mRequestTag = ""
@@ -159,6 +152,8 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
         mMessageLay.setOnClickListener(this)
         mNoticeLay = contentView.findViewById(R.id.notice_Lay)
         mNoticeLay.setOnClickListener(this)
+        mExitTv = contentView.findViewById(R.id.exitTv)
+        mExitTv.setOnClickListener(this)
 
 
 
@@ -272,6 +267,7 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
 
     }
 
+    private var sureOrNoDialog: SureOrNoDialog? = null
     override fun onClick(view: View) {
 
         var intent: Intent
@@ -326,8 +322,31 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
                 startActivity(intent)
             }
 
-
-
+            R.id.exitTv ->{
+                sureOrNoDialog = SureOrNoDialog(activity!!, true)
+                sureOrNoDialog!!.initValue("提示", "确定要退出登录吗？")
+                sureOrNoDialog!!.onClickListener = View.OnClickListener { v ->
+                    when (v.id) {
+                        R.id.cancel -> sureOrNoDialog!!.dismiss()
+                        R.id.confirm -> {
+                            /*ChatManagerHolder.gChatManager.disconnect(true);
+                                        SharedPreferences sp = getSharedPreferences("config", Context.MODE_PRIVATE);
+                                        sp.edit().clear().apply();*/
+                            activity!!.finish()
+                            MbsConstans.USER_MAP = null
+                            MbsConstans.RONGYUN_MAP = null
+                            MbsConstans.ACCESS_TOKEN = ""
+                            SPUtils.put(activity!!, MbsConstans.SharedInfoConstans.LOGIN_OUT, true)
+                            SPUtils.put(activity!!, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, "")
+                            val intent = Intent(activity, LoginActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
+                }
+                sureOrNoDialog!!.show()
+                sureOrNoDialog!!.setCanceledOnTouchOutside(false)
+                sureOrNoDialog!!.setCancelable(true)
+            }
         }
 
     }

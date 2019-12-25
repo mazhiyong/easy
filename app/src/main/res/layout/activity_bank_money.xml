@@ -301,7 +301,7 @@
         android:id="@+id/but_next"
         android:layout_width="match_parent"
         android:layout_height="@dimen/but_height"
-        android:layout_margin="@dimen/dp_15"
+        android:layout_margin="@dimen/dp_10"
         android:background="@drawable/btn_next"
         android:text="确定提交"
         android:textColor="@color/btn_login_text"
@@ -309,7 +309,9 @@
 
     <TextView
         android:id="@+id/tipTv"
-        android:layout_margin="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginRight="@dimen/dp_15"
         android:text=""
         android:textColor="@color/black33"
         android:lineSpacingExtra="@dimen/dp_5"

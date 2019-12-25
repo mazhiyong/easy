@@ -80,7 +80,7 @@ class WeituoListAdapter(context: Context) : ListBaseAdapter() {
             viewHolder.typeTv.text = (item["short"].toString().substring(0,2)).toUpperCase()
             viewHolder.numberTv.text = item["code"].toString()
             viewHolder.lay!!.setOnClickListener {
-                onItemClickListener.onItemClickListener(viewHolder.lay!!, position, item)
+                //onItemClickListener.onItemClickListener(viewHolder.lay!!, position, item)
             }
         }
     }

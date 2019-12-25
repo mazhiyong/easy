@@ -1,6 +1,7 @@
 package com.lairui.easy.ui.module4.activity
 
 import android.content.Intent
+import android.view.Gravity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,16 +30,20 @@ import java.util.HashMap
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.OnClick
+import com.lairui.easy.listener.SelectBackListener
+import com.lairui.easy.mywidget.dialog.DateSelectDialog
 import com.lairui.easy.mywidget.view.TipsToast
 import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module4.adapter.RecordListAdapter
 import com.lairui.easy.utils.tool.LogUtil
 import com.lairui.easy.utils.tool.SPUtils
+import kotlinx.android.synthetic.main.activity_records_list.*
 
 /**
  * 记录列表 界面
  */
-class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
+class RecordListActivity : BasicActivity(), RequestView, ReLoadingData, SelectBackListener {
+
 
 
     @BindView(R.id.back_img)
@@ -72,6 +77,16 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
     private val mDataList = ArrayList<MutableMap<String, Any>>()
     private var mPage = 1
 
+    private var type: String =""
+    private var mark: String = ""
+
+    private lateinit var mySelectDialog: DateSelectDialog
+    private lateinit var mySelectDialog2: DateSelectDialog
+
+    private var mStartTime = ""
+    private var mEndTime = ""
+
+
     override val contentView: Int
         get() = R.layout.activity_records_list
 
@@ -80,7 +95,7 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
         val  bundle = intent.extras
         if (bundle != null){
-            val type = bundle["TYPE"].toString()
+            type = bundle["TYPE"].toString()
             when(type){
                 "1"->{
                     mTitleText.text = "交易记录"
@@ -88,24 +103,37 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
                 }
                 "2"->{
                     mTitleText.text = "追加保证金记录"
-                    val mark = bundle.getString("mark")
+                    mark = bundle.getString("mark")
                     bondMoneyListAction(mark)
                 }
                 "3"->{
                     mTitleText.text = "扩大配资记录"
-                    val mark = bundle.getString("mark")
+                    mark = bundle.getString("mark")
                     extendMoneyListAction(mark)
                 }
                 "4"->{
                     mTitleText.text = "提取收益记录"
-                    val mark = bundle.getString("mark")
+                    mark = bundle.getString("mark")
                     shouyiListAction(mark)
                 }
                 "5"->{
                     mTitleText.text = "支付利息记录"
-                    val mark = bundle.getString("mark")
+                    mark = bundle.getString("mark")
                     lixiListAction(mark)
                 }
+                "6"->{
+                    mTitleText.text = "资金流水"
+                    mark = bundle.getString("mark")
+                    zijinListAction(mark)
+                    dateLay.visibility = View.VISIBLE
+                    mySelectDialog = DateSelectDialog(this, true, "选择日期", 21)
+                    mySelectDialog.selectBackListener = this
+                    mySelectDialog2 = DateSelectDialog(this, true, "选择日期", 22)
+                    mySelectDialog2.selectBackListener = this
+
+
+                }
+
             }
         }else{
             finish()
@@ -135,7 +163,28 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
 
         mRefreshListView.setOnRefreshListener {
             //mPage = 1
-            tradeListAction()
+            when(type){
+                "1"->{
+                    tradeListAction()
+                }
+                "2"->{
+                    bondMoneyListAction(mark)
+                }
+                "3"->{
+                    extendMoneyListAction(mark)
+                }
+                "4"->{
+                    shouyiListAction(mark)
+                }
+                "5"->{
+                    lixiListAction(mark)
+                }
+                "6"->{
+                    zijinListAction(mark)
+                }
+
+            }
+
         }
 
         mRefreshListView.setOnLoadMoreListener {
@@ -144,6 +193,23 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
             mRefreshListView.setNoMore(true)
         }
     }
+
+    private fun zijinListAction(mark :String) {
+
+        mRequestTag = MethodUrl.TRADEFLOW_LIST
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.TRADEFLOW_LIST
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@RecordListActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        map["mark"] = mark
+        map["start"] = mStartTime
+        map["end"] = mEndTime
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.TRADEFLOW_LIST, map)
+    }
+
 
     private fun lixiListAction(mark :String) {
 
@@ -287,12 +353,22 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
 
     }
 
-    @OnClick(R.id.left_back_lay)
+    @OnClick(R.id.left_back_lay,R.id.start_time_value_tv,R.id.end_time_value_tv,R.id.queryIv)
     fun onViewClicked(view: View) {
         when (view.id) {
             R.id.left_back_lay -> {
                 finish()
             }
+            R.id.start_time_value_tv -> {
+                mySelectDialog.showAtLocation(Gravity.BOTTOM, 0, 0)
+            }
+            R.id.end_time_value_tv -> {
+                mySelectDialog2.showAtLocation(Gravity.BOTTOM, 0, 0)
+            }
+            R.id.queryIv -> {
+                zijinListAction(mark)
+            }
+
         }
     }
 
@@ -308,7 +384,7 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
 
         val intent: Intent
         when (mType) {
-            MethodUrl.LIXI_LIST,MethodUrl.PROFIT_LIST,MethodUrl.BOND_LIST ,MethodUrl.CAPITAL_LIST,MethodUrl.TRADE_LIST ->{
+            MethodUrl.TRADEFLOW_LIST,MethodUrl.LIXI_LIST,MethodUrl.PROFIT_LIST,MethodUrl.BOND_LIST ,MethodUrl.CAPITAL_LIST,MethodUrl.TRADE_LIST ->{
                 when (tData["code"].toString() + "") {
                     "1" -> {
                         if (!UtilTools.empty(tData["data"])){
@@ -347,14 +423,14 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
             MethodUrl.hetongList//
             -> if (mRecordAdapter != null) {
                 if (mRecordAdapter!!.dataList.isEmpty()) {
-                    mPageView!!.showNetworkError()
+                    mPageView.showNetworkError()
                 } else {
-                    mPageView!!.showContent()
+                    mPageView.showContent()
                 }
-                mRefreshListView!!.refreshComplete(10)
-                mRefreshListView!!.setOnNetWorkErrorListener { tradeListAction() }
+                mRefreshListView.refreshComplete(10)
+                mRefreshListView.setOnNetWorkErrorListener { tradeListAction() }
             } else {
-                mPageView!!.showNetworkError()
+                mPageView.showNetworkError()
             }
         }
 
@@ -363,6 +439,20 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData {
 
     override fun reLoadingData() {
         tradeListAction()
+    }
+
+    override fun onSelectBackListener(map: MutableMap<String, Any>, type: Int) {
+        when (type) {
+            21 -> {
+                mStartTime =map["year"].toString() + "-" + map["month"] + "-" + map["day"]
+                start_time_value_tv.text = map["year"].toString() + "-" + map["month"] + "-" + map["day"]
+            }
+            22 -> {
+                mEndTime = map["year"].toString() + "-" + map["month"] + "-" + map["day"]
+                end_time_value_tv.text = map["year"].toString() + "-" + map["month"] + "-" + map["day"]
+
+            }
+        }
     }
 
 

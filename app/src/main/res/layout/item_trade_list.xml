@@ -129,6 +129,7 @@
                 android:paddingBottom="@dimen/dp_2"
                 >
                 <TextView
+                    android:id="@+id/changeTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/dp_5"
@@ -146,7 +147,6 @@
                     android:layout_gravity="right"
                     android:gravity="right"
                     android:textSize="@dimen/sp_14"
-                    android:textColor="@color/colorPrimary"
                     />
 
             </RelativeLayout>

@@ -38,7 +38,7 @@ class JSONUtil {
         var map: MutableMap<String, Any>? = null
         try {
             // json转为带泛型的list
-            map = gson!!.fromJson<MutableMap<String, Any>>(json, object : TypeToken<MutableMap<String, Any>>() {
+            map = gson.fromJson<MutableMap<String, Any>>(json, object : TypeToken<MutableMap<String, Any>>() {
 
             }.type)
         } catch (e: Exception) {

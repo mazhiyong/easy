@@ -31,6 +31,7 @@ import com.lairui.easy.ui.module.activity.XieYiDetialActivity
 import com.lairui.easy.ui.module3.activity.PayActivity
 import com.lairui.easy.ui.module3.adapter.SelectMoneyAdapter
 import com.lairui.easy.utils.tool.*
+import kotlinx.android.synthetic.main.fragment_celue.*
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -125,22 +126,9 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
 
 
 
+        initTextView()
 
 
-        val textViewUtils = TextViewUtils()
-        val s = mTipTv.text.toString()
-        textViewUtils.init(s, mTipTv)
-        textViewUtils.setTextColor(s.indexOf("《"), s.indexOf("》"), ContextCompat.getColor(activity!!, R.color.font_c))
-        textViewUtils.setTextClick(s.indexOf("《"), s.indexOf("》"), object : TextViewUtils.ClickCallBack {
-            override fun onClick() {
-               // Toast.makeText(activity, "策略协议", Toast.LENGTH_LONG).show()
-                val intent = Intent(activity,XieYiDetialActivity::class.java)
-                intent.putExtra("TYPE","3")
-                startActivity(intent)
-            }
-
-        })
-        textViewUtils.build()
 
 
         mTabLayout.addTab(mTabLayout.newTab().setText("按天配资"))
@@ -157,8 +145,17 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
                         mDayRv.visibility =View.VISIBLE
                         mLixiLay.visibility = View.VISIBLE
                         mFreeXiLay.visibility = View.GONE
+                        mTipTv.text="1.非交易日不收取管理费用;\n" +
+                                "2.申请即表示已阅读并同意《策略协议》;\n" +
+                                "3.每个合约至少2个交易日,首次申请将扣取2个交易日的管理费"
+                        initTextView()
+                        lixiTv.text ="0.00 元/交易日"
+                        totalMoneyTv.text = "0.00 元"
+                        jingjieLineTv.text = "0.00 元"
+                        pingcangLineTv.text = "0.00 元"
+                        boundEt.setText("")
                         getDayInfoAction()
-                        timeTv.text = "自动延期，最长"+mData["delay"]+"个交易日"
+
                     }
                     1 ->{
                         mPeiziLay.visibility =View.VISIBLE
@@ -166,6 +163,15 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
                         mDayRv.visibility =View.GONE
                         mLixiLay.visibility = View.VISIBLE
                         mFreeXiLay.visibility = View.GONE
+                        mTipTv.text="1.非交易日不收取管理费用;\n" +
+                                "2.申请即表示已阅读并同意《策略协议》;"
+                        initTextView()
+                        lixiTv.text ="0.00 元/月"
+                        totalMoneyTv.text = "0.00 元"
+                        jingjieLineTv.text = "0.00 元"
+                        pingcangLineTv.text = "0.00 元"
+                        boundEt.setText("")
+                        getMonthInfoAction()
                     }
                     2 ->{
                         mPeiziLay.visibility =View.VISIBLE
@@ -173,6 +179,16 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
                         mDayRv.visibility =View.VISIBLE
                         mLixiLay.visibility = View.GONE
                         mFreeXiLay.visibility = View.VISIBLE
+                        mTipTv.text="1.非交易日不收取管理费用;\n" +
+                                "2.申请即表示已阅读并同意《策略协议》;\n" +
+                                "3.每个合约至少2个交易日,首次申请将扣取2个交易日的管理费"
+                        initTextView()
+                        totalMoneyTv.text = "0.00 元"
+                        jingjieLineTv.text = "0.00 元"
+                        pingcangLineTv.text = "0.00 元"
+                        boundEt.setText("")
+                       getFreeInfoAction()
+
                     }
                    /* 3 ->{
                         mPeiziLay.visibility =View.GONE
@@ -231,9 +247,22 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
                         //计算平仓线 = 保证金*平仓线比例+保证金*配资倍数
                         val pingcangMoney =(mData["close"].toString().toFloat() +(mDataList[selectItem]["multiple"].toString()).toInt()) * (s.toString()).toInt()
                         pingcangLineTv.text =UtilTools.getNormalMoney(pingcangMoney.toString())+"元"
-                        //计算利息/管理费 = 保证金*配资倍数*利息比例*2 (按天)
-                        lixiMoney =(mDataList[selectItem]["ratio"].toString().toFloat()) *((mDataList[selectItem]["multiple"].toString()).toInt()) * (s.toString()).toInt()*2
-                        lixiTv.text =UtilTools.getNormalMoney(lixiMoney.toString())+"元/交易日"
+                        when(mTabLayout.selectedTabPosition){
+                            0 ->{
+                                //计算利息/管理费 = 保证金*配资倍数*利息比例*2 (按天)
+                                lixiMoney =(mDataList[selectItem]["ratio"].toString().toFloat()) *((mDataList[selectItem]["multiple"].toString()).toInt()) * (s.toString()).toInt()*2
+                                lixiTv.text =UtilTools.getNormalMoney(lixiMoney.toString())+"元/交易日"
+                            }
+                            1 ->{
+                                //计算利息/管理费 = 保证金*配资倍数*利息比例*2 (按天)
+                                lixiMoney =(mDataList[selectItem]["ratio"].toString().toFloat()) *((mDataList[selectItem]["multiple"].toString()).toInt()) * (s.toString()).toInt()
+                                lixiTv.text =UtilTools.getNormalMoney(lixiMoney.toString())+"元/月"
+                            }
+                            2 ->{
+
+                            }
+                        }
+
 
                     }
 
@@ -263,6 +292,23 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
 
     }
 
+    private fun initTextView() {
+        val textViewUtils = TextViewUtils()
+        val s = mTipTv.text.toString()
+        textViewUtils.init(s, mTipTv)
+        textViewUtils.setTextColor(s.indexOf("《"), s.indexOf("》"), ContextCompat.getColor(activity!!, R.color.font_c))
+        textViewUtils.setTextClick(s.indexOf("《"), s.indexOf("》"), object : TextViewUtils.ClickCallBack {
+            override fun onClick() {
+                // Toast.makeText(activity, "策略协议", Toast.LENGTH_LONG).show()
+                val intent = Intent(activity,XieYiDetialActivity::class.java)
+                intent.putExtra("TYPE","3")
+                startActivity(intent)
+            }
+
+        })
+        textViewUtils.build()
+    }
+
     fun setBarTextColor() {
         StatusBarUtil.setLightMode(activity!!)
     }
@@ -279,6 +325,29 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
         mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.PEIZI_DAY_INFO, map)
     }
 
+    private fun getMonthInfoAction() {
+        mRequestTag = MethodUrl.PEIZI_MONTH_INFO
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.PEIZI_MONTH_INFO
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[activity!!, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.PEIZI_MONTH_INFO, map)
+    }
+    private fun getFreeInfoAction() {
+        mRequestTag = MethodUrl.PEIZI_FREE_INFO
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.PEIZI_FREE_INFO
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[activity!!, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.PEIZI_FREE_INFO, map)
+    }
+
     @OnClick(R.id.selectTimeLay, R.id.selectTimeLay2,R.id.shenQingTv)
     fun onViewClicked(view: View) {
         var intent: Intent? = null
@@ -291,7 +360,24 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
                 intent.putExtra("lixi",lixiMoney.toString())
                 intent.putExtra("multiple",mDataList[selectItem]["multiple"].toString())
 
+                when(mTabLayout.selectedTabPosition){
+                    0 ->{
+                        intent.putExtra("type","0")
+                    }
+
+                    1 ->{
+                        intent.putExtra("type","1")
+                    }
+
+                    2 ->{
+                        intent.putExtra("type","2")
+                        intent.putExtra("lixi","0")
+                    }
+
+                }
                 startActivity(intent)
+
+
             }
         }
     }
@@ -322,6 +408,7 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
                             boundEt.hint = mData["explain"].toString()
                             timeTv.text = "自动延期，最长"+mData["delay"]+"个交易日"
                             val strList = JSONUtil.instance.jsonToListStr2(mapData["multiple"].toString()) as ArrayList<List<String>>
+                            mDataList.clear()
                             for (item in strList){
                                 val map = HashMap<String,Any>()
                                 map["multiple"] = item[0]
@@ -342,6 +429,66 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
             }
 
 
+            MethodUrl.PEIZI_MONTH_INFO -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    //val map = tData["data"] as String
+                    if (!UtilTools.empty(tData["data"].toString())){
+                        val  mapData = tData["data"] as MutableMap<String,Any>
+                        if (!UtilTools.empty(mapData["data"].toString())){
+                            mData = mapData["data"] as MutableMap<String,Any>
+                            boundEt.hint = mData["explain"].toString()
+                            timeTv.text = "自动延期，最长"+mData["delay"]+"个自然月"
+                            val strList = JSONUtil.instance.jsonToListStr2(mapData["multiple"].toString()) as ArrayList<List<String>>
+                            mDataList.clear()
+                            for (item in strList){
+                                val map = HashMap<String,Any>()
+                                map["multiple"] = item[0]
+                                map["ratio"] = item[1]
+                                mDataList.add(map)
+                            }
+                        }
+
+                    }
+
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    activity!!.finish()
+                    val intent = Intent(activity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            MethodUrl.PEIZI_FREE_INFO -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    //val map = tData["data"] as String
+                    if (!UtilTools.empty(tData["data"].toString())){
+                        val  mapData = tData["data"] as MutableMap<String,Any>
+                        if (!UtilTools.empty(mapData["data"].toString())){
+                            mData = mapData["data"] as MutableMap<String,Any>
+                            boundEt.hint = mData["explain"].toString()
+                            timeTv.text = mData["delay"].toString()+"个交易日"
+                            freeTipTv.text = mapData["tips"].toString()
+                            val strList = JSONUtil.instance.jsonToListStr2(mapData["multiple"].toString()) as ArrayList<List<String>>
+                            mDataList.clear()
+                            for (item in strList){
+                                val map = HashMap<String,Any>()
+                                map["multiple"] = item[0]
+                                map["ratio"] = item[1]
+                                mDataList.add(map)
+                            }
+                        }
+
+                    }
+
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    activity!!.finish()
+                    val intent = Intent(activity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
 
 
 
@@ -388,9 +535,23 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
             //计算平仓线 = 保证金*平仓线比例+保证金*配资倍数
             val pingcangMoney =(mData["close"].toString().toFloat() +(mDataList[selectItem]["multiple"].toString()).toInt()) * (boundEt.text.toString()).toInt()
             pingcangLineTv.text =UtilTools.getNormalMoney(pingcangMoney.toString())+"元"
-            //计算利息/管理费 = 保证金*配资倍数*利息比例*2 (按天)
-            lixiMoney =(mDataList[selectItem]["ratio"].toString().toFloat()) *((mDataList[selectItem]["multiple"].toString()).toInt()) * (boundEt.text.toString()).toInt()*2
-            lixiTv.text =UtilTools.getNormalMoney(lixiMoney.toString())+"元/交易日"
+
+            when(mTabLayout.selectedTabPosition){
+                0 ->{
+                    //计算利息/管理费 = 保证金*配资倍数*利息比例*2 (按天)
+                    lixiMoney =(mDataList[selectItem]["ratio"].toString().toFloat()) *((mDataList[selectItem]["multiple"].toString()).toInt()) * (boundEt.text.toString()).toInt()*2
+                    lixiTv.text =UtilTools.getNormalMoney(lixiMoney.toString())+"元/交易日"
+                }
+                1 ->{
+                    //计算利息/管理费 = 保证金*配资倍数*利息比例*2 (按天)
+                    lixiMoney =(mDataList[selectItem]["ratio"].toString().toFloat()) *((mDataList[selectItem]["multiple"].toString()).toInt()) * (boundEt.text.toString()).toInt()
+                    lixiTv.text =UtilTools.getNormalMoney(lixiMoney.toString())+"元/月"
+                }
+                2 ->{
+
+                }
+            }
+
         }
 
 

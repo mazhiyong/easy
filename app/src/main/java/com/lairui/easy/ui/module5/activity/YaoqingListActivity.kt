@@ -202,8 +202,8 @@ class YaoqingListActivity : BasicActivity(), RequestView, ReLoadingData {
     @OnClick(R.id.left_back_lay)
     fun onViewClicked(view: View) {
         when (view.id) {
-
             R.id.left_back_lay -> {
+                finish()
             }
         }
     }

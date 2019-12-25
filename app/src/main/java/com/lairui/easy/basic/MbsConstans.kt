@@ -40,6 +40,8 @@ object MbsConstans {
 
     val SERVER_URL = "http://fysp.bjfable.com"
     val HANGQING_SERVER_URL = "http://hq.sinajs.cn/"  //涨跌幅
+    val ZHENFU_SERVER_URL = "http://q.jrjimg.cn/?q=cn|s&c=s,sl&o=sl,d"  //振幅榜
+    val LIANGBI_SERVER_URL = "http://q.jrjimg.cn/?q=cn|s&c=s,cat&o=cat,d"  //量比榜
     val HOME_SERVER_URL = "http://qt.gtimg.cn/q=sh000001,sz399001,sz399006" //三大板块
     val QUERY_SERVER_URL = "http://smartbox.gtimg.cn/s3/" //检索
     val DETIAL_SERVER_URL = "http://qt.gtimg.cn/" //详情
@@ -48,9 +50,9 @@ object MbsConstans {
     val TIME_FDAY_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/day/query?_var=fdays_data_sz000656&code=sz000656" //5日 分时
 
     val KLINE_MINUTE_SERVER_URL = "http://ifzq.gtimg.cn/appstock/app/kline/mkline?" //分钟 K线
-    val KLINE_DAY_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_dayqfq" //日 K线
-    val KLINE_WEEK_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_weekqfq " //周 K线
-    val KLINE_MONTHS_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_monthqfq" //月 K线
+    val KLINE_DAY_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/kline/kline?_var=kline_day" //日 K线
+    val KLINE_WEEK_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/kline/kline?_var=kline_week " //周 K线
+    val KLINE_MONTHS_SERVER_URL = "http://web.ifzq.gtimg.cn/appstock/app/kline/kline?_var=kline_month" //月 K线
 
 
 

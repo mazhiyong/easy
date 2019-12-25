@@ -8,6 +8,66 @@
     <include
         android:id="@+id/top_layout"
         layout="@layout/title_leftbut_bar"/>
+    <LinearLayout
+        android:id="@+id/dateLay"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:src="@drawable/icon_date"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/start_time_value_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:layout_marginLeft="@dimen/dp_2"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:textSize="@dimen/sp_12"
+            android:background="@drawable/date_corners"
+            android:text="请选择起始日期"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/zhi"
+            android:padding="@dimen/dp_5"
+            android:layout_gravity="center_vertical"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:src="@drawable/icon_date"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/end_time_value_tv"
+            android:layout_width="wrap_content"
+            android:background="@drawable/date_corners"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:text="请选择结束日期"
+            android:layout_marginLeft="@dimen/dp_2"
+            android:textSize="@dimen/sp_12"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:id="@+id/queryIv"
+            android:layout_margin="@dimen/dp_10"
+            android:src="@mipmap/ic_search1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
 
 
     <com.lairui.easy.mywidget.view.PageView

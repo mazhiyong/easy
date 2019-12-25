@@ -190,8 +190,8 @@ class LineDataFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
     @OnClick(R.id.start_time_value_tv, R.id.end_time_value_tv, R.id.query_bt)
     fun onViewClicked(view: View) {
         when (view.id) {
-            R.id.start_time_value_tv -> mySelectDialog!!.showAtLocation(Gravity.BOTTOM, 0, 0)
-            R.id.end_time_value_tv -> mySelectDialog2!!.showAtLocation(Gravity.BOTTOM, 0, 0)
+            R.id.start_time_value_tv -> mySelectDialog.showAtLocation(Gravity.BOTTOM, 0, 0)
+            R.id.end_time_value_tv -> mySelectDialog2.showAtLocation(Gravity.BOTTOM, 0, 0)
             R.id.query_bt -> {
 
                 val start = mStartTimeValueTv!!.text.toString().trim { it <= ' ' }

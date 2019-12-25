@@ -76,7 +76,7 @@
                 android:id="@+id/ratioTv"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:text="涨幅"
+                android:text="涨跌幅"
                 android:layout_marginLeft="@dimen/dp_5"
                 android:layout_marginRight="@dimen/dp_5"
                 android:lineSpacingExtra="@dimen/dp_5"
