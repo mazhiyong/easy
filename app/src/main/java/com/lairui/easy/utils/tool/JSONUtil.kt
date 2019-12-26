@@ -73,6 +73,19 @@ class JSONUtil {
         return retList
     }
 
+    fun jsonToListAny(json: String): List<List<Any>>? {
+        var retList: List<List<Any>>? = null
+        try {
+            // json转为带泛型的list
+            retList = gson.fromJson<List<List<Any>>>(json, object : TypeToken<List<List<Any>>>() {
+            }.type)
+        } catch (e: Exception) {
+            return retList
+        }
+
+        return retList
+    }
+
     fun jsonToListStr(json: String): List<String>? {
         var retList: List<String>? = null
         try {

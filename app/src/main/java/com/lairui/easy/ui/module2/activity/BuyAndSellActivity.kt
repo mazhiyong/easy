@@ -80,6 +80,8 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
         mPageView.showLoading()
         mPageView.reLoadingData = this
 
+
+
        /* val layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, resources.getDimension(R.dimen.title_item_height).toInt() + UtilTools.getStatusHeight2(this))
         title_bar_view.layoutParams = layoutParams
         title_bar_view.setPadding(0, UtilTools.getStatusHeight2(this), 0, 0)
@@ -105,12 +107,24 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                     0 ->{ //买入
                         tvBuySell.setBackgroundResource(R.drawable.btn_next)
                         tvBuySell.text = "买入"
-                        guAmoutTv.text = "可买股数 0"
+                        guAmoutTv.text = "可买股数 --"
+                        if (marktCb.isChecked && stockInfoBean != null){
+                            priceEt.setText(stockInfoBean!!.stockCurrentPrice)
+                        }else{
+                            priceEt.setText("")
+                        }
+
+
                     }
                     1 ->{ //卖出
                         tvBuySell.setBackgroundResource(R.drawable.btn_next_green)
                         tvBuySell.text = "卖出"
-                        guAmoutTv.text = "持仓数量 "+surplusAmount
+                        guAmoutTv.text = "可卖数量 "+surplusAmount
+                        if (marktCb.isChecked && stockInfoBean != null){
+                            priceEt.setText(stockInfoBean!!.stockCurrentPrice)
+                        }else{
+                            priceEt.setText("")
+                        }
                     }
                 }
             }
@@ -175,7 +189,8 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
             }
         }*/
 
-        getUserInfoAction()
+        //获取配资详情
+        getDetialInfoAction()
 
 
 
@@ -186,16 +201,21 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!TextUtils.isEmpty(amountEt.text) && s.toString().isNotEmpty()){
-                    if (s.toString() == "0"){
-                        guAmoutTv.text = "可买股数 0"
-                    }else{
-                        guAmoutTv.text = "可买股数 "+ (totalMony/((s.toString().toDouble())*amountEt.text.toString().toDouble())).toInt()
-                    }
+                if (mTabLayout.selectedTabPosition == 0){
+                    //买入
+                    if ( s.toString().isNotEmpty()){
+                        if (s.toString() == "0" || s.toString() == "0."){
+                            guAmoutTv.text = "可买股数 --"
+                        }else{
+                            guAmoutTv.text = "可买股数 "+ (totalMony/(s.toString().toDouble())).toInt()
+                        }
 
-                }else{
-                    guAmoutTv.text = "可买股数 0"
+                    }else{
+                        guAmoutTv.text = "可买股数 --"
+                    }
                 }
+
+
             }
 
         })
@@ -210,16 +230,16 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                     return
                 }
 
-                if (!TextUtils.isEmpty(priceEt.text) && s.toString().isNotEmpty()){
+                /*if (!TextUtils.isEmpty(priceEt.text) && s.toString().isNotEmpty()){
                     if (s.toString() == "0"){
-                        guAmoutTv.text = "可买股数 0"
+                        guAmoutTv.text = "可买股数 --"
                     }else{
                         guAmoutTv.text = "可买股数 "+ (totalMony/((s.toString().toDouble())*priceEt.text.toString().toDouble())).toInt()
                     }
 
                 }else{
-                    guAmoutTv.text = "可买股数 0"
-                }
+                    guAmoutTv.text = "可买股数 --"
+                }*/
 
 
             }
@@ -254,32 +274,56 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
 
         rg.setOnCheckedChangeListener(object: RadioGroup.OnCheckedChangeListener {
             override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
-                if (TextUtils.isEmpty(priceEt.text)){
-                    showToastMsg("请输入价格")
-                    return
-                }
-                when(checkedId){
-                    R.id.allRb ->{
-                       val amount:Int = ((totalMony/(priceEt.text.toString().toDouble()))/100).toInt()
-                        amountEt.setText((amount*100).toString())
-                        //guAmoutTv.text = "可买股数 "+ totalMony/(amount*priceEt.text.toString().toDouble())
+                if (mTabLayout.selectedTabPosition == 0){ //买入
+                    if (TextUtils.isEmpty(priceEt.text) || priceEt.text.toString().toDouble() < 0.000001){
+                        showToastMsg("请输入价格")
+                        return
+                    }
+                    when(checkedId){
+                        R.id.allRb ->{
+                            val amount:Int = ((totalMony/(priceEt.text.toString().toDouble()))/100).toInt()
+                            amountEt.setText((amount*100).toString())
+                            //guAmoutTv.text = "可买股数 "+ totalMony/(amount*priceEt.text.toString().toDouble())
+
+                        }
+                        R.id.halfRb ->{
+                            val amount:Int = ((totalMony/(priceEt.text.toString().toDouble()))/100).toInt()
+                            amountEt.setText((amount/2*100).toString())
+                            // guAmoutTv.text = "可买股数 "+ totalMony/(amount*priceEt.text.toString().toDouble())
+                        }
+                        R.id.thirdRb ->{
+                            val amount:Int = ((totalMony/(priceEt.text.toString().toDouble()))/100/3).toInt()
+                            amountEt.setText((amount*100).toString())
+                            //guAmoutTv.text = "可买股数 "+ totalMony/(amount*priceEt.text.toString().toDouble())
+                        }
 
                     }
-                    R.id.halfRb ->{
-                        val amount:Int = ((totalMony/(priceEt.text.toString().toDouble()))/100).toInt()
-                        amountEt.setText((amount/2*100).toString())
-                       // guAmoutTv.text = "可买股数 "+ totalMony/(amount*priceEt.text.toString().toDouble())
+                }else { //卖出
+
+                    when (checkedId) {
+                        R.id.allRb -> {
+                            val amount: Int = (surplusAmount.toDouble()/100).toInt()
+                            amountEt.setText((amount * 100).toString())
+
+                        }
+                        R.id.halfRb -> {
+                            val amount: Int = (surplusAmount.toDouble()/100).toInt()
+                            amountEt.setText((amount / 2 * 100).toString())
+
+                        }
+                        R.id.thirdRb -> {
+                            val amount: Int = (surplusAmount.toDouble()/100/3).toInt()
+                            amountEt.setText((amount * 100).toString())
+
+                        }
+
                     }
-                    R.id.thirdRb ->{
-                        val amount:Int = ((totalMony/(priceEt.text.toString().toDouble()))/100/3).toInt()
-                        amountEt.setText((amount*100).toString())
-                        //guAmoutTv.text = "可买股数 "+ totalMony/(amount*priceEt.text.toString().toDouble())
-                    }
+
 
                 }
             }
-
         })
+
 
 
         chiCangLsitAction()
@@ -307,20 +351,23 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
             refreshLayout.finishLoadMoreWithNoMoreData()
         }
 
+
+        initData()
     }
 
     /**
-     * 获取用户信息
+     * 获取配资详情
      */
-    private fun getUserInfoAction() {
-        val map = HashMap<String, Any>()
-        map["nozzle"] = MethodUrl.ACCOUNT_INFO
+    private fun getDetialInfoAction() {
+        val map = java.util.HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.DETAILED_IFFO
         if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
             MbsConstans.ACCESS_TOKEN = SPUtils[this@BuyAndSellActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
         }
         map["token"] = MbsConstans.ACCESS_TOKEN
-        val mHeaderMap = HashMap<String, String>()
-        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.ACCOUNT_INFO, map)
+        map["mark"] = mark
+        val mHeaderMap = java.util.HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.DETAILED_IFFO, map)
     }
 
 
@@ -592,11 +639,12 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                             mPageView.showContent()
                             for (item in mDataList){
                                 if (item["short"].toString() == mCode ){
-                                    surplusAmount = item ["number"].toString()
+                                    surplusAmount = item ["surplus"].toString()
+                                    if (mTabLayout.selectedTabPosition == 1){
+                                        guAmoutTv.text = "可卖数量 "+surplusAmount
+                                    }
                                 }
-
                             }
-
                              var paramCode = ""
                              for (item in mDataList){
                                  paramCode = paramCode+item["short"].toString()+","
@@ -617,6 +665,23 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                 startActivity(intent)
             }
         }
+
+            MethodUrl.DETAILED_IFFO -> when (tData["code"].toString()) {
+                "1" -> {
+                    if (tData["data"].toString().isNotEmpty()){
+                        val mapData = tData["data"] as MutableMap<String,Any>
+                        totalMony = (mapData["available"] as String).toDouble()
+                    }
+
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@BuyAndSellActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
 
 
             MethodUrl.CHEDAN_LIST -> when (tData["code"].toString() + "") {
@@ -782,6 +847,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                     }else{
                         mCode = tData["data"].toString()
                         getDetialDataAction()
+                        chiCangLsitAction()
                     }
                 }
                 "0" -> showToastMsg(tData["msg"].toString() + "")
@@ -806,7 +872,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
 
                     }
 
-                    if ( buyData.size >0){
+                    if ( buyData.size >0  && sellData.size > 0){
                         if (mBuyadapter == null){
                             mBuyadapter = BuyAndSellAdapter(this@BuyAndSellActivity)
                         }
@@ -814,28 +880,28 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                         mBuyadapter!!.addAll(buyData)
                         rvBuy.adapter = mBuyadapter
 
-                    }
-
-                    if ( sellData.size >0){
                         if (mSelladapter == null){
                             mSelladapter = BuyAndSellAdapter(this@BuyAndSellActivity)
                         }
                         mSelladapter!!.clear()
                         mSelladapter!!.addAll(sellData)
                         rvSell.adapter = mSelladapter
+
+                    }else{
+                        initData()
                     }
                 }else{ //列表数据
                     val result = tData["result"]!!.toString() + ""
                     val infoDataList = handInfoDataList(result)
-                    if (infoDataList.isNotEmpty()){
-                        for (itemMap in mDataList){
-                            for (item in infoDataList){
-                                if (itemMap["code"].toString() == item ["code"].toString()){
+                    if (infoDataList.isNotEmpty()) {
+                        for (itemMap in mDataList) {
+                            for (item in infoDataList) {
+                                if (itemMap["code"].toString() == item["code"].toString()) {
                                     itemMap["current"] = item["current"].toString()
                                     itemMap["ratio"] = item["ratio"].toString()
 
                                 }
-                                LogUtil.i("show","当前价:"+item["current"] + "/装跌幅:"+item["ratio"])
+                                LogUtil.i("show", "当前价:" + item["current"] + "/装跌幅:" + item["ratio"])
                             }
                         }
 
@@ -847,8 +913,15 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                         val view: View = LayoutInflater.from(this@BuyAndSellActivity).inflate(R.layout.item_chichang_header, rcv, false)
                         mChicangListAdapter!!.addHeaderView(view)
                         rcv.adapter = mChicangListAdapter
-                    }
+                        mChicangListAdapter!!.onItemClickListener = object : com.lairui.easy.listener.OnItemClickListener {
+                            override fun onItemClickListener(view: View, position: Int, map: MutableMap<String, Any>) {
+                                inputCode.setText(map["code"].toString())
+                                //getMsgAction(inputCode.text.toString())
 
+                            }
+
+                        }
+                    }
                 }
 
 
@@ -993,31 +1066,38 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                 buyData.add(map5)
 
 
-                val  map6 = HashMap<String,Any>()
-                map6["price"] = stockInfoBean!!.stockSell1Price
-                map6["amount"] = stockInfoBean!!.stockSell1Amount
-                map6["type"] = "卖1"
-                sellData.add(map6)
-                val  map7 = HashMap<String,Any>()
-                map7["price"] = stockInfoBean!!.stockSell2Price
-                map7["amount"] = stockInfoBean!!.stockSell1Amount
-                map7["type"] = "卖2"
-                sellData.add(map7)
-                val  map8 = HashMap<String,Any>()
-                map8["price"] = stockInfoBean!!.stockSell3Price
-                map8["amount"] = stockInfoBean!!.stockSell3Amount
-                map8["type"] = "卖3"
-                sellData.add(map8)
-                val  map9 = HashMap<String,Any>()
-                map9["price"] = stockInfoBean!!.stockSell4Price
-                map9["amount"] = stockInfoBean!!.stockSell4Amount
-                map9["type"] = "卖4"
-                sellData.add(map9)
                 val  map10 = HashMap<String,Any>()
                 map10["price"] = stockInfoBean!!.stockSell5Price
                 map10["amount"] = stockInfoBean!!.stockSell5Amount
                 map10["type"] = "卖5"
                 sellData.add(map10)
+
+                val  map9 = HashMap<String,Any>()
+                map9["price"] = stockInfoBean!!.stockSell4Price
+                map9["amount"] = stockInfoBean!!.stockSell4Amount
+                map9["type"] = "卖4"
+                sellData.add(map9)
+
+                val  map8 = HashMap<String,Any>()
+                map8["price"] = stockInfoBean!!.stockSell3Price
+                map8["amount"] = stockInfoBean!!.stockSell3Amount
+                map8["type"] = "卖3"
+                sellData.add(map8)
+
+                val  map7 = HashMap<String,Any>()
+                map7["price"] = stockInfoBean!!.stockSell2Price
+                map7["amount"] = stockInfoBean!!.stockSell1Amount
+                map7["type"] = "卖2"
+                sellData.add(map7)
+
+                val  map6 = HashMap<String,Any>()
+                map6["price"] = stockInfoBean!!.stockSell1Price
+                map6["amount"] = stockInfoBean!!.stockSell1Amount
+                map6["type"] = "卖1"
+                sellData.add(map6)
+
+
+
 
 
 
@@ -1064,6 +1144,81 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                 chengJiaoLsitAction()
             }
         }
+    }
+
+    fun initData(){
+        val  map1 = HashMap<String,Any>()
+        map1["price"] = "--"
+        map1["amount"] = "--"
+        map1["type"] = "买1"
+        buyData.add(map1)
+        val  map2 = HashMap<String,Any>()
+        map2["price"] = "--"
+        map2["amount"] = "--"
+        map2["type"] = "买2"
+        buyData.add(map2)
+        val  map3 = HashMap<String,Any>()
+        map3["price"] = "--"
+        map3["amount"] = "--"
+        map3["type"] = "买3"
+        buyData.add(map3)
+        val  map4 = HashMap<String,Any>()
+        map4["price"] = "--"
+        map4["amount"] = "--"
+        map4["type"] = "买4"
+        buyData.add(map4)
+        val  map5 = HashMap<String,Any>()
+        map5["price"] = "--"
+        map5["amount"] = "--"
+        map5["type"] = "买5"
+        buyData.add(map5)
+
+
+        val  map10 = HashMap<String,Any>()
+        map10["price"] = "--"
+        map10["amount"] = "--"
+        map10["type"] = "卖5"
+        sellData.add(map10)
+
+        val  map9 = HashMap<String,Any>()
+        map9["price"] = "--"
+        map9["amount"] = "--"
+        map9["type"] = "卖4"
+        sellData.add(map9)
+
+        val  map8 = HashMap<String,Any>()
+        map8["price"] = "--"
+        map8["amount"] = "--"
+        map8["type"] = "卖3"
+        sellData.add(map8)
+
+        val  map7 = HashMap<String,Any>()
+        map7["price"] = "--"
+        map7["amount"] = "--"
+        map7["type"] = "卖2"
+        sellData.add(map7)
+
+        val  map6 = HashMap<String,Any>()
+        map6["price"] = "--"
+        map6["amount"] = "--"
+        map6["type"] = "卖1"
+        sellData.add(map6)
+
+            if (mBuyadapter == null){
+                mBuyadapter = BuyAndSellAdapter(this@BuyAndSellActivity)
+            }
+            mBuyadapter!!.clear()
+            mBuyadapter!!.addAll(buyData)
+            rvBuy.adapter = mBuyadapter
+
+
+            if (mSelladapter == null){
+                mSelladapter = BuyAndSellAdapter(this@BuyAndSellActivity)
+            }
+            mSelladapter!!.clear()
+            mSelladapter!!.addAll(sellData)
+            rvSell.adapter = mSelladapter
+
     }
 
 }

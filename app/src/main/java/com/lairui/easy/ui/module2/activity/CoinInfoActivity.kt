@@ -96,6 +96,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
             mRequestTag = 0
             getTimeMinuteDataActin()
             //getKLineMinuteDataActin("m1")
+            getKLineMonthAction()
             getDetialDataAction()
             queryConcernAction()
         }
@@ -630,7 +631,21 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                     if (UtilTools.empty(dataMap1["day"])){
                         return
                     }
-                    val data = JSONUtil.instance.jsonToListStr2(dataMap1["day"].toString())
+
+                    val dataListAny = JSONUtil.instance.jsonToListAny(dataMap1["day"].toString().trim())
+                    LogUtil.i("show","dataListAny:"+dataListAny!!.size)
+                    val data = ArrayList<List<String>>()
+                    for (item in dataListAny){
+                        val list = ArrayList<String>()
+                        list.add(item[0].toString())
+                        list.add(item[1].toString())
+                        list.add(item[2].toString())
+                        list.add(item[3].toString())
+                        list.add(item[4].toString())
+                        list.add(item[5].toString())
+                        data.add(list)
+                    }
+
                     if (data != null) {
                       /*  dataList.clear()
                         for (item in data){
@@ -642,8 +657,9 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                         }
                         //设置数据
                         LogUtil.i("show","$$$$:"+dataList.size)
-                        updateDataAndUI(dataList)
-*/
+                        updateDataAndUI(dataList)*/
+
+
                         LogUtil.i("show","日K线格式化后数据:"+data )
                         //上证指数代码000001.IDX.SH
                         val listDataMap = HashMap<String,Any>()
@@ -686,7 +702,19 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                     if (UtilTools.empty(dataMap1["week"].toString())){
                         return
                     }
-                    val data = JSONUtil.instance.jsonToListStr2(dataMap1["week"].toString())
+                    val dataListAny = JSONUtil.instance.jsonToListAny(dataMap1["week"].toString().trim())
+                    LogUtil.i("show","dataListAny:"+dataListAny!!.size)
+                    val data = ArrayList<List<String>>()
+                    for (item in dataListAny){
+                        val list = ArrayList<String>()
+                        list.add(item[0].toString())
+                        list.add(item[1].toString())
+                        list.add(item[2].toString())
+                        list.add(item[3].toString())
+                        list.add(item[4].toString())
+                        list.add(item[5].toString())
+                        data.add(list)
+                    }
                     if (data != null) {
                     /*    dataList.clear()
                         for (item in data){
@@ -737,7 +765,19 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                     if (UtilTools.empty(dataMap1["month"].toString())){
                         return
                     }
-                    val data = JSONUtil.instance.jsonToListStr2(dataMap1["month"].toString())
+                    val dataListAny = JSONUtil.instance.jsonToListAny(dataMap1["month"].toString().trim())
+                    LogUtil.i("show","dataListAny:"+dataListAny!!.size)
+                    val data = ArrayList<List<String>>()
+                    for (item in dataListAny){
+                        val list = ArrayList<String>()
+                        list.add(item[0].toString())
+                        list.add(item[1].toString())
+                        list.add(item[2].toString())
+                        list.add(item[3].toString())
+                        list.add(item[4].toString())
+                        list.add(item[5].toString())
+                        data.add(list)
+                    }
                     if (data != null) {
                        /* dataList.clear()
                         for (item in data){

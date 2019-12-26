@@ -23,10 +23,12 @@ import com.lairui.easy.ui.temporary.activity.*
 import com.lairui.easy.utils.tool.*
 import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 
 class LoginActivity : BasicActivity(), CompoundButton.OnCheckedChangeListener {
+
 
     @BindView(R.id.user_icon)
     lateinit var mUserIcon: ImageView
@@ -60,6 +62,7 @@ class LoginActivity : BasicActivity(), CompoundButton.OnCheckedChangeListener {
 
     private var mFirmKind = ""
 
+    private var type: String = "0"
 
     override val contentView: Int
         get() = R.layout.activity_login
@@ -79,21 +82,12 @@ class LoginActivity : BasicActivity(), CompoundButton.OnCheckedChangeListener {
     }
 
 
-    override fun onNewIntent(intent: Intent?) {
-        if (intent != null) {
-            val bundle = intent.extras
-            if (bundle != null) {
 
-            }
-        }
-        super.onNewIntent(intent)
-    }
 
     override fun init() {
         mInstance = this
 
         //getNameCodeInfo()
-
 
         // StatusBarUtil.setColor(this, ContextCompat.getColor(this, R.color.white), 60);
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
@@ -219,6 +213,15 @@ class LoginActivity : BasicActivity(), CompoundButton.OnCheckedChangeListener {
         SPUtils.put(this@LoginActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, "")
 
 
+        getBasicAction()
+
+    }
+
+    private fun getBasicAction() {
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.BASIC_INFO
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.BASIC_INFO, map)
     }
 
 
@@ -373,7 +376,21 @@ class LoginActivity : BasicActivity(), CompoundButton.OnCheckedChangeListener {
         //mBtnLogin.isEnabled = true
         //mBtnLogin.setTextColor(ContextCompat.getColor(this@LoginActivity,R.color.white))
         when (mType) {
+            MethodUrl.BASIC_INFO ->  when (tData["code"].toString() + "") {
+                "1" -> {
+                   val mapData = tData["data"] as MutableMap<String,Any>
+                   if (!UtilTools.empty(mapData) && !UtilTools.empty(mapData["is_register"])){
+                       if (mapData["is_register"].toString() == "0"){
+                           //隐藏注册按钮
+                           registTv.visibility = View.GONE
+                       }else{
+                           registTv.visibility = View.VISIBLE
+                       }
+                   }
 
+                }
+                "0" -> showToastMsg(tData["msg"].toString() + "")
+            }
             MethodUrl.LOGIN_ACTION -> when (tData["code"].toString() + "") {
                 "1" -> {
                     showToastMsg(tData["msg"].toString() + "")
@@ -390,6 +407,7 @@ class LoginActivity : BasicActivity(), CompoundButton.OnCheckedChangeListener {
                     SPUtils.put(this@LoginActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, MbsConstans.ACCESS_TOKEN)
 
                     intent = Intent(this@LoginActivity,MainActivity::class.java)
+                    intent.putExtra("type",type)
                     startActivity(intent)
                 }
                 "0" -> showToastMsg(tData["msg"].toString() + "")

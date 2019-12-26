@@ -20,14 +20,15 @@ import com.lairui.easy.basic.BasicActivity
 import com.lairui.easy.basic.MbsConstans
 import com.lairui.easy.db.DataBaseHelper
 import com.lairui.easy.mywidget.view.CountDownProgressView
-import com.lairui.easy.utils.tool.AppUtil
-import com.lairui.easy.utils.tool.HandlerUtil
-import com.lairui.easy.utils.tool.JSONUtil
-import com.lairui.easy.utils.tool.SPUtils
 import com.jaeger.library.StatusBarUtil
 
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.lairui.easy.api.MethodUrl
+import com.lairui.easy.mywidget.view.TipsToast
+import com.lairui.easy.utils.tool.*
+import java.util.ArrayList
+import java.util.HashMap
 
 
 /**
@@ -65,6 +66,7 @@ class SplashActivity : BasicActivity() {
     private val isJump = false
     private val isClick = false
 
+    private var type = "0" //默认线上用户
 
     override val contentView: Int
         get() = R.layout.activity_splash
@@ -76,6 +78,7 @@ class SplashActivity : BasicActivity() {
 
     override fun init() {
         ButterKnife.bind(this)
+        //getUserInfoAction()
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             MbsConstans.ALPHA = 100
@@ -93,6 +96,21 @@ class SplashActivity : BasicActivity() {
         //loadImage();
         //imageTask();
 
+
+    }
+
+    /**
+     * 获取用户基本信息
+     */
+    fun getUserInfoAction() {
+        val map = HashMap<String, Any>()
+        map["nozzle"] = MethodUrl.ACCOUNT_INFO
+        if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
+            MbsConstans.ACCESS_TOKEN = SPUtils[this@SplashActivity, MbsConstans.SharedInfoConstans.ACCESS_TOKEN, ""].toString()
+        }
+        map["token"] = MbsConstans.ACCESS_TOKEN
+        val mHeaderMap = HashMap<String, String>()
+        mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.ACCOUNT_INFO, map)
     }
 
 
@@ -150,6 +168,7 @@ class SplashActivity : BasicActivity() {
                             } else {
                                 MbsConstans.USER_MAP = JSONUtil.instance.jsonMap(s)
                                 intent = Intent(this@SplashActivity, MainActivity::class.java)
+                                //intent.putExtra("type",type)
                                 startActivity(intent)
                                 finish()
                             }
@@ -268,9 +287,9 @@ class SplashActivity : BasicActivity() {
 
     private fun getCount() {
         count--
-        textView!!.text = count.toString() + ""
-        animation!!.reset()
-        textView!!.startAnimation(animation)
+        textView.text = count.toString() + ""
+        animation.reset()
+        textView.startAnimation(animation)
     }
 
     /**
@@ -299,6 +318,22 @@ class SplashActivity : BasicActivity() {
      * @date 2017/2/16 11:01
      */
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
+        when (mType) {
+            MethodUrl.ACCOUNT_INFO -> when (tData["code"].toString() + "") {
+                "1" -> {
+                    MbsConstans.USER_MAP = tData["data"] as MutableMap<String, Any>?
+                    SPUtils.put(this@SplashActivity, MbsConstans.SharedInfoConstans.LOGIN_INFO, JSONUtil.instance.objectToJson(MbsConstans.USER_MAP!!))
+                    type = MbsConstans.USER_MAP!!["type"].toString()
+                }
+                "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
+                "-1" -> {
+                    closeAllActivity()
+                    val intent = Intent(this@SplashActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+        }
 
     }
 

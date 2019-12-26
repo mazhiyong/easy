@@ -251,6 +251,7 @@ class PayActivity : BasicActivity(), RequestView {
                    /* val  activity = ActivityManager.instance.currentActivity() as MainActivity
                     activity.toTradeFragment()*/
 
+
                 }
                 "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
                 "-1" -> {

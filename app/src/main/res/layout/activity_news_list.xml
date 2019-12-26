@@ -11,7 +11,7 @@
 
     <com.stx.xhb.xbanner.XBanner
         android:id="@+id/xBanner"
-        android:layout_width="@dimen/dp_0"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/dp_120"
         app:AutoPlayTime="3000"
         android:layout_marginLeft="@dimen/dp_10"
@@ -22,7 +22,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:pageChangeDuration="1000"
-        app:placeholderDrawable="@drawable/icon1_banner"
         app:pointContainerPosition="BOTTOM"
         app:pointLeftRightPadding="0dp"
         app:pointNormal="@drawable/shape_point_normal"

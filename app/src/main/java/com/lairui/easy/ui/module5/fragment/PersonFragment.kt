@@ -29,6 +29,7 @@ import com.lairui.easy.utils.tool.JSONUtil
 import com.lairui.easy.utils.tool.SPUtils
 import com.lairui.easy.utils.tool.UtilTools
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.fragment_circle_view2.*
 import java.util.*
 
 class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
@@ -195,7 +196,6 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
         setBarTextColor()
 
         getUserInfoAction()
-
 
     }
 
@@ -374,6 +374,12 @@ class PersonFragment : BasicFragment(), View.OnClickListener, RequestView {
                     mAviableMoneyTv.text = MbsConstans.USER_MAP!!["account"] as String*/
                     SPUtils.put(activity!!, MbsConstans.SharedInfoConstans.LOGIN_INFO, JSONUtil.instance.objectToJson(MbsConstans.USER_MAP!!))
                    // initHeadPic()
+                    if (MbsConstans.USER_MAP!!["type"].toString() == "0"){ //线上用户
+                        mMessageLay.visibility = View.VISIBLE
+                    }else{//线下用户
+                        mMessageLay.visibility = View.GONE
+                    }
+
                 }
                 "0" -> showToastMsg(tData["msg"].toString() + "")
                 "-1" -> {

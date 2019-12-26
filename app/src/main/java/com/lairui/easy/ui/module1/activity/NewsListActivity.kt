@@ -116,9 +116,9 @@ class NewsListActivity : BasicActivity(), RequestView, ReLoadingData {
     }
 
     fun getNewsListAction() {
-        val map = java.util.HashMap<String, Any>()
+        val map = HashMap<String, Any>()
         map["nozzle"] = MethodUrl.NEWS_LIST
-        val mHeaderMap = java.util.HashMap<String, String>()
+        val mHeaderMap =HashMap<String, String>()
         mRequestPresenterImp.requestPostToMap(mHeaderMap, MethodUrl.NEWS_LIST, map)
     }
 
@@ -226,12 +226,12 @@ class NewsListActivity : BasicActivity(), RequestView, ReLoadingData {
                 } else {
                     val mapData = tData["data"] as MutableMap<String,Any>
                     if (!UtilTools.empty(mapData["banner"].toString())){
-                        LogUtil.i("show","bannerInfo:"+mapData["banner"].toString())
                         val bannerMapList = mapData["banner"] as List<Map<String, Any>>
                         LogUtil.i("show","bannerList:"+bannerMapList.size)
                         if (bannerMapList.isNotEmpty()){
                             localImageInfos.clear()
                             for (map in bannerMapList) {
+                                LogUtil.i("show","bannerImage:"+map["image"].toString() + "")
                                 val customViewsInfo = CustomViewsInfo(map["image"].toString() + "")
                                 localImageInfos.add(customViewsInfo)
                             }

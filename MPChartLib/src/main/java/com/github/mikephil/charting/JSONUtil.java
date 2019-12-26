@@ -80,6 +80,18 @@ public class JSONUtil {
         return retList;
     }
 
+    public  List<List<Object>> jsonToListObj(String json){
+        List<List<Object>> retList = null;
+        try {
+            // json转为带泛型的list
+            retList = gson.fromJson(json,new TypeToken<List<List<Object>>>() {}.getType());
+        }catch (Exception e){
+            return retList;
+        }
+        return retList;
+    }
+
+
     public  List<String> jsonToListStr(String json){
         List<String> retList = null;
         try {

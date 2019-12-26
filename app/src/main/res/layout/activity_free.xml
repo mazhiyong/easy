@@ -51,6 +51,7 @@
                     android:layout_width="@dimen/dp_20"
                     android:layout_height="@dimen/dp_20"/>
                 <TextView
+                    android:id="@+id/tipsTv"
                     android:textSize="@dimen/sp_14"
                     android:textStyle="bold"
                     android:layout_gravity="center_vertical"

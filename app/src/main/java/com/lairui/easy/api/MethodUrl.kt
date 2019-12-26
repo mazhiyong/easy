@@ -170,7 +170,11 @@ object MethodUrl {
     const val HOME_INFO = "home_info" //账号信息
 
 
+
     const val ACCOUNT_INFO = "account_info" //账号信息
+    const val BASIC_INFO = "basic_config" //基本配置
+
+
     const val CERTIFIED_INFO = "certified_info" //认证信息
     const val CERTIFIED_ACTION = "certification" //认证操作
     const val BANK_LIST = "user_bank" //银行卡列表
@@ -213,6 +217,10 @@ object MethodUrl {
     const val PEIZI_MONTH_APPLY = "apply_month" //申请按月配资
     const val PEIZI_FREE_INFO = "capital_mutual" //免息配资
     const val PEIZI_FREE_APPLY = "apply_mutual" //申请免息配资
+    const val PEIZI_FREEMONEY_INFO = "capital_activity" //免费配资
+    const val PEIZI_FREEMONEY_APPLY = "apply_activity" //申请免费配资
+
+
     const val PEIZI_LIST= "assets_info" //当前配资(操盘中)
     const val BOND_INFO = "bond_info" //追加保证金信息
     const val BOND_ACTION = "bond_operate" //追加保证金操作

@@ -109,6 +109,21 @@ class MainActivity : BasicActivity(), RequestView {
     }
 
     override fun init() {
+        getUserInfoAction()
+       val bundle =  intent.extras
+       if (bundle != null){
+           val  type = bundle.getString("type")
+           if (type == "0"){ //线上用户
+               btn_container_get.visibility = View.VISIBLE
+           }else{ //线下用户
+               btn_container_get.visibility = View.GONE
+           }
+       }
+
+       initView()
+
+
+
 
         val eventBus = EventBus.getDefault()
         if (!eventBus.isRegistered(this)) {
@@ -134,7 +149,7 @@ class MainActivity : BasicActivity(), RequestView {
         SPUtils.put(this, MbsConstans.SharedInfoConstans.LOGIN_OUT, false)
 
         StatusBarUtil.setTranslucentForImageView(this, MbsConstans.ALPHA, null)
-        initView()
+
 
      /*   //启动下载Service
         mDownIntent = Intent(this, DownloadService::class.java)
@@ -164,7 +179,7 @@ class MainActivity : BasicActivity(), RequestView {
 
         //getAppVersion()
         //getNameCodeInfo()
-        getUserInfoAction()
+        //getUserInfoAction()
 
         //mAutoScrollTextView = findViewById(R.id.scroll_text_view);
         //mAutoScrollTextView.setSelected(true);
@@ -231,8 +246,13 @@ class MainActivity : BasicActivity(), RequestView {
 
     }
 
+
+
     override fun onResume() {
         super.onResume()
+        if (mIsRefresh) {
+            toTradeFragment()
+        }
     }
 
     /**
@@ -370,6 +390,12 @@ class MainActivity : BasicActivity(), RequestView {
                 "1" -> {
                     MbsConstans.USER_MAP = tData["data"] as MutableMap<String, Any>?
                     SPUtils.put(this@MainActivity, MbsConstans.SharedInfoConstans.LOGIN_INFO, JSONUtil.instance.objectToJson(MbsConstans.USER_MAP!!))
+                    if (MbsConstans.USER_MAP!!["type"].toString() == "0"){ //线上用户
+                        btn_container_get.visibility = View.VISIBLE
+                    }else{ //线下用户
+                        btn_container_get.visibility = View.GONE
+                    }
+
                 }
                 "0" -> TipsToast.showToastMsg(tData["msg"].toString() + "")
                 "-1" -> {

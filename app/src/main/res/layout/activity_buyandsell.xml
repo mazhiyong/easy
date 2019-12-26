@@ -208,6 +208,7 @@
                             android:layout_width="@dimen/dp_0"
                             android:background="@null"
                             android:hint="0.00"
+                            android:maxLength="8"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"/>
@@ -291,7 +292,7 @@
                     <TextView
                         android:id="@+id/guAmoutTv"
                         android:textSize="@dimen/sp_12"
-                        android:text="可买股数 0"
+                        android:text="可买股数 --"
                         android:gravity="right"
                         android:padding="@dimen/dp_5"
                         android:textColor="@color/black33"
@@ -398,7 +399,6 @@
                             android:textSize="@dimen/sp_12"
                             android:text="买1"
                             android:visibility="invisible"
-                            android:padding="@dimen/dp_5"
                             android:textColor="@color/black33"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -408,7 +408,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="价格"
-                            android:layout_marginLeft="@dimen/dp_5"
                             android:padding="@dimen/dp_5"
                             android:textColor="@color/gray8"
                             android:textSize="@dimen/sp_13"
