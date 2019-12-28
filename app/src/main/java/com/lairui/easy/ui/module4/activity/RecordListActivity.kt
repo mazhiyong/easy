@@ -438,7 +438,28 @@ class RecordListActivity : BasicActivity(), RequestView, ReLoadingData, SelectBa
     }
 
     override fun reLoadingData() {
-        tradeListAction()
+        when(type){
+            "1"->{
+                tradeListAction()
+            }
+            "2"->{
+                bondMoneyListAction(mark)
+            }
+            "3"->{
+                extendMoneyListAction(mark)
+            }
+            "4"->{
+                shouyiListAction(mark)
+            }
+            "5"->{
+                lixiListAction(mark)
+            }
+            "6"->{
+                zijinListAction(mark)
+            }
+
+        }
+
     }
 
     override fun onSelectBackListener(map: MutableMap<String, Any>, type: Int) {

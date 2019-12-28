@@ -32,6 +32,7 @@
     </array>
 
     <string-array name="timeChoose">
+        <item>分钟K</item>
         <item>1分钟</item>
         <item>5分钟</item>
         <item>15分钟</item>

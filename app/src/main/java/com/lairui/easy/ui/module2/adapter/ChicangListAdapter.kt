@@ -68,7 +68,9 @@ class ChicangListAdapter(context: Context) : ListBaseAdapter() {
             viewHolder.nameTv.text = item["name"].toString() + ""
             viewHolder.priceTv.text = item["price"].toString() + ""
             viewHolder.priceCurTv.text = item["current"].toString() + ""
-            if (item["ratio"].toString().isNotEmpty()){
+            val radio =(((item["current"].toString().toDouble()-item["price"].toString().toDouble())) * item["number"].toString().toDouble())/(item["price"].toString().toDouble()*item["number"].toString().toDouble()) *100
+            viewHolder.ratioTv.text = UtilTools.numFormat(radio,2)+"%"
+          /*  if (item["ratio"].toString().isNotEmpty()){
                 if (item["ratio"].toString().contains("-")){
                     viewHolder.ratioTv.text =item["ratio"].toString() + "%"
                     viewHolder.ratioTv.setTextColor(ContextCompat.getColor(mContext!!,R.color.colorPrimary))
@@ -76,7 +78,7 @@ class ChicangListAdapter(context: Context) : ListBaseAdapter() {
                     viewHolder.ratioTv.text ="+" +item["ratio"].toString() + "%"
                     viewHolder.ratioTv.setTextColor(ContextCompat.getColor(mContext!!,R.color.font_c))
                 }
-            }
+            }*/
             val markMonty = item["current"].toString().toDouble()*item["number"].toString().toDouble()
             viewHolder.amountTv.text = UtilTools.getNormalMoney(markMonty.toString())
 

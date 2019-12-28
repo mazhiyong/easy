@@ -205,7 +205,7 @@ class PayActivity : BasicActivity(), RequestView {
                 "1" -> {
                     TipsToast.showToastMsg(tData["msg"].toString() + "")
                     intent = Intent()
-                    intent.action = MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE
+                    intent.action = MbsConstans.BroadcastReceiverAction.INTENT_AND_UPDATE
                     sendBroadcast(intent)
                     finish()
 
@@ -224,7 +224,7 @@ class PayActivity : BasicActivity(), RequestView {
                 "1" -> {
                     TipsToast.showToastMsg(tData["msg"].toString() + "")
                     intent = Intent()
-                    intent.action = MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE
+                    intent.action = MbsConstans.BroadcastReceiverAction.INTENT_AND_UPDATE
                     sendBroadcast(intent)
 
                     finish()
@@ -244,7 +244,7 @@ class PayActivity : BasicActivity(), RequestView {
                 "1" -> {
                     TipsToast.showToastMsg(tData["msg"].toString() + "")
                     intent = Intent()
-                    intent.action = MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE
+                    intent.action = MbsConstans.BroadcastReceiverAction.INTENT_AND_UPDATE
                     sendBroadcast(intent)
 
                     finish()

@@ -2,8 +2,10 @@ package com.lairui.easy.ui.module3.fragment
 
 import android.content.Intent
 import android.text.Editable
+import android.text.Html
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.text.method.LinkMovementMethod
 import android.view.Gravity
 import android.view.View
 import android.widget.*
@@ -31,6 +33,7 @@ import com.lairui.easy.ui.module.activity.XieYiDetialActivity
 import com.lairui.easy.ui.module3.activity.PayActivity
 import com.lairui.easy.ui.module3.adapter.SelectMoneyAdapter
 import com.lairui.easy.utils.tool.*
+import kotlinx.android.synthetic.main.activity_news_item.*
 import kotlinx.android.synthetic.main.fragment_celue.*
 import java.util.*
 import kotlin.collections.HashMap
@@ -116,6 +119,8 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
 
     override fun init() {
 
+
+
         val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, activity!!.resources.getDimension(R.dimen.title_item_height).toInt() + UtilTools.getStatusHeight2(activity!!))
         mTitleBarView.layoutParams = layoutParams
         mTitleBarView.setPadding(0, UtilTools.getStatusHeight2(activity!!), 0, 0)
@@ -123,8 +128,6 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
         mTipTv.text="1.非交易日不收取管理费用;\n" +
                 "2.申请即表示已阅读并同意《策略协议》;\n" +
                 "3.每个合约至少2个交易日,首次申请将扣取2个交易日的管理费"
-
-
 
         initTextView()
 
@@ -468,7 +471,8 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
                             mData = mapData["data"] as MutableMap<String,Any>
                             boundEt.hint = mData["explain"].toString()
                             timeTv.text = mData["delay"].toString()+"个交易日"
-                            freeTipTv.text = mapData["tips"].toString()
+                            freeTipTv.movementMethod = LinkMovementMethod.getInstance()
+                            freeTipTv.text = Html.fromHtml(mapData["tips"].toString())
                             val strList = JSONUtil.instance.jsonToListStr2(mapData["multiple"].toString()) as ArrayList<List<String>>
                             mDataList.clear()
                             for (item in strList){
@@ -565,8 +569,6 @@ class CeLueFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
         } else {
             userVisibleHint = true
             Objects.requireNonNull(mTabLayout.getTabAt(TYPE))!!.select()
-
-
         }
     }
 }

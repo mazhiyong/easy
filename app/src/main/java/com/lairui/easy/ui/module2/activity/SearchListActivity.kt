@@ -1,7 +1,9 @@
 package com.lairui.easy.ui.module2.activity
 
 import android.content.Intent
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,7 +57,7 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
     lateinit var mContent: LinearLayout
     @BindView(R.id.page_view)
     lateinit var mPageView: PageView
-    private var mRequestTag = ""
+    private var mRequestTag = "0"
 
     private var mDataMap: MutableMap<String, Any>? = null
 
@@ -70,9 +72,25 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
     override fun init() {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
-
-
         initView()
+
+        inputEt.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.toString().isNotEmpty()){
+                    mRequestTag = "0"
+                    searchListAction(s.toString())
+                }else{
+                    mPageView.showEmpty()
+                }
+            }
+
+        })
 
     }
 
@@ -158,12 +176,12 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
             mRefreshListView.setNoMore(false)
         }
 
-        mRefreshListView!!.refreshComplete(10)
+        mRefreshListView.refreshComplete(10)
         mRecordAdapter!!.notifyDataSetChanged()
         if (mRecordAdapter!!.dataList.isEmpty()) {
-            mPageView!!.showEmpty()
+            mPageView.showEmpty()
         } else {
-            mPageView!!.showContent()
+            mPageView.showContent()
         }
 
     }
@@ -181,8 +199,10 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
                 val p = Pattern.compile(regEx)
                 val m = p.matcher(inputEt.text.toString())
                 if (m.replaceAll("").trim().isEmpty()){
+                    mRequestTag = "1"
                     searchListAction(inputEt.text.toString())
                 }else{
+                    mRequestTag = "1"
                     searchListAction(m.replaceAll("").trim())
                 }
 
@@ -193,11 +213,11 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
     }
 
     override fun showProgress() {
-        showProgressDialog()
+        //showProgressDialog()
     }
 
     override fun disimissProgress() {
-        dismissProgressDialog()
+        //dismissProgressDialog()
     }
 
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
@@ -210,7 +230,9 @@ class SearchListActivity : BasicActivity(), RequestView, ReLoadingData {
                 LogUtil.i("show","搜索结果"+result)
 
                 if (result == "N;"){
-                    showToastMsg("未检索到相关数据")
+                    if (mRequestTag == "1"){
+                        showToastMsg("未检索到相关数据")
+                    }
                     mPageView.showEmpty()
                     return
                 }

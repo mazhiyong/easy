@@ -66,7 +66,10 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
     private var mItemDataList: MutableList<MutableMap<String, Any>> = ArrayList()
 
 
+    private var handler = android.os.Handler()
+
     private var mIsShow = false
+    private var mIsShowLoading = false
 
 
     override val contentView: Int
@@ -263,9 +266,6 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                     thirdRb.isChecked = false
                     mIsShow = true
                 } else {
-                    if (mIsShow) {
-
-                    }
                     mIsShow = false
                 }
             }
@@ -355,10 +355,38 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
         initData()
     }
 
+    override fun onPause() {
+        super.onPause()
+        // if (getDefault().isConnect) getDefault().disConnect()
+        handler.removeCallbacks(cnyRunnable)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //if (!getDefault().isConnect) getDefault().reconnect()
+        handler.post(cnyRunnable)
+    }
+
+    private val cnyRunnable = object : Runnable {
+        override fun run() {
+            chiCangLsitAction()
+            if (!UtilTools.empty(mCode)){
+                getDetialDataAction()
+            }
+
+            handler.postDelayed(this, 10 * 1000)
+
+
+        }
+    }
+
+
+
     /**
      * 获取配资详情
      */
     private fun getDetialInfoAction() {
+        mIsShowLoading = true
         val map = java.util.HashMap<String, Any>()
         map["nozzle"] = MethodUrl.DETAILED_IFFO
         if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
@@ -373,6 +401,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
 
     //获取详情
     private fun getDetialDataAction() {
+        mIsShowLoading = false
         mRequestTag = 0
         val map = HashMap<String, String>()
         map["q"] = mCode
@@ -382,6 +411,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
 
     //获取详情
     private fun getDetialDataAction(code:String) {
+        mIsShowLoading = false
         mRequestTag = 1
         val map = HashMap<String, String>()
         map["q"] = code
@@ -395,7 +425,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
 
     //持仓
     private fun chiCangLsitAction() {
-
+        mIsShowLoading = false
         val map = HashMap<String, Any>()
         map["nozzle"] = MethodUrl.CHICANG_LIST
          if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
@@ -409,7 +439,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
 
     //成交
     private fun chengJiaoLsitAction() {
-
+        mIsShowLoading = true
         val map = HashMap<String, Any>()
         map["nozzle"] = MethodUrl.CHENGJIAO_LIST
         if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
@@ -423,7 +453,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
 
     //撤单
     private fun cheDanLsitAction() {
-
+        mIsShowLoading = true
         val map = HashMap<String, Any>()
         map["nozzle"] = MethodUrl.CHEDAN_LIST
         if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
@@ -437,7 +467,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
 
     //委托
     private fun weiTuoLsitAction() {
-
+        mIsShowLoading = true
         val map = HashMap<String, Any>()
         map["nozzle"] = MethodUrl.WEITUO_LIST
         if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
@@ -455,7 +485,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
 
 
     private fun getMsgAction(str:String) {
-
+        mIsShowLoading = true
         val map = HashMap<String, Any>()
         map["nozzle"] = MethodUrl.QUERY_STOCK
        /* if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
@@ -478,6 +508,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
             showToastMsg("请输入数量")
             return
         }
+        mIsShowLoading = true
         val map = HashMap<String, Any>()
         map["nozzle"] = MethodUrl.BUY_STOCK
         if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
@@ -509,7 +540,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
             showToastMsg("请输入数量")
             return
         }
-
+        mIsShowLoading = true
         val map = HashMap<String, Any>()
         map["nozzle"] = MethodUrl.SELL_STOCK
          if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
@@ -532,7 +563,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
 
 
     private fun cancelAction(id: String) {
-
+        mIsShowLoading = true
         val map = HashMap<String, Any>()
         map["nozzle"] = MethodUrl.CHEXIAO_ACTION
         if (UtilTools.empty(MbsConstans.ACCESS_TOKEN)) {
@@ -564,7 +595,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
             R.id.limitCb -> {
                 marktCb.isChecked = false
                 limitCb.isChecked = true
-                priceEt.setText("0.00")
+                // priceEt.setText("0.00")
             }
             R.id.addPriceIv -> {
                 var currentaAmount = 0.00
@@ -618,11 +649,15 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
     }
 
     override fun showProgress() {
-        showProgressDialog()
+        if (mIsShowLoading){
+            showProgressDialog()
+        }
+
     }
 
     override fun disimissProgress() {
         dismissProgressDialog()
+
     }
 
     override fun loadDataSuccess(tData: MutableMap<String, Any>, mType: String) {
@@ -899,25 +934,48 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
                                 if (itemMap["code"].toString() == item["code"].toString()) {
                                     itemMap["current"] = item["current"].toString()
                                     itemMap["ratio"] = item["ratio"].toString()
-
                                 }
-                                LogUtil.i("show", "当前价:" + item["current"] + "/装跌幅:" + item["ratio"])
                             }
                         }
-
                         if (mChicangListAdapter == null) {
                             mChicangListAdapter = ChicangListAdapter(this@BuyAndSellActivity)
                         }
+                       /* if ( mChicangListAdapter!!.dataList.size == mDataList.size){
+                            //列表数据无变化 整体不刷新
+                            LogUtil.i("show","整体不刷新")
+                            //判断当前价是否变动,变动了更新,不变动不更新
+                            if (mDataList.size>0){
+                                for (itemMap in mDataList) {
+                                    for (item in mChicangListAdapter!!.dataList) {
+                                        if (itemMap["current"].toString() == item["current"].toString()) {
+                                           //价格一致不刷新
+                                        }else{
+                                            //价格改变局部刷新
+                                            mChicangListAdapter!!.notifyDataSetChanged()
+                                        }
+                                    }
+                                }
+                            }
+
+                        }else{
+                            //列表数据更新 整体刷新
+                            LogUtil.i("show","整体刷新")
+                            mChicangListAdapter!!.clear()
+                            mChicangListAdapter!!.addAll(mDataList)
+                            val view: View = LayoutInflater.from(this@BuyAndSellActivity).inflate(R.layout.item_chichang_header, rcv, false)
+                            mChicangListAdapter!!.addHeaderView(view)
+                            rcv.adapter = mChicangListAdapter
+                        }*/
+
                         mChicangListAdapter!!.clear()
                         mChicangListAdapter!!.addAll(mDataList)
                         val view: View = LayoutInflater.from(this@BuyAndSellActivity).inflate(R.layout.item_chichang_header, rcv, false)
                         mChicangListAdapter!!.addHeaderView(view)
                         rcv.adapter = mChicangListAdapter
+
                         mChicangListAdapter!!.onItemClickListener = object : com.lairui.easy.listener.OnItemClickListener {
                             override fun onItemClickListener(view: View, position: Int, map: MutableMap<String, Any>) {
                                 inputCode.setText(map["code"].toString())
-                                //getMsgAction(inputCode.text.toString())
-
                             }
 
                         }
@@ -1086,7 +1144,7 @@ class BuyAndSellActivity : BasicActivity(), RequestView, ReLoadingData {
 
                 val  map7 = HashMap<String,Any>()
                 map7["price"] = stockInfoBean!!.stockSell2Price
-                map7["amount"] = stockInfoBean!!.stockSell1Amount
+                map7["amount"] = stockInfoBean!!.stockSell2Amount
                 map7["type"] = "卖2"
                 sellData.add(map7)
 

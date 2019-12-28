@@ -94,6 +94,8 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
 
     private lateinit var mLoadingWindow: LoadingWindow
 
+    private var handler = android.os.Handler()
+
     override val layoutId: Int
         get() = R.layout.fragment_circle_view2
 
@@ -102,11 +104,6 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
         initView()
     }
 
-    override fun onResume() {
-        super.onResume()
-        homeInfoAction()
-
-    }
 
     private fun initView() {
 
@@ -417,8 +414,41 @@ class IndexFragment : BasicFragment(), RequestView, SelectBackListener,ReLoading
 
 
     override fun reLoadingData() {
-
+        getNewsListAction()
     }
+
+    override fun onPause() {
+        super.onPause()
+        // if (getDefault().isConnect) getDefault().disConnect()
+        handler.removeCallbacks(cnyRunnable)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        handler.post(cnyRunnable)
+    }
+
+    private val cnyRunnable = object : Runnable {
+        override fun run() {
+            homeInfoAction()
+            handler.postDelayed(this, 5 * 1000)
+
+        }
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            //不可见
+            handler.removeCallbacks(cnyRunnable)
+        } else {
+            //可见
+            handler.post(cnyRunnable)
+        }
+    }
+
+
+
 
 
     fun handleData2(result: String) {

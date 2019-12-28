@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="工商银行（8888）"
+            android:textColor="@color/blue"
             android:gravity="center"
             android:textSize="@dimen/sp_15"
             android:id="@+id/tv_bank_num"

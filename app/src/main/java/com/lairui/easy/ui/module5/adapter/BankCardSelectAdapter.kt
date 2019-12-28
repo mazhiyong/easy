@@ -1,4 +1,4 @@
-package com.lairui.easy.ui.temporary.adapter
+package com.lairui.easy.ui.module5.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,10 +13,6 @@ import android.widget.TextView
 import com.lairui.easy.R
 import com.lairui.easy.listener.OnMyItemClickListener
 import com.lairui.easy.utils.imageload.GlideUtils
-import com.lairui.easy.utils.tool.UtilTools
-
-import butterknife.BindView
-import butterknife.ButterKnife
 
 class BankCardSelectAdapter(private val mContext: Context, var datas: List<MutableMap<String, Any>>?) : RecyclerView.Adapter<BankCardSelectAdapter.ViewHolder>() {
 
@@ -64,15 +60,11 @@ class BankCardSelectAdapter(private val mContext: Context, var datas: List<Mutab
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.iv_bank_ico)
-        lateinit var mImageView: ImageView
-        @BindView(R.id.tv_bank_num)
-        lateinit var mTextView: TextView
-        @BindView(R.id.ll_layout)
-        lateinit var mLayout: LinearLayout
 
-        init {
-            ButterKnife.bind(this, itemView)
-        }
+        var mImageView: ImageView = itemView.findViewById(R.id.iv_bank_ico)
+        var mTextView: TextView = itemView.findViewById(R.id.tv_bank_num)
+        var mLayout: LinearLayout = itemView.findViewById(R.id.ll_layout)
+
+
     }
 }

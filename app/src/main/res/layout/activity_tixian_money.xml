@@ -110,6 +110,7 @@
                     android:textSize="@dimen/sp_14"
                     android:layout_gravity="center_horizontal"
                     android:background="@null"
+                    android:inputType="numberPassword"
                     android:layout_width="@dimen/dp_0"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"/>

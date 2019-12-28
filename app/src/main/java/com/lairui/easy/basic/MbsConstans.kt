@@ -305,6 +305,7 @@ object MbsConstans {
         var WEIXIN_PAY_ACTION = "WEIXIN_PAY_ACTION"
         var ZHENGSHU_UPDATE = "ZHENGSHU_UPDATE"//证书信息更新
         var USER_INFO_UPDATE = "USER_INFO_UPDATE"//用户信息更新
+        var INTENT_AND_UPDATE = "INTENT_AND_UPDATE"//通知跳转并更新用户信息广播
         var DAIBAN_INFO_UPDATE = "DAIBAN_INFO_UPDATE"//首页 待办列表数据更新
         var SHOUXIN_UPDATE = "SHOUXIN_UPDATE"//首页 授信状态信息变化更新
         var JIE_HUAN_UPDATE = "JIE_HUAN_UPDATE"// 还款  借款 成功后更新数据

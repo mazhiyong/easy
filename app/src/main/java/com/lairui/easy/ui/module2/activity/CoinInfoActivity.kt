@@ -4,6 +4,7 @@ import android.content.Intent
 import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import butterknife.OnClick
 import com.github.mikephil.charting.stockChart.charts.CoupleChartGestureListener.CoupleClick
@@ -25,10 +26,12 @@ import com.lairui.easy.mywidget.kview.Quotes
 import com.lairui.easy.mywidget.view.TipsToast
 import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module2.adapter.BuyAndSellAdapter
+import com.lairui.easy.ui.module2.adapter.TestArrayAdapter
 import com.lairui.easy.utils.tool.*
 import kotlinx.android.synthetic.main.activity_coin_info.*
 import kotlinx.android.synthetic.main.title_leftbut_bar.*
 import org.json.JSONObject
+import java.lang.reflect.Field
 import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 
@@ -51,6 +54,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
     private var mIsFirst:Boolean = true
 
     private var dateformat: SimpleDateFormat? = null
+    private var dateformat1: SimpleDateFormat? = null
 
     private val kTimeData = TimeDataManage()
     private var kLineDatas : KLineDataManage? = null
@@ -85,7 +89,8 @@ class CoinInfoActivity : BasicActivity(), RequestView {
         right_text_tv.visibility = View.VISIBLE
         right_img.setBackgroundResource(R.drawable.zixuan_selected)
 
-        dateformat =  SimpleDateFormat("yyyyMMddHHmmss")
+        dateformat =  SimpleDateFormat("yyyyMMddHHmm")
+        dateformat1 =  SimpleDateFormat("yyyy-MM-ddHHmmss")
 
         val bundle = intent.extras
         if (bundle == null){
@@ -152,44 +157,83 @@ class CoinInfoActivity : BasicActivity(), RequestView {
         })
 
 
+        //val sortList = arrayOf("分钟K", "1分钟", "5分钟", "15分钟", "30分钟", "60分钟")
+        //val arrayAdapter = TestArrayAdapter(this,sortList)
+        //spinner.adapter = arrayAdapter
         spinner.onItemSelectedListener = object:AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+                    //以下三行代码是解决点击当前选中的无响应问题
+                val  field = AdapterView::class.java.getDeclaredField("mOldSelectedPosition")
+                field.isAccessible = true//设置mOldSelectedPosition可访问
+                field.setInt(spinner, AdapterView.INVALID_POSITION)//设置mOldSelectedPosition的值
+
+                val tv = view as TextView
+                //tv.text = sortList[position]
+                //arrayAdapter.type = position
+
+
                 when(position){
                     0 ->{
-                        if (mIsFirst){
-                            mIsFirst = false
-                            return
-                        }
+                        LogUtil.i("show","初始化执行")
+                        tv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                    }
+                    1 ->{
                         mRequestTag = 5 //1分钟 K
                         getKLineMinuteDataActin("m1")
                         timeChart.visibility = View.GONE
                         kLineChart.visibility =View.VISIBLE
+                        timeTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        dayKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        weekKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        monthKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        tv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.blue))
                     }
-                    1 ->{
+                    2 ->{
                         mRequestTag = 6 //5分钟 K
                         getKLineMinuteDataActin("m5")
                         timeChart.visibility = View.GONE
                         kLineChart.visibility =View.VISIBLE
+                        timeTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        dayKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        weekKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        monthKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        tv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.blue))
                     }
-                    2 ->{
+                    3 ->{
                         //mRequestTag = 7 //10分钟 K
                         //getKLineMinuteDataActin("m10")
                         mRequestTag = 8 //15分钟 K
                         getKLineMinuteDataActin("m15")
                         timeChart.visibility = View.GONE
                         kLineChart.visibility =View.VISIBLE
+                        timeTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        dayKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        weekKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        monthKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        tv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.blue))
                     }
-                    3 ->{
+                    4 ->{
                         mRequestTag = 9 //30分钟 K
                         getKLineMinuteDataActin("m30")
                         timeChart.visibility = View.GONE
                         kLineChart.visibility =View.VISIBLE
+                        timeTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        dayKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        weekKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        monthKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        tv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.blue))
                     }
-                    4 ->{
+                    5 ->{
                         mRequestTag = 10 //60分钟 K
                         getKLineMinuteDataActin("m60")
                         timeChart.visibility = View.GONE
                         kLineChart.visibility =View.VISIBLE
+                        timeTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        dayKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        weekKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        monthKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                        tv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.blue))
                     }
 
                 }
@@ -392,7 +436,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
 
 
-    @OnClick(R.id.back_img, R.id.left_back_lay,R.id.right_lay)
+    @OnClick(R.id.back_img, R.id.left_back_lay,R.id.right_lay,R.id.timeTv,R.id.dayKTv,R.id.weekKTv,R.id.monthKTv)
     fun onViewClicked(view: View) {
         var intent: Intent
         when (view.id) {
@@ -406,6 +450,57 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                     addConcernAction()
                 }
 
+            }
+            R.id.timeTv ->{
+                timeTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.blue))
+                dayKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                weekKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                monthKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                mRequestTag = 0
+                getTimeMinuteDataActin() //1分时图
+                timeChart.visibility = View.VISIBLE
+                kLineChart.visibility =View.GONE
+
+                spinner.setSelection(0)
+            }
+
+            R.id.dayKTv ->{
+                timeTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                dayKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.blue))
+                weekKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                monthKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                mRequestTag = 2 //日K
+                getKLineDayAction()
+                timeChart.visibility = View.GONE
+                kLineChart.visibility =View.VISIBLE
+
+                spinner.setSelection(0)
+            }
+
+            R.id.weekKTv ->{
+                timeTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                dayKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                weekKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.blue))
+                monthKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                mRequestTag = 3 //周K
+                getKLineWeekAction()
+                timeChart.visibility = View.GONE
+                kLineChart.visibility =View.VISIBLE
+
+                spinner.setSelection(0)
+            }
+
+            R.id.monthKTv ->{
+                timeTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                dayKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                weekKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.black))
+                monthKTv.setTextColor(ContextCompat.getColor(this@CoinInfoActivity,R.color.blue))
+                mRequestTag = 4//月K
+                getKLineMonthAction()
+                timeChart.visibility = View.GONE
+                kLineChart.visibility =View.VISIBLE
+
+                spinner.setSelection(0)
             }
 
         }
@@ -461,7 +556,6 @@ class CoinInfoActivity : BasicActivity(), RequestView {
             }
             getDetialDataAction()
 
-/*
             when(mRequestTag){
                 0 ->{
                     getTimeMinuteDataActin() //1分时图
@@ -498,11 +592,9 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                 }
 
             }
-*/
 
 
-            handler.postDelayed(this, 5 * 1000)
-
+            handler.postDelayed(this, 15 * 1000)
 
         }
     }
@@ -573,7 +665,25 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                     if (UtilTools.empty(resultStr)){
                         return
                     }
-                    val data = JSONUtil.instance.jsonToListStr2(resultStr!!)
+                    //val data = JSONUtil.instance.jsonToListStr2(resultStr!!)
+
+                    val dataListAny = JSONUtil.instance.jsonToListAny(resultStr!!.trim())
+                    val data = ArrayList<List<String>>()
+                    if (dataListAny != null) {
+                        for (item in dataListAny){
+                            val list = ArrayList<String>()
+                            //2019 1203 1315
+                            list.add(item[0].toString())
+                            list.add(item[1].toString())
+                            list.add(item[2].toString())
+                            list.add(item[3].toString())
+                            list.add(item[4].toString())
+                            list.add(item[5].toString())
+                            data.add(list)
+                        }
+                    }
+
+
                     if (data != null) {
                        /* dataList.clear()
                         for (item in data){
@@ -590,6 +700,9 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                         LogUtil.i("show","$$$$:"+dataList.size)
                         updateDataAndUI(dataList)
 */
+
+
+
                         LogUtil.i("show","K线格式化后数据:"+data )
                         //上证指数代码000001.IDX.SH
                         val listDataMap = HashMap<String,Any>()
@@ -597,7 +710,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                         val obc = JSONObject(JSONUtil.instance.toJson(listDataMap))
 
                         //上证指数代码000001.IDX.SH
-                        kLineDatas!!.parseKlineData(obc, "000001.IDX.SH", true,prec)
+                        kLineDatas!!.parseKlineData(obc, "000001.IDX.SH", true,prec,1)
                         kLineChart.setDataToChart(kLineDatas)
 
 
@@ -633,17 +746,18 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                     }
 
                     val dataListAny = JSONUtil.instance.jsonToListAny(dataMap1["day"].toString().trim())
-                    LogUtil.i("show","dataListAny:"+dataListAny!!.size)
                     val data = ArrayList<List<String>>()
-                    for (item in dataListAny){
-                        val list = ArrayList<String>()
-                        list.add(item[0].toString())
-                        list.add(item[1].toString())
-                        list.add(item[2].toString())
-                        list.add(item[3].toString())
-                        list.add(item[4].toString())
-                        list.add(item[5].toString())
-                        data.add(list)
+                    if (dataListAny != null) {
+                        for (item in dataListAny){
+                            val list = ArrayList<String>()
+                            list.add(item[0].toString())
+                            list.add(item[1].toString())
+                            list.add(item[2].toString())
+                            list.add(item[3].toString())
+                            list.add(item[4].toString())
+                            list.add(item[5].toString())
+                            data.add(list)
+                        }
                     }
 
                     if (data != null) {
@@ -667,7 +781,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                         val obc = JSONObject(JSONUtil.instance.toJson(listDataMap))
 
                         //上证指数代码000001.IDX.SH
-                        kLineDatas!!.parseKlineData(obc, "000001.IDX.SH", true,prec)
+                        kLineDatas!!.parseKlineData(obc, "000001.IDX.SH", true,prec,0)
                         kLineChart.setDataToChart(kLineDatas)
                     }
                 }
@@ -703,17 +817,18 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                         return
                     }
                     val dataListAny = JSONUtil.instance.jsonToListAny(dataMap1["week"].toString().trim())
-                    LogUtil.i("show","dataListAny:"+dataListAny!!.size)
                     val data = ArrayList<List<String>>()
-                    for (item in dataListAny){
-                        val list = ArrayList<String>()
-                        list.add(item[0].toString())
-                        list.add(item[1].toString())
-                        list.add(item[2].toString())
-                        list.add(item[3].toString())
-                        list.add(item[4].toString())
-                        list.add(item[5].toString())
-                        data.add(list)
+                    if (dataListAny != null) {
+                        for (item in dataListAny){
+                            val list = ArrayList<String>()
+                            list.add(item[0].toString())
+                            list.add(item[1].toString())
+                            list.add(item[2].toString())
+                            list.add(item[3].toString())
+                            list.add(item[4].toString())
+                            list.add(item[5].toString())
+                            data.add(list)
+                        }
                     }
                     if (data != null) {
                     /*    dataList.clear()
@@ -735,7 +850,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                         val obc = JSONObject(JSONUtil.instance.toJson(listDataMap))
 
                         //上证指数代码000001.IDX.SH
-                        kLineDatas!!.parseKlineData(obc, "000001.IDX.SH", true,prec)
+                        kLineDatas!!.parseKlineData(obc, "000001.IDX.SH", true,prec,0)
                         kLineChart.setDataToChart(kLineDatas)
                     }
 
@@ -766,17 +881,18 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                         return
                     }
                     val dataListAny = JSONUtil.instance.jsonToListAny(dataMap1["month"].toString().trim())
-                    LogUtil.i("show","dataListAny:"+dataListAny!!.size)
                     val data = ArrayList<List<String>>()
-                    for (item in dataListAny){
-                        val list = ArrayList<String>()
-                        list.add(item[0].toString())
-                        list.add(item[1].toString())
-                        list.add(item[2].toString())
-                        list.add(item[3].toString())
-                        list.add(item[4].toString())
-                        list.add(item[5].toString())
-                        data.add(list)
+                    if (dataListAny != null) {
+                        for (item in dataListAny){
+                            val list = ArrayList<String>()
+                            list.add(item[0].toString())
+                            list.add(item[1].toString())
+                            list.add(item[2].toString())
+                            list.add(item[3].toString())
+                            list.add(item[4].toString())
+                            list.add(item[5].toString())
+                            data.add(list)
+                        }
                     }
                     if (data != null) {
                        /* dataList.clear()
@@ -798,7 +914,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
                         val obc = JSONObject(JSONUtil.instance.toJson(listDataMap))
 
                         //上证指数代码000001.IDX.SH
-                        kLineDatas!!.parseKlineData(obc, "000001.IDX.SH", true,prec)
+                        kLineDatas!!.parseKlineData(obc, "000001.IDX.SH", true,prec,0)
                         kLineChart.setDataToChart(kLineDatas)
                     }
 
@@ -1181,7 +1297,7 @@ class CoinInfoActivity : BasicActivity(), RequestView {
 
                 val  map7 = HashMap<String,Any>()
                 map7["price"] = stockInfoBean!!.stockSell2Price
-                map7["amount"] = stockInfoBean!!.stockSell1Amount
+                map7["amount"] = stockInfoBean!!.stockSell2Amount
                 map7["type"] = "卖2"
                 sellData.add(map7)
 

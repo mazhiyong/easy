@@ -65,8 +65,62 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="@dimen/dp_0"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/timeTv"
+                    android:text="分时"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/blue"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/dayKTv"
+                    android:text="日K"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/black"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/weekKTv"
+                    android:text="周K"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/black"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/monthKTv"
+                    android:text="月K"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/black"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 app:tabGravity="fill"

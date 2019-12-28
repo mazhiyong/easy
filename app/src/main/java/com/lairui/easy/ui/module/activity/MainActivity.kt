@@ -81,6 +81,11 @@ class MainActivity : BasicActivity(), RequestView {
             if (action == MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE) {
                 getUserInfoAction()
             }
+            if (action == MbsConstans.BroadcastReceiverAction.INTENT_AND_UPDATE) {
+                getUserInfoAction()
+                toTradeFragment()
+            }
+
         }
     }
 
@@ -140,6 +145,7 @@ class MainActivity : BasicActivity(), RequestView {
 
         val intentFilter = IntentFilter()
         intentFilter.addAction(MbsConstans.BroadcastReceiverAction.USER_INFO_UPDATE)
+        intentFilter.addAction(MbsConstans.BroadcastReceiverAction.INTENT_AND_UPDATE)
         registerReceiver(mBroadcastReceiver, intentFilter)
 
         val intent = Intent()

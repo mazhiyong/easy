@@ -88,6 +88,8 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
     private val listUp: MutableList<Map<String, Any>> = ArrayList()
 
 
+    private var handler = android.os.Handler()
+
     private lateinit var popView: View
     private lateinit var mConditionDialog: PopupWindow
     private var bright = false
@@ -116,8 +118,6 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
                     0 ->{
                         rvHoriList.visibility = View.VISIBLE
                         hScrollView.visibility = View.VISIBLE
-
-                        homeInfoAction()
                         when(postion){
                             0 -> listAction("new_all_changepercent_up")
                             1 -> listAction("new_all_changepercent_down")
@@ -432,7 +432,11 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
             }
             MbsConstans.DETIAL_SERVER_URL-> {
                //列表数据
-                    val result = tData["result"]!!.toString() + ""
+                if (tData["result"] == null){
+                    mPageView.showEmpty()
+                    return
+                }
+                val result = tData["result"]!!.toString() + ""
                 if (UtilTools.empty(result)) {
                     mPageView.showEmpty()
                 } else {
@@ -449,6 +453,10 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
 
 
             MbsConstans.HANGQING_SERVER_URL -> {
+                if (tData["result"] == null){
+                    mPageView.showEmpty()
+                    return
+                }
                 val result = tData["result"]!!.toString() + ""
                 if (UtilTools.empty(result)) {
                     mPageView.showEmpty()
@@ -463,6 +471,10 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
                 }
             }
             MbsConstans.HOME_SERVER_URL -> {
+                if (tData["result"] == null){
+                    mPageView.showEmpty()
+                    return
+                }
                 val result = tData["result"]!!.toString() + ""
                 if (!UtilTools.empty(result)) {
                     handleData2(result)
@@ -473,6 +485,10 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
             }
 
             MbsConstans.ZHENFU_SERVER_URL -> {
+                if (tData["result"] == null){
+                    mPageView.showEmpty()
+                    return
+                }
                 val result = tData["result"]!!.toString() + ""
                 if (!UtilTools.empty(result)) {
                     handleData3(result)
@@ -486,6 +502,10 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
             }
 
             MbsConstans.LIANGBI_SERVER_URL -> {
+                if (tData["result"] == null){
+                    mPageView.showEmpty()
+                    return
+                }
                 val result = tData["result"]!!.toString() + ""
                 if (!UtilTools.empty(result)) {
                     handleData3(result)
@@ -570,9 +590,23 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
 
     override fun reLoadingData() {
         mLoadingWindow.showView()
-        if (!UtilTools.empty(mRequestTag)){
-            listAction(mRequestTag)
+        when(mTabLayout.selectedTabPosition){
+            0 ->{
+                when(postion){
+                    0 -> listAction("new_all_changepercent_up")
+                    1 -> listAction("new_all_changepercent_down")
+                    2 -> listAction("new_all_turnoverrate")
+                    3 -> zhenfuInfoAction()
+                    4 -> liangbiInfoAction()
+                }
+            }
+            1 ->{
+                getMyselfList()
+            }
+
         }
+
+
     }
 
 
@@ -654,6 +688,38 @@ class HangQingFragment : BasicFragment(), RequestView, ReLoadingData, SelectBack
         }
 
     }
+
+
+    override fun onPause() {
+        super.onPause()
+        // if (getDefault().isConnect) getDefault().disConnect()
+        handler.removeCallbacks(cnyRunnable)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        handler.post(cnyRunnable)
+    }
+
+    private val cnyRunnable = object : Runnable {
+        override fun run() {
+            homeInfoAction()
+            handler.postDelayed(this, 5 * 1000)
+
+        }
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            //不可见
+            handler.removeCallbacks(cnyRunnable)
+        } else {
+            //可见
+            handler.post(cnyRunnable)
+        }
+    }
+
 
 
 

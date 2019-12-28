@@ -27,10 +27,7 @@ import com.lairui.easy.mywidget.view.PageView
 import com.lairui.easy.mywidget.view.TipsToast.Companion.showToastMsg
 import com.lairui.easy.ui.module.activity.LoginActivity
 import com.lairui.easy.ui.module4.adapter.TradeListAdapter
-import com.lairui.easy.utils.tool.AnimUtil
-import com.lairui.easy.utils.tool.JSONUtil
-import com.lairui.easy.utils.tool.SPUtils
-import com.lairui.easy.utils.tool.UtilTools
+import com.lairui.easy.utils.tool.*
 import java.util.*
 
 class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackListener {
@@ -63,6 +60,8 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
     private lateinit var popView: View
     private lateinit var mConditionDialog: PopupWindow
     private var bright = false
+
+    private var handler = android.os.Handler()
 
     override val layoutId: Int
         get() = R.layout.fragment_trade
@@ -344,7 +343,7 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
                 mRefreshListView.refreshComplete(10)
                 mRefreshListView.setOnNetWorkErrorListener { borrowListAction() }
             } else {
-                mPageView!!.showNetworkError()
+                mPageView.showNetworkError()
             }
         }
 
@@ -367,7 +366,40 @@ class TradeFragment : BasicFragment(), RequestView, ReLoadingData, SelectBackLis
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        // if (getDefault().isConnect) getDefault().disConnect()
+        handler.removeCallbacks(cnyRunnable)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        //if (!getDefault().isConnect) getDefault().reconnect()
+        handler.post(cnyRunnable)
+    }
+
+    private val cnyRunnable = object : Runnable {
+        override fun run() {
+            when(mTabLayout.selectedTabPosition){
+                0 ->{
+                    borrowListAction()
+                }
+            }
+            handler.postDelayed(this, 5 * 1000)
+
+        }
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+           //不可见
+            handler.removeCallbacks(cnyRunnable)
+        } else {
+           //可见
+            handler.post(cnyRunnable)
+        }
+    }
 
 
 

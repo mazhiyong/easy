@@ -129,7 +129,7 @@
             <RadioGroup
                 android:id="@+id/rg"
                 android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_40"
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginBottom="@dimen/dp_10"
                 android:layout_width="match_parent"

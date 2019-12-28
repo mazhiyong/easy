@@ -13,7 +13,7 @@ import com.flyco.animation.SlideExit.SlideBottomExit
 import com.lairui.easy.R
 import com.lairui.easy.listener.OnMyItemClickListener
 import com.lairui.easy.listener.SelectBackListener
-import com.lairui.easy.ui.temporary.adapter.KindSelectAdapter
+import com.lairui.easy.ui.module5.adapter.KindSelectAdapter
 import java.util.*
 
 /**

@@ -69,14 +69,6 @@ class BankPayActivity : BasicActivity(), RequestView {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         StatusBarUtil.setColorForSwipeBack(this, ContextCompat.getColor(this, MbsConstans.TOP_BAR_COLOR), MbsConstans.ALPHA)
         mTitleText.text = "银行卡"
-        mTipTv.text = "温馨提示:\n"+"1.通过望山银行向平台对公账号转账，请务必选择实时到账选项；（不收任何手续费）\n"+"2.请确认转账成功后，再点击提交等待审核到账；（工作时间及时到账）"
-
-        val textViewUtils = TextViewUtils()
-        val s = mTipTv.text.toString()
-        textViewUtils.init(s, mTipTv)
-        textViewUtils.setTextColor(0, s.indexOf(":"), ContextCompat.getColor(this, R.color.font_c))
-
-        textViewUtils.build()
 
         mClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
 
@@ -198,6 +190,15 @@ class BankPayActivity : BasicActivity(), RequestView {
                         bankNameEt.setText(mapBank["bank"].toString())
                         bankNumberEt.setText(mapBank["card"].toString())
                         bankAddressEt.setText(mapBank["address"].toString())
+
+                        mTipTv.text = "温馨提示:\n"+"1.通过"+mapBank["bank"].toString()+"向平台对公账号转账，请务必选择实时到账选项；（不收任何手续费）\n"+"2.请确认转账成功后，再点击提交等待审核到账；（工作时间及时到账）"
+
+                        val textViewUtils = TextViewUtils()
+                        val s = mTipTv.text.toString()
+                        textViewUtils.init(s, mTipTv)
+                        textViewUtils.setTextColor(0, s.indexOf(":") , ContextCompat.getColor(this, R.color.font_c))
+
+                        textViewUtils.build()
                     }
 
                 }

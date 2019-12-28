@@ -1,4 +1,4 @@
-package com.lairui.easy.ui.temporary.adapter
+package com.lairui.easy.ui.module5.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -11,8 +11,6 @@ import android.widget.TextView
 import com.lairui.easy.R
 import com.lairui.easy.listener.OnMyItemClickListener
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 
 class KindSelectAdapter(private val mContext: Context, var datas: List<MutableMap<String, Any>>?, type: Int) : RecyclerView.Adapter<KindSelectAdapter.ViewHolder>() {
 
@@ -49,13 +47,9 @@ class KindSelectAdapter(private val mContext: Context, var datas: List<MutableMa
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.tv_bank_num)
-        lateinit var mTextView: TextView
-        @BindView(R.id.ll_layout)
-        lateinit var mLayout: LinearLayout
 
-        init {
-            ButterKnife.bind(this, itemView)
-        }
+        var mTextView: TextView = itemView.findViewById(R.id.tv_bank_num)
+        var mLayout: LinearLayout  = itemView.findViewById(R.id.ll_layout)
+
     }
 }
